@@ -12,8 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 @SpringBootApplication
 class Config
 
-
-object SpringBootApplication extends App {
+object StartSpringBootApplication extends App {
 
   SpringApplication.run(classOf[Config])
   
