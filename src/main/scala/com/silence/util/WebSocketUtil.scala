@@ -6,22 +6,22 @@ import com.silence.websocket.WebSocket
 
 object WebSocketUtil {
          
-    //¾²Ì¬±äÁ¿£¬ÓÃÀ´¼ÇÂ¼µ±Ç°ÔÚÏßÁ¬½ÓÊı¡£Ó¦¸Ã°ÑËüÉè¼Æ³ÉÏß³Ì°²È«µÄ¡£
+    //é™æ€å˜é‡ï¼Œç”¨æ¥è®°å½•å½“å‰åœ¨çº¿è¿æ¥æ•°ã€‚åº”è¯¥æŠŠå®ƒè®¾è®¡æˆçº¿ç¨‹å®‰å…¨çš„ã€‚
     private var onlineCount: Int = 0
     
-    //·µ»Øµ±Ç°ÔÚÏßÊıÁ¿
+    //è¿”å›å½“å‰åœ¨çº¿æ•°é‡
     def getOnlineCount(): Int = synchronized(onlineCount)
     
-    //Ïß³Ì°²È«£¬ÔÚÏß×ÔÔö
+    //çº¿ç¨‹å®‰å…¨ï¼Œåœ¨çº¿è‡ªå¢
     def addOnlineCount() = synchronized(onlineCount += 1)
     
-    //Ïß³Ì°²È«£¬ÔÚÏß×Ô¼õ
+    //çº¿ç¨‹å®‰å…¨ï¼Œåœ¨çº¿è‡ªå‡
     def subOnlineCount(): Unit = synchronized(onlineCount -= 1)
     
-    //concurrent°üµÄÏß³Ì°²È«Set£¬ÓÃÀ´´æ·ÅÃ¿¸ö¿Í»§¶Ë¶ÔÓ¦µÄMyWebSocket¶ÔÏó¡£
+    //concurrentåŒ…çš„çº¿ç¨‹å®‰å…¨Setï¼Œç”¨æ¥å­˜æ”¾æ¯ä¸ªå®¢æˆ·ç«¯å¯¹åº”çš„MyWebSocketå¯¹è±¡ã€‚
     var webSocketSet: CopyOnWriteArraySet[WebSocket] = new CopyOnWriteArraySet[WebSocket]()
     
-    //·¢ËÍÎÄ±¾ÏûÏ¢
+    //å‘é€æ–‡æœ¬æ¶ˆæ¯
     def sendMessage(message: String, sess: Session): Unit =  sess.getBasicRemote().sendText(message)
     
 }
