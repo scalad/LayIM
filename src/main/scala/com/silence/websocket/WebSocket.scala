@@ -12,6 +12,7 @@ import com.silence.util.WebSocketUtil
 import java.io.File
 import java.io.FileOutputStream
 import java.io.BufferedOutputStream
+import org.apache.commons.io.FileUtils
 
 @ServerEndpoint(value = "/websocket")
 @Component
@@ -62,25 +63,8 @@ class WebSocket {
     @OnMessage
     def onFileUpload(byte: Array[Byte], last: Boolean, session: Session){
         println("Binary Data")
-        saveFileFromBytes(byte, "e:\\test.jpg")
         println(byte.length)
-    }
-    
-    def saveFileFromBytes(byte: Array[Byte], outputFile: String){
-        var stream: FileOutputStream = null  
-        var file: File = null
-        try {
-            file = new File(outputFile)  
-            stream = new FileOutputStream(file)  
-            stream.write(byte);
-        }catch{
-            case e: Exception => println("write file Exception")
-            System.exit(-1)
-        }finally{
-            if(stream != null){
-                stream.close()
-            }
-        }
+        FileUtils.writeByteArrayToFile(new File("e:\\test.txt"), byte)
     }
     
     //连接关闭调用的方法
