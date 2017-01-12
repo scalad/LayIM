@@ -6,6 +6,14 @@
 * Gradle 3.*
 * Mysql 5.1*
 
+###technology
+
+* SpringBoot
+* SpringSecurity
+* Spring Data Jpa
+* Scala
+* Gradle
+
 ###configuration
 `application.properties`
     
