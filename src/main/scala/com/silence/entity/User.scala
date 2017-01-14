@@ -41,6 +41,10 @@ class User {
   @NotEmpty
   var telephone: String = _
   
-  override def toString = "id = " + id + ",name = " + name + ",birthday = " + birthday + ",telephone = " + telephone
+  @BeanProperty
+  @NotEmpty
+  var password: String = _  
+  
+  override def toString = "id = " + id + ",name = " + name + ",birthday = " + birthday + ",telephone = " + telephone + ",password = " + password
   
 }
