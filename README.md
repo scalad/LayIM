@@ -41,3 +41,4 @@
 
 * git clone https://github.com/silence940109/WebSocket.git
 * gradle bootRun
+* http://localhost:8080/swagger-ui.html
