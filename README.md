@@ -1,12 +1,12 @@
-###SpringBoot-WebSocket
+### SpringBoot-WebSocket
 
-###required
+### required
 * Scala 2.1*
 * JDK 1.8*
 * Gradle 3.*
 * Mysql 5.1*
 
-###technology
+### technology
 
 * SpringBoot
 * SpringSecurity
@@ -14,7 +14,7 @@
 * Scala
 * Gradle
 
-###configuration
+### configuration
 `application.properties`
     
 	#spring.datasource.url: jdbc:hsqldb:mem:scratchdb
@@ -37,7 +37,7 @@
 
 `/doc/user.sql`
 
-###build
+### build
 
 * git clone https://github.com/silence940109/WebSocket.git
 * gradle bootRun
