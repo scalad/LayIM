@@ -17,9 +17,7 @@
 ### configuration
 `application.properties`
     
-	#spring.datasource.url: jdbc:hsqldb:mem:scratchdb
-	#logging.file: /tmp/logs/app.log
-	#datasource
+    #datasource
 	spring.datasource.url = jdbc:mysql://localhost:3306/websocket
 	spring.datasource.username = root
 	spring.datasource.password = root
@@ -31,12 +29,10 @@
 	# Hibernate ddl auto (create, create-drop, update)
 	spring.jpa.hibernate.ddl-auto = update
 	# stripped before adding them to the entity manager)
-	spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5Dialect
+	spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5Dialect	
 	# Server port
-	server.port=8080
-
-`/doc/user.sql`
-
+	server.port=80
+	
 ### build
 
 * git clone https://github.com/silence940109/WebSocket.git
