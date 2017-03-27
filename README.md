@@ -6,6 +6,8 @@
 * Gradle 3.*
 * Mysql 5.1*
 
+![功能设计](https://github.com/scalad/WebSocket/blob/master/doc/image/function.png)
+
 ### technology
 
 * SpringBoot
