@@ -1,3 +1,9 @@
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+apply plugin: 'org.springframework.boot'
+
 buildscript {
     ext {
         springBootVersion = '1.4.3.RELEASE'
@@ -7,13 +13,10 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		//spring boot hot deploy plugin
+        classpath("org.springframework:springloaded:1.2.5.RELEASE")
     }
 }
-apply plugin: 'java'
-apply plugin: 'scala'
-apply plugin: 'eclipse'
-apply plugin: 'application'
-apply plugin: 'org.springframework.boot'
 
 ext {
     sourceCompatibility = 1.8
@@ -49,8 +52,6 @@ dependencies {
     //swagger
     compile ("io.springfox:springfox-swagger2:2.2.2")
     compile ("io.springfox:springfox-swagger-ui:2.2.2")
-    //quart 
-    compile ("org.quartz-scheduler:quartz:2.2.1")
     
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("junit:junit:4.12")
