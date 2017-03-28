@@ -1,20 +1,20 @@
 package com.silence.config
 
-import org.springframework.context.annotation.Configuration
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Bean
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory
-import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.connection.RedisConnectionFactory
-import org.springframework.data.redis.core.StringRedisTemplate
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.annotation.PropertyAccessor
-import com.fasterxml.jackson.annotation.JsonAutoDetect
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.context.annotation.ComponentScan
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Configuration
+import org.springframework.data.redis.connection.RedisConnectionFactory
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory
+import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.data.redis.core.StringRedisTemplate
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.annotation.PropertyAccessor
+import com.fasterxml.jackson.databind.ObjectMapper
 
 @Configuration
 @ComponentScan
@@ -31,12 +31,20 @@ class RedisConfig {
     @Value("${spring.redis.timeout}")
     private var timeout: Int = _
     
+    @Value("${spring.redis.password}")
+    private var password: String = _
+    
+    @Value("${spring.redis.database}")
+    private var database: Int = _
+    
     @Bean
     def redisConnectionFactory(): JedisConnectionFactory = {
         var factory: JedisConnectionFactory = new JedisConnectionFactory
         factory.setHostName(host)
         factory.setPort(port)
         factory.setTimeout(timeout)
+        factory.setPassword(password)
+        factory.setDatabase(database)
         LOGGER.info("Init the Redis instance Finished")
         return factory;
     }

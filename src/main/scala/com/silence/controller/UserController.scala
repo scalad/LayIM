@@ -23,13 +23,17 @@ import io.swagger.annotations.ApiImplicitParams
 import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiResponses
 import io.swagger.annotations.ApiResponse
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @ComponentScan
 @Controller
 @ResponseBody
 @Api(value = "用户相关操作")
 class UserController @Autowired()(private val userService : UserService){
-     
+    
+    private final val LOGGER:Logger = LoggerFactory.getLogger(classOf[UserController])
+    
     @ApiOperation("获取用户信息")
     @ApiImplicitParams(
         Array(new ApiImplicitParam(paramType="header",name="username",dataType="String",required=true,value="用户的姓名",defaultValue="zhaojigang")
