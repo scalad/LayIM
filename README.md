@@ -10,11 +10,13 @@
 
 ### technology
 
+* Gradle
+* Scala
 * SpringBoot
 * SpringSecurity
 * Spring Data Jpa
-* Scala
-* Gradle
+* Redis
+
 
 ### configuration
 `application.properties`
