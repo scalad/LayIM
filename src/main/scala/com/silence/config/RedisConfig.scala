@@ -64,6 +64,7 @@ class RedisConfig {
         var jedisPoolConfig = new JedisPoolConfig
         jedisPoolConfig.setMaxIdle(maxIdle)
         jedisPoolConfig.setMinIdle(minIdle)
+        jedisPoolConfig.setMaxWaitMillis(maxWait)
         LOGGER.info("Init the RedisPoolConfig Finished")
         jedisPoolConfig
     }
@@ -84,7 +85,7 @@ class RedisConfig {
         LOGGER.info("Init the Redis instance Finished")
         factory
     }
-    
+       
     @Bean
     def redisTemplate(factory: RedisConnectionFactory): RedisTemplate[String, String] = {
         var template = new StringRedisTemplate(factory)
