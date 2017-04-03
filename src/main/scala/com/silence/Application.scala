@@ -6,6 +6,8 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import springfox.documentation.swagger2.annotations.EnableSwagger2
+import org.springframework.boot.web.support.SpringBootServletInitializer
+import org.springframework.boot.builder.SpringApplicationBuilder
 
 @Configuration
 @EnableAutoConfiguration
@@ -13,10 +15,17 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 @SpringBootApplication
 //启动swagger注解
 @EnableSwagger2
-class Config
+class Config extends App
 
-object Application extends App {
+object Application extends SpringBootServletInitializer {
 
-    SpringApplication.run(classOf[Config])
-    
+    def main(args: Array[String]): Unit = {
+      
+    		SpringApplication.run(classOf[Config])
+
+    }
+        
+    override protected def configure(builder: SpringApplicationBuilder): SpringApplicationBuilder = {
+  		  builder.sources(Application);
+  	}
 }

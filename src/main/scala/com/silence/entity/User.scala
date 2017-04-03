@@ -12,6 +12,7 @@ import javax.persistence.TemporalType
 import org.springframework.format.annotation.DateTimeFormat
 import javax.validation.constraints.NotNull
 import org.hibernate.validator.constraints.NotBlank
+import javax.persistence.Column
 
 /**
  * @description 用户属性
@@ -19,32 +20,50 @@ import org.hibernate.validator.constraints.NotBlank
  * @author wang
  *
  */
-@Table(name = "user")
+@Table(name = "t_user")
 @Entity
 class User {
 
-  @Id
-  @GeneratedValue
-  @BeanProperty
-  var id: Long = _
+    @Id
+    @GeneratedValue
+    @BeanProperty
+    var id: Long = _
+    
+    //用户名
+    @BeanProperty
+    @NotBlank
+    var username: String = _
   
-  @BeanProperty
-  @NotBlank
-  var name: String = _
+    //密码
+    @BeanProperty
+    @NotEmpty
+    var password: String = _
+    
+    //签名
+    @BeanProperty
+    @NotEmpty
+    var sign: String = _
+    
+    //头像
+    @BeanProperty
+    var avatar: String = _
+    
+    //电话
+    @BeanProperty
+    @NotEmpty
+    var telephone: String = _
+    
+    //创建时间
+    @BeanProperty
+    @NotNull
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @Column(name = "create_date")
+    var createDate: Date = _
+    
+    //性别
+    @BeanProperty
+    var sex: Int = _
   
-  @BeanProperty
-  @NotNull
-  @DateTimeFormat(pattern="yyyy-MM-dd")
-  var birthday: Date = _
-  
-  @BeanProperty
-  @NotEmpty
-  var telephone: String = _
-  
-  @BeanProperty
-  @NotEmpty
-  var password: String = _  
-  
-  override def toString = "id = " + id + ",name = " + name + ",birthday = " + birthday + ",telephone = " + telephone + ",password = " + password
-  
+    override def toString = id + ", " + username + ", " + password + ", " + sign + ", " + avatar + ", " + telephone + ", " + createDate
+    
 }
