@@ -53,7 +53,7 @@ dependencies {
     //swagger
     compile ("io.springfox:springfox-swagger2:2.2.2")
     compile ("io.springfox:springfox-swagger-ui:2.2.2")
-    //兼容JSP
+    //JSP
     compile ("org.apache.tomcat.embed:tomcat-embed-jasper:+")
     compile ("javax.servlet.jsp.jstl:jstl-api:1.2")
     
