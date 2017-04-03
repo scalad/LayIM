@@ -14,33 +14,38 @@
 * Scala
 * SpringBoot
 * SpringSecurity
-* Spring Data Jpa
+* Mybatis
 * Redis
-
+* Alibaba Druid
+* Shiro
 
 ### application.properties configuration
     
+	# Application
+	spring.application.name=LayIM
+	
+	# Mybayis
+	mybatis.type-aliases-package=com.silence.entity
+	mybatis.mapper-locations=classpath*:/mapper/*Mapper.xml
+	mybatis.configuration.map-underscore-to-camel-case=true
+	mybatis.configuration.use-generated-keys=true
+	mybatis.configuration.default-fetch-size=100
+	mybatis.configuration.default-statement-timeout=30
+	
 	# Datasource
+	spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
 	spring.datasource.url = jdbc:mysql://localhost:3306/websocket
 	spring.datasource.username = root
 	spring.datasource.password = root
-	spring.datasource.driverClassName = com.mysql.jdbc.Driver
+	spring.datasource.driver-class-name= com.mysql.jdbc.Driver
 	
-	# Spring MVC configration
+	# Spring MVC
 	spring.mvc.view.prefix=/WEB-INF/view/
 	spring.mvc.view.suffix=.jsp
 	
-	# Specify the DBMS
-	spring.jpa.database = MYSQL
-	# Show or not log for each sql query
-	spring.jpa.show-sql = true
-	# Hibernate ddl auto (create, create-drop, update)
-	spring.jpa.hibernate.ddl-auto = update
-	# stripped before adding them to the entity manager)
-	spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5Dialect
-	
-	# Server port
+	# Server
 	server.port=80
+	server.session.timeout=1800
 	
 	# Redis Configration
 	# Redis database index, default is 0
