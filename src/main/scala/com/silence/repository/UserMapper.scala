@@ -1,8 +1,8 @@
 package com.silence.repository
 
 import com.silence.enties.User
-import org.springframework.data.jpa.repository.JpaRepository
 import java.lang.Long
+import org.apache.ibatis.annotations.Select
 
 /**
  * @description User Dao
@@ -10,4 +10,9 @@ import java.lang.Long
  * @author wang
  *
  */
-trait UserRepository extends JpaRepository[User, Long]
+trait UserMapper {
+  
+    @Select(value = Array("select * from t_user where username = #{username}"))
+    def findUser(username: String): User
+    
+}

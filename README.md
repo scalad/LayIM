@@ -1,6 +1,8 @@
 ### SpringBoot-WebSocket
 
-### required
+一个基于WebSocket和[LayIM](https://www.layui.com/)的即时通讯系统，后台使用了Gradle集成了Spring Boot、Scala、Mybatis以及Redis等
+
+### 需要
 * Scala 2.1+
 * JDK 1.8+
 * Gradle 3.+
@@ -8,7 +10,7 @@
 
 ![功能设计](https://github.com/scalad/WebSocket/blob/master/doc/image/function.png)
 
-### technology
+### 技术
 
 * Gradle
 * Scala
@@ -19,7 +21,7 @@
 * Alibaba Druid
 * Shiro
 
-### application.properties configuration
+### application.properties配置文件
     
 	# Application
 	spring.application.name=LayIM
@@ -59,8 +61,9 @@
 	spring.redis.pool.max-wait=-1
 	spring.redis.timeout=100
 	
-### build
+### 构建
 
-* git clone https://github.com/silence940109/WebSocket.git
+* git clone https://github.com/scalad/WebSocket.git
 * gradle bootRun
 * http://localhost:8080/swagger-ui.html
+* druid manage reference http://localhost/druid/index.html
