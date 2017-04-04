@@ -28,9 +28,9 @@ class MailService {
     
     /** 
      * @description 发送纯文本的简单邮件 
-     * @param to 
-     * @param subject 
-     * @param content 
+     * @param to 邮件接收者
+     * @param subject 主题
+     * @param content 内容
      */ 
     def sendSimpleMail(to: String, subject: String, content: String) = {
         val message = new SimpleMailMessage
@@ -40,19 +40,19 @@ class MailService {
         message.setText(content)
         try {
             sender.send(message)
-            LOGGER.info("to + " + to + "邮件发送成功")
+            LOGGER.info("发送给  " + to + "邮件发送成功")
         } catch {
             case ex: Exception => {
-                LOGGER.info("to " + to + "邮件发送失败！" + ex.getMessage)
+                LOGGER.info("发送给 " + to + "邮件发送失败！" + ex.getMessage)
             }
         }
     }
     
     /** 
      * @description 发送html格式的邮件 
-     * @param to 
-     * @param subject 
-     * @param content 
+     * @param to 邮件接收者
+     * @param subject 主题
+     * @param content 内容
      */ 
     def sendHtmlMail(to: String, subject: String,content: String) = {
         val message = sender.createMimeMessage()
@@ -63,20 +63,20 @@ class MailService {
         helper.setText(content, true)
         try {
             sender.send(message)
-            LOGGER.info("to + " + to + "html格式的邮件发送成功")
+            LOGGER.info("发送给  " + to + "html格式的邮件发送成功")
         } catch {
             case ex: MessagingException => {
-                LOGGER.info("to " + to + "html格式的邮件发送失败！" + ex.getMessage)
+                LOGGER.info("发送给  " + to + "html格式的邮件发送失败！" + ex.getMessage)
             }
         }       
     }
     
     /** 
      * @description 发送带附件的邮件 
-     * @param to 
-     * @param subject 
-     * @param content 
-     * @param filePath 
+     * @param to 邮件接收者
+     * @param subject 主题
+     * @param content 内容
+     * @param filePath 附件路径
      */
     def sendAttachmentsMail(to: String,subject: String, content: String, filePath: String) = {
         val message = sender.createMimeMessage()
@@ -90,18 +90,18 @@ class MailService {
         helper.addAttachment(fileName, file)
         try {
             sender.send(message)
-            LOGGER.info("to + " + to + "带附件邮件发送成功")
+            LOGGER.info("发送给  " + to + "带附件邮件发送成功")
         } catch {
             case ex: MessagingException => {
-                LOGGER.info("to " + to + "带附件邮件发送失败！" + ex.getMessage)
+                LOGGER.info("发送给   " + to + "带附件邮件发送失败！" + ex.getMessage)
             }
         }              
     }
     
     /** 
      * @description 发送嵌入静态资源（一般是图片）的邮件 
-     * @param to 
-     * @param subject 
+     * @param to 邮件接收者
+     * @param subject 主题
      * @param content 邮件内容，需要包括一个静态资源的id，比如：<img src=\"cid:rscId01\" > 
      * @param rscPath 静态资源路径和文件名 
      * @param rscId 静态资源id 
@@ -117,10 +117,10 @@ class MailService {
         helper.addInline(rscId, res)
         try {
             sender.send(message)
-            LOGGER.info("to + " + to + "嵌入静态资源的邮件发送成功")
+            LOGGER.info("发送给  " + to + "嵌入静态资源的邮件发送成功")
         } catch {
             case ex: MessagingException => {
-                LOGGER.info("to " + to + "嵌入静态资源的邮件发送失败！" + ex.getMessage)
+                LOGGER.info("发送给  " + to + "嵌入静态资源的邮件发送失败！" + ex.getMessage)
             }
         }       
     }
