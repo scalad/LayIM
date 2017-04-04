@@ -6,7 +6,7 @@
 * Scala 2.1+
 * JDK 1.8+
 * Gradle 3.+
-* Mysql 5.1+
+* Mysql 5.0+
 
 ![功能设计](https://github.com/scalad/WebSocket/blob/master/doc/image/function.png)
 
@@ -20,6 +20,7 @@
 * Redis
 * Alibaba Druid
 * Shiro
+* Java Mail
 
 ### application.properties配置文件
     
@@ -70,5 +71,5 @@
 
 * git clone https://github.com/scalad/WebSocket.git
 * gradle bootRun
-* swagger ui http://localhost:8080/swagger-ui.html
-* druid manage reference http://localhost/druid/index.html
+* swagger ui reference => http://localhost:8080/swagger-ui.html
+* druid manage reference => http://localhost/druid/index.html
