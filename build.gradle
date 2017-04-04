@@ -35,7 +35,9 @@ repositories {
 
 dependencies {
 	//spring boot
-    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-web"){
+    	transitive = false
+    }
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-websocket")
     compile("org.springframework.boot:spring-boot-starter-redis")

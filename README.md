@@ -60,10 +60,15 @@
 	spring.redis.pool.max-active=8
 	spring.redis.pool.max-wait=-1
 	spring.redis.timeout=100
+
+	# Logging
+	logging.level.*=debug
+	logging.level.com.silence.repository=debug
+	logging.file=./log/spring.log
 	
 ### 构建
 
 * git clone https://github.com/scalad/WebSocket.git
 * gradle bootRun
-* http://localhost:8080/swagger-ui.html
+* swagger ui http://localhost:8080/swagger-ui.html
 * druid manage reference http://localhost/druid/index.html

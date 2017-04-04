@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
 import java.util.Date
 import com.silence.util.DateUtil
+import org.slf4j.Logger
 
 /**
  * @description ScheduledTasks定时任务处理
@@ -20,17 +21,18 @@ import com.silence.util.DateUtil
 @EnableScheduling 
 class ScheduledTasks {
   
+    private final val LOGGER:Logger = LoggerFactory.getLogger(classOf[ScheduledTasks])
     /**
      * 每1分钟执行一次
      */
     @Scheduled(cron = "0 */1 *  * * * ")
     def redisTask = {
-       println ("Scheduling Tasks Examples By Cron: The time is now " + DateUtil.getDate)
+        LOGGER.info("Scheduling Tasks Examples By Cron: The time is now " + DateUtil.getDate)
     }
     
     @Scheduled(fixedRate = 1000 * 30)
     def dataBaseTask = {
-        System.out.println ("Scheduling Tasks Examples: The time is now " + DateUtil.getDate)
+        LOGGER.info("Scheduling Tasks Examples: The time is now " + DateUtil.getDate)
     }
 
 }
