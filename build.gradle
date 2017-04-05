@@ -59,6 +59,7 @@ dependencies {
 
     //mybatis
     compile ("org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1")
+    compile ("com.github.pagehelper:pagehelper:4.1.0")
 
     //alibaba fastjson
     compile 'com.alibaba:fastjson:1.2.12'
