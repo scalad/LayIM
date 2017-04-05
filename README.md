@@ -16,7 +16,7 @@
 * Scala
 * SpringBoot
 * SpringSecurity
-* Mybatis
+* Mybatis And PageHelper
 * Redis
 * Alibaba Druid
 * Shiro

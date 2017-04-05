@@ -1,6 +1,5 @@
 package com.silence.controller
 
-import org.springframework.context.annotation.ComponentScan
 import io.swagger.annotations.Api
 import org.springframework.beans.factory.annotation.Autowired
 import com.silence.service.UserService
@@ -19,10 +18,14 @@ import io.swagger.annotations.ApiResponse
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.ui.Model
 import com.silence.service.UserService
+import org.springframework.web.bind.annotation.RequestBody
+import com.silence.enties.User
+import com.silence.util.DateUtil
+import com.github.pagehelper.PageHelper
 
-@ComponentScan
 @Controller
 @Api(value = "用户相关操作")
+@RequestMapping(value = Array("/user"))
 class UserController @Autowired()(private val userService : UserService){
     
     private final val LOGGER:Logger = LoggerFactory.getLogger(classOf[UserController])
@@ -33,12 +36,27 @@ class UserController @Autowired()(private val userService : UserService){
     @ApiResponses(Array(new ApiResponse(code=400,message="请求参数没填好"),new ApiResponse(code=404,message="请求路径没有或页面跳转路径不对")))
   	@RequestMapping(value = Array("/find/{username}"), method = Array(RequestMethod.GET))
     def find(@PathVariable(value = "username") username: String) = {
+        LOGGER.info("userController find user by name")
         userService.findUserByUsername(username)        
     }
     
+    @ResponseBody
+    @RequestMapping(value = Array("/saveUser"), method = Array(RequestMethod.POST))
+    def saveUser(@RequestBody user: User) = {
+        user.setCreateDate(DateUtil.getDate())
+        userService.saveUser(user)
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = Array("/findAll"), method = Array(RequestMethod.POST))
+    def findAll(): java.util.List[User] = {
+        PageHelper.startPage(1,10)
+        userService.findAll()
+    }
+        
     @RequestMapping(value = Array("/index"), method = Array(RequestMethod.GET))
     def index(model: Model): String = {
-        println("index action")
+        LOGGER.info("index action")
         "index"
     }
 }
