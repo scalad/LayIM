@@ -7,19 +7,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory
-import org.springframework.data.redis.core.StringRedisTemplate
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect
-import com.fasterxml.jackson.annotation.PropertyAccessor
-import com.fasterxml.jackson.databind.ObjectMapper
 import redis.clients.jedis.JedisPoolConfig
-import org.springframework.cache.CacheManager
-import org.springframework.data.redis.cache.RedisCacheManager
-import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.cache.annotation.EnableCaching
-import org.springframework.cache.interceptor.KeyGenerator
-import java.lang.reflect.Method
 
 /**
  * @description redis连接配置
@@ -27,7 +16,6 @@ import java.lang.reflect.Method
  * @author silence
  */
 @Configuration
-@EnableCaching
 class RedisConfig {
   
     private final val LOGGER: Logger = LoggerFactory.getLogger(classOf[RedisConfig])
@@ -88,46 +76,6 @@ class RedisConfig {
         factory.setPoolConfig(poolConfig)
         LOGGER.info("Init the Redis instance Finished")
         factory
-    }
-    
-    @Bean
-    def cacheManager(redisTemplate: RedisTemplate[String, String]): CacheManager = {
-        var cacheManager = new RedisCacheManager(redisTemplate)
-        //设置key-value超时时间
-        cacheManager.setDefaultExpiration(timeout) 
-        cacheManager
-    }
-    
-    @Bean
-    def wiselyKeyGenerator(): KeyGenerator = {
-        new KeyGenerator() {
-            override protected def generate(target: Any, method: Method, params: AnyRef*): Object = {
-                  var sb = new StringBuilder()
-                  sb.append(target.getClass().getName())
-                  sb.append(method.getName())
-                  for(param <- params) {
-                      sb.append(param.toString())
-                  }
-                  sb.toString()
-              }
-        };
-    }
-    
-    @Bean
-    def redisTemplate(factory: RedisConnectionFactory): RedisTemplate[String, String] = {
-        var template = new StringRedisTemplate(factory)
-        setSerializer(template)
-        template.afterPropertiesSet()
-        return template
-    }
-    
-    def setSerializer(template: StringRedisTemplate): Unit = {
-        var jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(classOf[Object])
-        var om = new ObjectMapper
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL)
-        jackson2JsonRedisSerializer.setObjectMapper(om)
-        template.setValueSerializer(jackson2JsonRedisSerializer)
     }
     
 }
