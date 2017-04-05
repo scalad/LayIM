@@ -9,6 +9,8 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.cache.annotation.CacheEvict
 
 import java.util.List
+import com.silence.util.UUIDUtil
+import com.silence.util.SecurityUtil
 
 @Service
 class UserService @Autowired()(private var userMapper: UserMapper) {
@@ -20,6 +22,8 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     //清除缓存
     @CacheEvict(value = Array("findUsers" ), allEntries = true)  
     def saveUser(user: User): Int = {
+        user.setActive(UUIDUtil.getUUID64String)
+        user.setPassword(SecurityUtil.encrypt(user.getPassword))
         userMapper.saveUser(user)
     }
     

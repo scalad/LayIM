@@ -49,10 +49,15 @@ class User {
     //性别
     @BeanProperty
     var sex: Int = _
-  
+    
+    //状态
     @BeanProperty
     var status: Int = _
     
-    override def toString = id + ", " + username + ", " + password + ", " + sign + ", " + avatar + ", " + email + ", " + createDate + ", " + status
+    //激活码
+    @BeanProperty
+    var active: String = _
+    
+    override def toString = id + ", " + username + ", " + password + ", " + sign + ", " + avatar + ", " + email + ", " + createDate + ", " + status + ", " + active
     
 }
