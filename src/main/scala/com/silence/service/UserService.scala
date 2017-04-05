@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service
 import com.silence.repository.UserMapper
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.cache.annotation.CacheEvict
+
+import java.util.List
 
 @Service
 class UserService @Autowired()(private var userMapper: UserMapper) {
@@ -14,13 +17,16 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
         userMapper.findUser(username)
     }
   
-    @Transactional
+    //清除缓存
+    @CacheEvict(value = Array("findUsers" ), allEntries = true)  
     def saveUser(user: User): Int = {
         userMapper.saveUser(user)
     }
     
-    @Cacheable(value = Array("reportcache"), keyGenerator = "wiselyKeyGenerator")
-    def findAll(): java.util.List[User] = {
-        userMapper.findAll()
+    @Transactional
+    @Cacheable(value = Array("findUsers"), keyGenerator = "wiselyKeyGenerator")
+    def findUsers(): List[User] = {
+        userMapper.findUsers
     }
+    
 }

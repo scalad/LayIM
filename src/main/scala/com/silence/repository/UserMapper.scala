@@ -4,6 +4,7 @@ import com.silence.enties.User
 import org.apache.ibatis.annotations.Select
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Results
+import java.util.List
 
 /**
  * @description User Dao
@@ -20,6 +21,6 @@ trait UserMapper {
     def saveUser(user: User): Int
     
     @Select(value = Array("select * from t_user"))
-    def findAll(): java.util.List[User]
+    def findUsers(): List[User]
     
 }

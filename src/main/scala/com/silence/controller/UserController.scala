@@ -23,6 +23,8 @@ import com.silence.enties.User
 import com.silence.util.DateUtil
 import com.github.pagehelper.PageHelper
 
+import java.util.List
+
 @Controller
 @Api(value = "用户相关操作")
 @RequestMapping(value = Array("/user"))
@@ -49,9 +51,9 @@ class UserController @Autowired()(private val userService : UserService){
     
     @ResponseBody
     @RequestMapping(value = Array("/findAll"), method = Array(RequestMethod.POST))
-    def findAll(): java.util.List[User] = {
+    def findAll(): List[User] = {
         PageHelper.startPage(1,10)
-        userService.findAll()
+        userService.findUsers
     }
         
     @RequestMapping(value = Array("/index"), method = Array(RequestMethod.GET))
