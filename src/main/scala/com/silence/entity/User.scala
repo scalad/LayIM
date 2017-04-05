@@ -35,10 +35,10 @@ class User {
     @BeanProperty
     var avatar: String = _
     
-    //电话
+    //邮箱
     @BeanProperty
     @NotEmpty
-    var telephone: String = _
+    var email: String = _
     
     //创建时间
     @BeanProperty
@@ -50,6 +50,9 @@ class User {
     @BeanProperty
     var sex: Int = _
   
-    override def toString = id + ", " + username + ", " + password + ", " + sign + ", " + avatar + ", " + telephone + ", " + createDate
+    @BeanProperty
+    var status: Int = _
+    
+    override def toString = id + ", " + username + ", " + password + ", " + sign + ", " + avatar + ", " + email + ", " + createDate + ", " + status
     
 }
