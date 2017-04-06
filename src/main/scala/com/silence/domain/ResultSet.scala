@@ -1,6 +1,6 @@
 package com.silence.domain
 
-import com.silence.common.SystemCode
+import com.silence.common.SystemConstant
 
 /**
  * @description 返回值信息
@@ -12,7 +12,7 @@ class ResultSet[T](var code: Int, var msg: String) {
     private var data: T = _  
   
     def this(data: T) = {
-        this(SystemCode.SUCCESS, SystemCode.SUCCESS_MESSAGE)
+        this(SystemConstant.SUCCESS, SystemConstant.SUCCESS_MESSAGE)
         this.data = data      
     }
 }
