@@ -7,6 +7,11 @@ import org.springframework.context.annotation.Bean
 import com.github.pagehelper.PageHelper
 import java.util.Properties
 
+/**
+ * @description Mybatis的分页插件
+ * @date 2017-04-05
+ * @author silence
+ */
 @Configuration
 class MybatisConfig {
   

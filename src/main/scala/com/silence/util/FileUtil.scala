@@ -20,12 +20,10 @@ object FileUtil {
      */
     def upload(types: String, path: String, file: MultipartFile) : String = {
         val name = file.getOriginalFilename
-        //重命名图片的名称
-        val fileName = UUIDUtil.getUUID32String() + name.substring(name.indexOf("."))
     		//图片保存到服务器
         val paths = path + DateUtil.getDateString()
-        FileUtils.copyInputStreamToFile(file.getInputStream, new File(paths, fileName))
-        types + DateUtil.getDateString() + "/" + fileName        
+        FileUtils.copyInputStreamToFile(file.getInputStream, new File(paths, name))
+        types + DateUtil.getDateString() + "/" + name
     }
   
 }
