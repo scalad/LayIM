@@ -15,4 +15,5 @@ class ResultSet[T](var code: Int, var msg: String) {
         this(SystemConstant.SUCCESS, SystemConstant.SUCCESS_MESSAGE)
         this.data = data      
     }
+
 }

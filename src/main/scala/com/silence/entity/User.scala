@@ -52,7 +52,7 @@ class User {
     
     //状态
     @BeanProperty
-    var status: Int = _
+    var status: String = _
     
     //激活码
     @BeanProperty
