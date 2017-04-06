@@ -39,6 +39,7 @@ dependencies {
     	transitive = false
     }
     compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-websocket")
     compile("org.springframework.boot:spring-boot-starter-redis")
    	compile("org.springframework.boot:spring-boot-starter-mail")
 

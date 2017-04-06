@@ -19,7 +19,6 @@
 * Mybatis And PageHelper
 * Redis
 * Alibaba Druid
-* Shiro
 * Java Mail
 
 ### application.properties配置文件
@@ -73,3 +72,4 @@
 * gradle bootRun
 * swagger ui reference => http://localhost:8080/swagger-ui.html
 * druid manage reference => http://localhost/druid/index.html
+> username:admin password:admin
