@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull
  * @author wang
  *
  */
-class User {
+class User extends Serializable {
 
-    var id: Long = _
+    @BeanProperty var id: Long = _
     
     //用户名
     @BeanProperty
@@ -32,8 +32,7 @@ class User {
     var sign: String = _
     
     //头像
-    @BeanProperty
-    var avatar: String = _
+    @BeanProperty var avatar: String = _
     
     //邮箱
     @BeanProperty
@@ -47,18 +46,13 @@ class User {
     var createDate: Date = _
     
     //性别
-    @BeanProperty
-    var sex: Int = _
+    @BeanProperty var sex: Int = _
     
     //状态
-    @BeanProperty
-    var status: String = _
+    @BeanProperty var status: String = _
     
     //激活码
-    @BeanProperty
-    var active: String = _
-    
-    def getId(): Long = id
+    @BeanProperty var active: String = _
     
     override def toString = id + ", " + username + ", " + password + ", " + sign + ", " + avatar + ", " + email + ", " + createDate + ", " + status + ", " + active
     
