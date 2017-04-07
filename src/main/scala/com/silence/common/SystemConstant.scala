@@ -6,6 +6,10 @@ object SystemConstant {
     
     final val ERROR: Int = 1
     
+    final val LOGGIN_SUCCESS: String = "登陆成功"
+    
+    final val LOGGIN_FAIL: String = "登陆失败"
+    
     final val SUCCESS_MESSAGE: String = "请求数据成功"
     
     final val SUCCESS_ERROR: String = "请求数据失败"

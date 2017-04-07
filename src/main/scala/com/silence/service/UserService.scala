@@ -28,6 +28,23 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     private final val LOGGER: Logger = LoggerFactory.getLogger(classOf[UserService])
     
     /**
+     * @description 用户邮件和密码是否匹配
+     * @param user
+     * @return User
+     */
+    def matchUser(user: User): User = {
+        if (user == null || user.getEmail == null) {
+            return null
+        }
+        val u: User = userMapper.matchUser(user.getEmail)
+        //密码不匹配
+        if(u == null || !SecurityUtil.matchs(user.getPassword, u.getPassword)){
+            return null      
+        }
+        u
+    }
+    
+    /**
      * @description 根据群组ID查询群里用户的信息
      * @param gid
      * @return List[User]

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestBody
 import com.silence.enties.User
 import com.silence.util.DateUtil
@@ -29,7 +28,7 @@ import java.io.File
 import java.util.HashMap
 import com.silence.common.SystemConstant
 import com.silence.util.FileUtil
-import com.silence.util.FileUtil
+import org.springframework.ui.Model
 
 @Controller
 @Api(value = "用户相关操作")
@@ -39,6 +38,20 @@ class UserController @Autowired()(private val userService : UserService){
     private final val LOGGER:Logger = LoggerFactory.getLogger(classOf[UserController])
     
     private final val gson: Gson = new Gson
+    
+    @ResponseBody
+    @RequestMapping(value = Array("/login"), method = Array(RequestMethod.POST))
+    def login(@RequestBody user: User, request: HttpServletRequest): String = {
+        val u: User = userService.matchUser(user)
+        if(u != null) {
+            LOGGER.info(user + "成功登陆服务器")
+            request.getSession.setAttribute("user", u);
+            gson.toJson(new ResultSet[User](u))
+        } else {        
+            var result = new ResultSet[User](SystemConstant.ERROR, SystemConstant.LOGGIN_FAIL)
+            gson.toJson(result)
+        }
+    }
     
     @ResponseBody
     @RequestMapping(value = Array("/saveUser"), method = Array(RequestMethod.POST))
@@ -101,7 +114,9 @@ class UserController @Autowired()(private val userService : UserService){
     }
         
     @RequestMapping(value = Array("/index"), method = Array(RequestMethod.GET))
-    def index(model: Model): String = {
+    def index(model: Model, request: HttpServletRequest): String = {
+        val user = request.getSession.getAttribute("user");
+        model.addAttribute("user", user)
         LOGGER.info("index action")
         "index"
     }

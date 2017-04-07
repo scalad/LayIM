@@ -58,6 +58,8 @@ class User {
     @BeanProperty
     var active: String = _
     
+    def getId(): Long = id
+    
     override def toString = id + ", " + username + ", " + password + ", " + sign + ", " + avatar + ", " + email + ", " + createDate + ", " + status + ", " + active
     
 }
