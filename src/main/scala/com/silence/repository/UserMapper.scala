@@ -3,7 +3,6 @@ package com.silence.repository
 import com.silence.enties.User
 import org.apache.ibatis.annotations.Select
 import org.apache.ibatis.annotations.Insert
-import org.apache.ibatis.annotations.Results
 import java.util.List
 import com.silence.domain.GroupList
 import com.silence.domain.FriendList
@@ -33,19 +32,11 @@ trait UserMapper {
     def findUserById(id: Int): User
     
     /**
-     * @description 根据ID集合查询用户信息
-     * @param ids
-     * @return List[User]
-     */
-/*    //@Select(Array("select id,username,status,sign,avatar from t_user where id = #{id}"))
-    def findUsersByIds(ids: List[Integer]): List[User]*/
-    
-    /**
-     * @description 根据ID查询用户群组列表
+     * @description 根据ID查询用户群组列表,不管是自己创建的还是别人创建的
      * @param uid 用户ID
      * @return List[Group]
      */
-    @Select(Array("select id,group_name,avatar from t_group where create_id = #{uid}"))
+    @Select(Array("select id,group_name,avatar from t_group where id in(select distinct gid from t_group_members where uid = #{uid})"))
     def findGroupsById(uid: Int): List[GroupList]
     
     /**
