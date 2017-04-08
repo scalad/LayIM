@@ -83,12 +83,24 @@
 		var layer = layui.layer, form = layui.form(), $ = layui.jquery;
 	    //注册
 	    form.on('submit(register)', function (data){
+	    	var passwordsignup_confirm = $("#passwordsignup_confirm").val().trim();
+	    	var passwordsignup = $("#passwordsignup").val().trim();
+	    	if (passwordsignup != passwordsignup_confirm) {
+	    		layer.msg("两次密码不一致!");
+	    		$("#passwordsignup_confirm").val("");
+	    		$("#passwordsignup").val("");
+	    		return false;
+	    	}
 	    	var d = {
 				'username':$("#usernamesignup").val(),
 				'email':$("#emailsignup").val(),
-				'password':$("#passwordsignup").val()
+				'password':passwordsignup
 			};
-	    	console.log(d);
+	    	
+	    	//loading层
+	    	var index = layer.load(0, {
+	    	    shade: [0.6,'#fff'] //0.1透明度的白色背景
+	    	});
 	    	$.ajax({
 	    		url:"user/register",
 	    		dataType:"JSON",
@@ -96,11 +108,9 @@
 	    		type:"POST",
 	    		data:JSON.stringify(d),
 	    		success:function(data) {
-	    			if (data.code == 1) {
+	    				layer.close(index);
 	    				layer.msg(data.msg);
-	    			} else if(data.code == 0) {
-	    				layer.msg(data.msg);	    				
-	    			}
+	    				window.location.href = "/#tologin";
 	    		},
 	    		error:function(data) {
 	    			layer.msg("服务器错误,请稍后再试！");
