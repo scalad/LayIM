@@ -18,6 +18,7 @@ class WebSocket {
         
     private final val LOGGER: Logger = LoggerFactory.getLogger(classOf[WebSocket])
     
+    //Google对JSON支持
     private final val gson: Gson = new Gson
     
     private var session: Session = null
