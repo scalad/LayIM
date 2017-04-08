@@ -20,11 +20,11 @@
                     <a class="hiddenanchor" id="tologin"></a>
                     <div id="wrapper">
                         <div id="login" class="animate form">
-                            <form action="#" autocomplete="on" method="post"> 
+                            <form action="" autocomplete="on" method="post" class="layui-form" lay-filter="login"> 
                                 <h1>LayIM Log in</h1> 
                                 <p> 
                                     <label for="email" class="uname" data-icon="u"> Your email </label>
-                                    <input id="email" name="email" required="required" type="text" placeholder="mymail@mail.com">
+                                    <input id="email"  name="email" required="required" type="email" placeholder="mymail@mail.com">
                                 </p>
                                 <p> 
                                     <label for="password" class="youpasswd" data-icon="p"> Your password </label>
@@ -45,7 +45,7 @@
                         </div>
 
                         <div id="register" class="animate form">
-                            <form action="#" autocomplete="on"> 
+                            <form action="#" autocomplete="on" class="layui-form" lay-filter="register"> 
                                 <h1> Sign up </h1> 
                                 <p> 
                                     <label for="usernamesignup" class="uname" data-icon="u">Your username</label>
@@ -77,4 +77,61 @@
                 </div>  
             </section>
         </div>
-</body></html>
+<script type="text/javascript">
+	layui.use(['layer', 'form', 'jquery'], function(){
+	    //layui组件
+		var layer = layui.layer, form = layui.form(), $ = layui.jquery;
+	    //注册
+	    form.on('submit(register)', function (data){
+	    	var d = {
+				'username':$("#usernamesignup").val(),
+				'email':$("#emailsignup").val(),
+				'password':$("#passwordsignup").val()
+			};
+	    	console.log(d);
+	    	$.ajax({
+	    		url:"user/register",
+	    		dataType:"JSON",
+	    		contentType:"application/json",
+	    		type:"POST",
+	    		data:JSON.stringify(d),
+	    		success:function(data) {
+	    			if (data.code == 1) {
+	    				layer.msg(data.msg);
+	    			} else if(data.code == 0) {
+	    				layer.msg(data.msg);	    				
+	    			}
+	    		},
+	    		error:function(data) {
+	    			layer.msg("服务器错误,请稍后再试！");
+	    		}
+	    	});
+	    	return false;
+	    });
+	    //登陆
+	    form.on('submit(login)', function (data){
+		    var d = {'email': $("#email").val(),'password': $("#password").val()};
+	    	$.ajax({
+	    		url:"user/login",
+	    		dataType:"JSON",
+	    		contentType:"application/json",
+	    		type:"POST",
+	    		data:JSON.stringify(d),
+	    		success:function(data) {
+	    			if (data.code == 1) {
+	    				layer.msg("邮箱或密码错误！");
+	    				$("#password").val("");
+	    			} else if(data.code == 0) {
+	    				window.location.href = "http://localhost/user/index";
+	    			}
+	    		},
+	    		error:function(data) {
+	    			layer.msg("服务器错误,请稍后再试！");
+	    		}
+	    	});
+	    	return false;
+	    });
+	});
+</script> 
+</body>
+</html>

@@ -13,10 +13,13 @@ import com.silence.util.UUIDUtil
 import com.silence.util.SecurityUtil
 import com.silence.domain.GroupList
 import com.silence.domain.FriendList
-import com.silence.domain.FriendList
 import scala.collection.JavaConversions
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import com.silence.util.DateUtil
+import com.silence.common.SystemConstant
+import com.silence.util.WebUtil
+import javax.servlet.http.HttpServletRequest
 
 /**
  * @description 用户信息相关操作
@@ -27,11 +30,27 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
 
     private final val LOGGER: Logger = LoggerFactory.getLogger(classOf[UserService])
     
+    //电子邮件相关服务
+    @Autowired private var mailService: MailService = _
+
+    /**
+     * @description 激活码激活用户
+     * @param activeCode
+     * @return Int
+     */
+    def activeUser(activeCode: String): Int = {
+        if (activeCode == null || "".equals(activeCode)) {
+            return 0
+        }
+        userMapper.activeUser(activeCode)
+    }
+    
     /**
      * @description 用户邮件和密码是否匹配
      * @param user
      * @return User
      */
+    @Cacheable(value = Array("matchUser"), keyGenerator = "wiselyKeyGenerator")
     def matchUser(user: User): User = {
         if (user == null || user.getEmail == null) {
             return null
@@ -49,6 +68,7 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @param gid
      * @return List[User]
      */
+    @Cacheable(value = Array("findUserByGroupId"), keyGenerator = "wiselyKeyGenerator")
     def findUserByGroupId(gid: Int): List[User] = userMapper.findUserByGroupId(gid)
     
     /**
@@ -56,7 +76,6 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @param uid 用户ID
      * @return List[FriendList]
      */
-    @Transactional
     @Cacheable(value = Array("findFriendGroupsById"), keyGenerator = "wiselyKeyGenerator")
     def findFriendGroupsById(uid: Int): List[FriendList] = {
         var friends = userMapper.findFriendGroupsById(uid)
@@ -74,6 +93,7 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @param id
      * @return User
      */
+    @Cacheable(value = Array("findUserById"), keyGenerator = "wiselyKeyGenerator")
     def findUserById(id: Int): User = {
         userMapper.findUserById(id)
     }
@@ -83,16 +103,32 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @param id
      * @return List[Group]
      */
+    @Cacheable(value = Array("findGroupsById"), keyGenerator = "wiselyKeyGenerator")
     def findGroupsById(id: Int): List[GroupList] = {
         userMapper.findGroupsById(id)
     }
     
+    /**
+     * @description 保存用户信息
+     * @param user
+     * @return Int
+     */
     //清除缓存
-    @CacheEvict(value = Array("findFriendGroupsById"), allEntries = true)  
-    def saveUser(user: User): Int = {
-        user.setActive(UUIDUtil.getUUID64String)
-        user.setPassword(SecurityUtil.encrypt(user.getPassword))
-        userMapper.saveUser(user)
+    @CacheEvict(value = Array("findUserById","findFriendGroupsById","findUserByGroupId","matchUser"), allEntries = true)  
+    def saveUser(user: User, request: HttpServletRequest): Int = {
+        if (user == null || user.getUsername == null || user.getPassword == null || user.getEmail == null) {
+            return 0
+        } else {          
+            //激活码
+            val activeCode = UUIDUtil.getUUID64String
+        	  user.setActive(activeCode)
+        	  user.setCreateDate(DateUtil.getDate)
+        	  //加密密码
+        	  user.setPassword(SecurityUtil.encrypt(user.getPassword))
+        	  mailService.sendHtmlMail(user.getEmail, SystemConstant.SUBJECT, 
+        	      user.getUsername +",请确定这是你本人注册的账号   " + ", " + WebUtil.getServerIpAdder(request) + "/user/active/" + activeCode)
+        	  userMapper.saveUser(user)
+        }
     }
         
 }

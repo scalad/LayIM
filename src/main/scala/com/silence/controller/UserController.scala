@@ -40,6 +40,25 @@ class UserController @Autowired()(private val userService : UserService){
     private final val gson: Gson = new Gson
     
     @ResponseBody
+    @RequestMapping(value = Array("/active/{activeCode}"), method = Array(RequestMethod.GET))
+    def activeUser(@PathVariable("activeCode") activeCode: String): String = {
+        if(userService.activeUser(activeCode) == 1) {
+            return gson.toJson(ResultSet)
+        }
+        null
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = Array("/register"), method = Array(RequestMethod.POST))
+    def register(@RequestBody user: User, request: HttpServletRequest): String = {
+        if(userService.saveUser(user, request) == 1) {
+            gson.toJson(new ResultSet[String](SystemConstant.SUCCESS, SystemConstant.REGISTER_SUCCESS))   
+        } else {
+          	gson.toJson(new ResultSet[String](SystemConstant.ERROR, SystemConstant.REGISTER_FAIL))   
+        }
+    }
+    
+    @ResponseBody
     @RequestMapping(value = Array("/login"), method = Array(RequestMethod.POST))
     def login(@RequestBody user: User, request: HttpServletRequest): String = {
         val u: User = userService.matchUser(user)
@@ -52,14 +71,7 @@ class UserController @Autowired()(private val userService : UserService){
             gson.toJson(result)
         }
     }
-    
-    @ResponseBody
-    @RequestMapping(value = Array("/saveUser"), method = Array(RequestMethod.POST))
-    def saveUser(@RequestBody user: User) = {
-        user.setCreateDate(DateUtil.getDate())
-        userService.saveUser(user)
-    }
-    
+
     @ResponseBody
     @ApiOperation("初始化聊天界面数据，分组列表好友信息、群列表")
     @RequestMapping(value = Array("/init/{userId}"), method = Array(RequestMethod.POST))
@@ -82,13 +94,19 @@ class UserController @Autowired()(private val userService : UserService){
         gson.toJson(new ResultSet[FriendList](friends))   
     }
     
+    /**
+     * @description 客户端上传图片
+     * @param file
+     * @param request
+     * @return 
+     */
     @ResponseBody
     @RequestMapping(value = Array("/upload/image"), method = Array(RequestMethod.POST))
     def uploadImage(@RequestParam("file") file:MultipartFile,request: HttpServletRequest): String = {
         if (file.isEmpty()) {
             return gson.toJson(new ResultSet(SystemConstant.ERROR, SystemConstant.UPLOAD_FAIL))
         }
-        val path = request.getServletContext.getRealPath(SystemConstant.IMAGE_PATH)
+        val path = request.getServletContext.getRealPath("/")
         val src = FileUtil.upload(SystemConstant.IMAGE_PATH, path, file)
         var result = new HashMap[String, String]
         //图片的相对路径地址
@@ -97,13 +115,19 @@ class UserController @Autowired()(private val userService : UserService){
         gson.toJson(new ResultSet[HashMap[String, String]](result))
     }
 
+    /**
+     * @description 客户端上传文件
+     * @param file
+     * @param request
+     * @return 
+     */
     @ResponseBody
     @RequestMapping(value = Array("/upload/file"), method = Array(RequestMethod.POST))
     def uploadFile(@RequestParam("file") file:MultipartFile,request: HttpServletRequest): String = {
         if (file.isEmpty()) {
             return gson.toJson(new ResultSet(SystemConstant.ERROR, SystemConstant.UPLOAD_FAIL))
         }
-        val path = request.getServletContext.getRealPath(SystemConstant.FILE_PATH)
+        val path = request.getServletContext.getRealPath("/")
         val src = FileUtil.upload(SystemConstant.FILE_PATH, path, file)
         var result = new HashMap[String, String]
         //文件的相对路径地址
@@ -116,8 +140,12 @@ class UserController @Autowired()(private val userService : UserService){
     @RequestMapping(value = Array("/index"), method = Array(RequestMethod.GET))
     def index(model: Model, request: HttpServletRequest): String = {
         val user = request.getSession.getAttribute("user");
+        //返回登陆页面
+        if (user == null) {
+            return "redirect:/"
+        }
         model.addAttribute("user", user)
-        LOGGER.info("index action")
+        LOGGER.info("用户" + user + "登陆服务器")
         "index"
     }
 }

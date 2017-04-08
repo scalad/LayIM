@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Insert
 import java.util.List
 import com.silence.domain.GroupList
 import com.silence.domain.FriendList
+import org.apache.ibatis.annotations.Update
 
 /**
  * @description User Dao
@@ -14,6 +15,14 @@ import com.silence.domain.FriendList
  *
  */
 trait UserMapper {
+
+    /**
+     * @description 激活用户账号
+     * @param activeCode
+     * @return List[User]
+     */
+    @Update(Array("update t_user set status = 'offline' where active = #{activeCode}"))
+    def activeUser(activeCode: String): Int
   
     /**
      * @description 根据群组ID查询群里用户的信息
@@ -60,7 +69,15 @@ trait UserMapper {
      * @param user
      * @return Int
      */
-    @Insert(Array("insert into t_user(username,password,sign,email,avatar,sex,create_date,status,active) values(#{username},#{password},#{sign},#{email},#{avatar},#{sex},#{createDate},#{status},#{active})"))
+    @Insert(Array("insert into t_user(username,password,email,create_date,active) values(#{username},#{password},#{email},#{createDate},#{active})"))
     def saveUser(user: User): Int
+    
+    /**
+     * @description 
+     * @param user
+     * @return User
+     */
+    @Select(Array("select id,username,email,avatar,sex,sign,password,status,active from t_user where email = #{email}"))
+    def matchUser(email: String): User
         
 }

@@ -10,6 +10,10 @@ object SystemConstant {
     
     final val LOGGIN_FAIL: String = "登陆失败"
     
+    final val REGISTER_SUCCESS: String = "注册成功"
+    
+    final val REGISTER_FAIL: String = "登陆失败"
+    
     final val SUCCESS_MESSAGE: String = "请求数据成功"
     
     final val SUCCESS_ERROR: String = "请求数据失败"
@@ -21,5 +25,8 @@ object SystemConstant {
     final val IMAGE_PATH: String = "/upload/image/"
     
     final val FILE_PATH: String = "/upload/file/"
-  
+    
+    //电子邮件相关
+    final val SUBJECT: String = "LayIM即时通讯系统邮箱激活邮件"
+    
 }
