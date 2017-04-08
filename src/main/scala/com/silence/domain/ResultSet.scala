@@ -17,3 +17,13 @@ class ResultSet[T](var code: Int = SystemConstant.SUCCESS, var msg: String = Sys
     }
     
 }
+/**
+ * @description ResultSet伴生对象
+ * @date 2017-04-08
+ * @author silence
+ */
+object ResultSet {
+  
+    def apply() = new ResultSet
+    
+}
