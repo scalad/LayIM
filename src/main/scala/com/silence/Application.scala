@@ -7,12 +7,14 @@ import org.springframework.boot.web.support.SpringBootServletInitializer
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.mybatis.spring.annotation.MapperScan
+import org.springframework.web.socket.config.annotation.EnableWebSocket
 
 @SpringBootApplication
 //启动swagger注解
 @EnableSwagger2
 @EntityScan(Array("com.silence.entity"))
 @MapperScan(Array("com.silence.repository"))
+@EnableWebSocket
 class Config extends App
 
 object Application extends SpringBootServletInitializer {
