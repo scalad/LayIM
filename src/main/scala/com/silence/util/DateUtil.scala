@@ -44,4 +44,10 @@ object DateUtil {
      */    
     def getDateTime: Date = new SimpleDateFormat(partternAll).parse(getDateTimeString)
     
+    /**
+     * @description 获取当前时间Long类型
+     * @return  
+     */    
+    def getLongDateTime(): Long = new Date().getTime
+    
 }
