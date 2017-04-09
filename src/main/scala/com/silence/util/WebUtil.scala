@@ -1,6 +1,7 @@
 package com.silence.util
 
 import javax.servlet.http.HttpServletRequest
+import org.springframework.context.ApplicationContext
 
 /**
  * @description web工具
@@ -8,6 +9,22 @@ import javax.servlet.http.HttpServletRequest
  * @author silence
  */
 object WebUtil {
+  
+    //Spring Boot 应用上下文
+    var applicationContext:ApplicationContext = _
+    
+	  def setApplicationContext(context: ApplicationContext) = {
+	      applicationContext = context
+	  }
+	  
+    /**
+     * @description 获取SpringBoot Bean实例
+     * @param clazz
+     * @return T
+     */
+	  def getBean[T](clazz: Class[T]): T = {
+	      return applicationContext.getBean(clazz)
+	  }
   
     /**
      * @description：获取服务器IP
