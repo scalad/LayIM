@@ -46,7 +46,7 @@ class User extends Serializable {
     var createDate: Date = _
     
     //性别
-    @BeanProperty var sex: Int = _
+    @BeanProperty var sex: Integer = _
     
     //状态
     @BeanProperty var status: String = _
