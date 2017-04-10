@@ -141,7 +141,11 @@
 	    				layer.msg("邮箱或密码错误！");
 	    				$("#password").val("");
 	    			} else if(data.code == 0) {
-	    				window.location.href = "http://localhost/user/index";
+	    				var host = window.location.host;
+	    				if(window.location.port != "") {
+	    					host = host + ":" + window.location.host;
+	    				}
+	    				window.location.href = "http://" + host + "/user/index";
 	    			}
 	    		},
 	    		error:function(data) {

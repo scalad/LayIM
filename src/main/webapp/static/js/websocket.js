@@ -6,7 +6,11 @@ var im = {
 			if (!uid) {
 				console.log('当前用户未登陆，应该跳到login');
 			} else {
-				var socketUrl = 'ws://localhost/websocket/'+uid;
+				var host = window.location.host
+				if(window.location.post != ""){
+					host = host + ":" + window.location.port;
+				}
+				var socketUrl = 'ws://' + host + '/websocket/'+uid;
 				socket = new WebSocket(socketUrl);
 				im.startListener();
 			}
