@@ -81,6 +81,15 @@
 	layui.use(['layer', 'form', 'jquery'], function(){
 	    //layui组件
 		var layer = layui.layer, form = layui.form(), $ = layui.jquery;
+		//判断用户是否是从激活链接过来的
+		if (location.href.split("?").length == 2){
+			var status = location.href.split("?")[1].split("=")[1];
+			if (status == 1){
+				layer.msg("激活成功，请登录！");
+			}else{
+				layer.msg("激活失败，请重新激活!");
+			}
+		}
 	    //注册
 	    form.on('submit(register)', function (data){
 	    	var passwordsignup_confirm = $("#passwordsignup_confirm").val().trim();

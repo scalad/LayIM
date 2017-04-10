@@ -1,20 +1,31 @@
-package com.silence.util
+package com.silence.service
 
-import org.springframework.stereotype.Component
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.Set
 import java.util.concurrent.TimeUnit
+import org.springframework.stereotype.Service
 
-@Component
-class RedisUtil {
+@Service
+class RedisService {
     
-    private val LOGGER: Logger = LoggerFactory.getLogger(classOf[RedisUtil])
+    private val LOGGER: Logger = LoggerFactory.getLogger(classOf[RedisService])
   
     @Autowired private var redisTemplate: RedisTemplate[String, String] = _
-
+  
+    /**
+     * @description 存储Map格式
+     * @param key
+     * @param hashKey 
+     * @param hashValue
+     * 
+     */
+    def setMap(key: String, hashKey: String, hashValue: String) = {
+        redisTemplate.opsForHash().put(key, hashKey, hashValue)
+    }
+    
     /**
      * @description 存储带有过期时间的key-value
      * @param key
@@ -82,15 +93,6 @@ class RedisUtil {
         if(keys.size() > 0) redisTemplate.delete(keys)
     }
     
-    /**
-     * @description 批量删除key对应的value
-     * @param key
-     * 
-     */
-     def removeBatchValue(keys: String *) = {
-         for(key <- keys) {
-             removeValue(key)
-         }
-     }
+  
     
 }

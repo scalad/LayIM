@@ -24,7 +24,7 @@ var im = {
 			}
 			socket.onmessage = function(event) {
 				console.log("接收到消息");
-				im.handleMessage(event.data);
+				im.handleMessage(event);
 			}
 			socket.onclose = function() {
 				console.log("关闭连接！!");
@@ -32,10 +32,11 @@ var im = {
 		}
 	},
 	handleMessage : function(msg) {
-		console.log(msg);
+		console.log(msg.data);
+		layim.getMessage(JSON.parse(msg.data));
 		switch (msg.type) {
-		case 'TYPE_TEXT_MESSAGE':
-			layim.getMessage(msg.msg);
+		case 'friend':
+			layim.getMessage(msg.data);
 			break;
 		case 'SERVICE_ONLINE_STATUS':
 			//更改状态
@@ -67,7 +68,8 @@ var im = {
 }
 
 layui.use(['layim', 'jquery'], function(layim){
-	var layim = layui.layim,$ = layui.jquery;
+	var $ = layui.jquery;
+	window.layim = layui.layim;
 	im.init();
 	if(!/^http(s*):\/\//.test(location.href)){
 		layer.open({
@@ -168,43 +170,7 @@ layui.use(['layim', 'jquery'], function(layim){
 	  
 	  //监听layim建立就绪
 	  layim.on('ready', function(res){
-	      layim.msgbox(5); //模拟消息盒子有新消息，实际使用时，一般是动态获得
-	
-	    //添加好友（如果检测到该socket）
-	    layim.addList({
-	        type: 'group'
-	        ,avatar: "http://tva3.sinaimg.cn/crop.64.106.361.361.50/7181dbb3jw8evfbtem8edj20ci0dpq3a.jpg"
-	        ,groupname: 'Angular开发'
-	        ,id: "12333333"
-	        ,members: 0
-	    });
-	    layim.addList({
-	        type: 'friend'
-	        ,avatar: "http://tp2.sinaimg.cn/2386568184/180/40050524279/0"
-	        ,username: '冲田杏梨'
-	        ,groupid: 2
-	        ,id: "1233333312121212"
-	        ,remark: "本人冲田杏梨将结束AV女优的工作"
-	    });
-	    
-	    setTimeout(function(){
-	        //接受消息（如果检测到该socket）
-	        layim.getMessage({
-  		        username: "Hi"
-	    	    ,avatar: "http://qzapp.qlogo.cn/qzapp/100280987/56ADC83E78CEC046F8DF2C5D0DD63CDE/100"
-	        	,id: "10000111"
-	        	,type: "friend"
-	        	,content: "临时："+ new Date().getTime()
-	        });
-	      
-	      /*layim.getMessage({
-	        username: "贤心"
-	        ,avatar: "http://tp1.sinaimg.cn/1571889140/180/40030060651/1"
-	        ,id: "100001"
-	        ,type: "friend"
-	        ,content: "嗨，你好！欢迎体验LayIM。演示标记："+ new Date().getTime()
-	      });*/
-		  }, 3000);
+	      layim.msgbox(5); //模拟消息盒子有新消息，实际使用时，一般是动态获得	
 	  });
 	
 	  //监听发送消息
@@ -212,12 +178,16 @@ layui.use(['layim', 'jquery'], function(layim){
 		  var mine = data.mine
 	      var To = data.to;
 	      console.log(data);
-	    
+	      socket.send(JSON.stringify({
+	    	 type:"chatMessage",
+	    	 mine:mine,
+	    	 to:To
+	      }));
 	      if(To.type === 'friend'){
 		      layim.setChatStatus('<span style="color:#FF5722;">对方正在输入。。。</span>');
 	      }
 	      //演示自动回复
-	      setTimeout(function(){
+	      /*setTimeout(function(){
 		      var obj = {};
 		      if(To.type === 'group'){
 		          obj = {
@@ -238,7 +208,7 @@ layui.use(['layim', 'jquery'], function(layim){
 		        	layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
 		      }
 	      	layim.getMessage(obj);
-	      }, 1000);
+	      }, 1000);*/
 	  });
 	
 	  //监听查看群员

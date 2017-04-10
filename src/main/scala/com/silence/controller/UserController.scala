@@ -39,13 +39,12 @@ class UserController @Autowired()(private val userService : UserService){
     
     private final val gson: Gson = new Gson
     
-    @ResponseBody
     @RequestMapping(value = Array("/active/{activeCode}"), method = Array(RequestMethod.GET))
     def activeUser(@PathVariable("activeCode") activeCode: String): String = {
         if(userService.activeUser(activeCode) == 1) {
-            return gson.toJson(ResultSet)
+            return "redirect:/#tologin?status=1"
         }
-        null
+        "redirect:/#toregister?status=0"
     }
     
     @ResponseBody
