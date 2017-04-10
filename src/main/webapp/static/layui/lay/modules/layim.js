@@ -1662,19 +1662,30 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
         ,file: 'uploadFile'
       }
       ,thatChat = thisChat(), upload = cache.base[api[type]] || {};
-  
+      
+      //上传加载
+      var index;
       layui.upload({
         url: upload.url || ''
         ,method: upload.type
         ,elem: othis.find('input')[0]
         ,unwrap: true
         ,type: type
+        ,before: function(res) {
+          if(type == "file"){
+        	index = layer.load(0, {
+  	    	    shade: [0.6,'#fff']
+  	    	});
+          }
+        }
         ,success: function(res){
           if(res.code == 0){
             res.data = res.data || {};
             if(type === 'images'){
               focusInsert(thatChat.textarea[0], 'img['+ (res.data.src||'') +']');
             } else if(type === 'file'){
+              layer.close(index);
+              layer.msg("传输完成!");
               focusInsert(thatChat.textarea[0], 'file('+ (res.data.src||'') +')['+ (res.data.name||'下载文件') +']');
             }
             sendMessage();

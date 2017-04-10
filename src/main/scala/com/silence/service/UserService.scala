@@ -63,7 +63,6 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @param user
      * @return User
      */
-    @Cacheable(value = Array("matchUser"), keyGenerator = "wiselyKeyGenerator")
     def matchUser(user: User): User = {
         if (user == null || user.getEmail == null) {
             return null
@@ -127,7 +126,7 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @return Int
      */
     //清除缓存
-    @CacheEvict(value = Array("findUserById","findFriendGroupsById","findUserByGroupId","matchUser"), allEntries = true)  
+    @CacheEvict(value = Array("findUserById","findFriendGroupsById","findUserByGroupId"), allEntries = true)  
     def saveUser(user: User, request: HttpServletRequest): Int = {
         if (user == null || user.getUsername == null || user.getPassword == null || user.getEmail == null) {
             return 0

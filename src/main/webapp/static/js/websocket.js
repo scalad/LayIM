@@ -157,7 +157,18 @@ layui.use(['layim', 'jquery'], function(layim){
 	  
 	  //监听签名修改
 	  layim.on('sign', function(value){
-	      console.log(value)
+		  $.ajax({
+	    		url:"/user/updateSign",
+	    		dataType:"JSON",
+	    		type:"POST",
+	    		data:{"sign":value},
+	    		success:function(data) {
+    				layer.msg(data.msg);
+	    		},
+	    		error:function(data) {
+	    			layer.msg(data.msg + ",服务器错误,请稍后再试！");
+	    		}
+	    	});
 	  });
 	
 	  //监听自定义工具栏点击，以添加代码为例

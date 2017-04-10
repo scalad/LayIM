@@ -14,9 +14,9 @@ object SystemConstant {
     
     final val REGISTER_FAIL: String = "登陆失败"
     
-    final val SUCCESS_MESSAGE: String = "请求数据成功"
+    final val SUCCESS_MESSAGE: String = "操作成功"
     
-    final val SUCCESS_ERROR: String = "请求数据失败"
+    final val ERROR_MESSAGE: String = "操作失败"
     
     final val UPLOAD_SUCCESS: String = "上传成功"
     

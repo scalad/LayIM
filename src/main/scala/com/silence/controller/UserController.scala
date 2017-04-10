@@ -39,6 +39,18 @@ class UserController @Autowired()(private val userService : UserService){
     
     private final val gson: Gson = new Gson
     
+    @ResponseBody
+    @RequestMapping(value = Array("/updateSign"), method = Array(RequestMethod.POST))
+    def updateSign(request: HttpServletRequest, @RequestParam("sign") sign: String): String = {
+        val user:User = request.getSession.getAttribute("user").asInstanceOf[User]
+        user.setSign(sign)
+        if(userService.updateSing(user)) {
+            gson.toJson(new ResultSet)
+        } else {
+            gson.toJson(new ResultSet(SystemConstant.ERROR, SystemConstant.ERROR_MESSAGE))
+        }
+    }
+    
     @RequestMapping(value = Array("/active/{activeCode}"), method = Array(RequestMethod.GET))
     def activeUser(@PathVariable("activeCode") activeCode: String): String = {
         if(userService.activeUser(activeCode) == 1) {

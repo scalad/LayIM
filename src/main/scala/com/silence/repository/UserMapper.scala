@@ -7,6 +7,7 @@ import java.util.List
 import com.silence.domain.GroupList
 import com.silence.domain.FriendList
 import org.apache.ibatis.annotations.Update
+import org.apache.ibatis.annotations.Param
 
 /**
  * @description User Dao
@@ -19,8 +20,8 @@ trait UserMapper {
     /**
      * @description 更新签名
      */
-    @Update(Array("update t_user set sign = #{sign} where uid = #{uid}"))
-    def updateSign(sign: String, uid: Integer): Int
+    @Update(Array("update t_user set sign = #{sign} where id = #{uid}"))
+    def updateSign(@Param("sign") sign: String, @Param("uid") uid: Integer): Int
   
     /**
      * @description 激活用户账号
