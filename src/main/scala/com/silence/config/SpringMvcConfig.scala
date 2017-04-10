@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry
 import org.springframework.core.Ordered
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 
 /**
  * @description SpringMVC配置
@@ -15,6 +16,7 @@ class SpringMvcConfig extends WebMvcConfigurerAdapter {
   
     /**
      * @description 重写addViewControllers方法配置默认主页
+     * @param registry
      */
     override def addViewControllers(registry: ViewControllerRegistry): Unit = {
         registry.addViewController( "/" ).setViewName( "forward:/index.html" )
@@ -22,4 +24,16 @@ class SpringMvcConfig extends WebMvcConfigurerAdapter {
         super.addViewControllers(registry )
     } 
     
+    /**
+     * @description 注册拦截器
+     * @param registry
+     */
+    override def addInterceptors(registry: InterceptorRegistry) = {
+        // addPathPatterns 用于添加拦截规则
+        // excludePathPatterns 用户排除拦截
+        registry.addInterceptor(new SystemHandlerInterceptorConfig())
+            .addPathPatterns("/**").excludePathPatterns("/").excludePathPatterns("/*.html")
+            .excludePathPatterns("/user/login").excludePathPatterns("/user/register")
+        super.addInterceptors(registry);
+    }
 }

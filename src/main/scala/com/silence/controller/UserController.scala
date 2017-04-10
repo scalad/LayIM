@@ -138,11 +138,7 @@ class UserController @Autowired()(private val userService : UserService){
         
     @RequestMapping(value = Array("/index"), method = Array(RequestMethod.GET))
     def index(model: Model, request: HttpServletRequest): String = {
-        val user = request.getSession.getAttribute("user");
-        //返回登陆页面
-        if (user == null) {
-            return "redirect:/"
-        }
+        val user = request.getSession.getAttribute("user")
         model.addAttribute("user", user)
         LOGGER.info("用户" + user + "登陆服务器")
         "index"
