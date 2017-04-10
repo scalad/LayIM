@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull
  */
 class User extends Serializable {
 
-    @BeanProperty var id: Long = _
+    @BeanProperty var id: Integer = _
     
     //用户名
     @BeanProperty
@@ -53,7 +53,5 @@ class User extends Serializable {
     
     //激活码
     @BeanProperty var active: String = _
-    
-    override def toString = id + ", " + username + ", " + password + ", " + sign + ", " + avatar + ", " + email + ", " + createDate + ", " + status + ", " + active
     
 }

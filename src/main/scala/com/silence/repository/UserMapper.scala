@@ -17,6 +17,12 @@ import org.apache.ibatis.annotations.Update
 trait UserMapper {
 
     /**
+     * @description 更新签名
+     */
+    @Update(Array("update t_user set sign = #{sign} where uid = #{uid}"))
+    def updateSign(sign: String, uid: Integer): Int
+  
+    /**
      * @description 激活用户账号
      * @param activeCode
      * @return List[User]

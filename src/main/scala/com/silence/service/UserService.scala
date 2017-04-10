@@ -34,6 +34,19 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     @Autowired private var mailService: MailService = _
 
     /**
+     * @description 用户更新签名
+     * @param user
+     * @return Boolean
+     */
+    def updateSing(user: User): Boolean = {
+        if (user == null || user.getSign == null || user.getId == null) {
+            return false
+        } else {
+            return userMapper.updateSign(user.getSign, user.getId) == 1     
+        }
+    }
+    
+    /**
      * @description 激活码激活用户
      * @param activeCode
      * @return Int
@@ -125,6 +138,7 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
         	  user.setCreateDate(DateUtil.getDate)
         	  //加密密码
         	  user.setPassword(SecurityUtil.encrypt(user.getPassword))
+        	  //发送激活电子邮件
         	  mailService.sendHtmlMail(user.getEmail, SystemConstant.SUBJECT, 
         	      user.getUsername +",请确定这是你本人注册的账号   " + ", " + WebUtil.getServerIpAdder(request) + "/user/active/" + activeCode)
         	  userMapper.saveUser(user)

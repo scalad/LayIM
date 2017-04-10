@@ -21,7 +21,7 @@ object FileUtil {
      */
     def upload(types: String, path: String, file: MultipartFile) : String = {
         var name = file.getOriginalFilename
-        var paths = path + types + DateUtil.getDateString
+        var paths = path + types + DateUtil.getDateString + "/"
         var result = types + DateUtil.getDateString + "/"
         //如果是图片，则使用uuid重命名图片
         if (SystemConstant.IMAGE_PATH.equals(types)) {

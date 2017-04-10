@@ -51,13 +51,13 @@ class CacheConfig extends CachingConfigurerSupport {
     def wiselyKeyGenerator(): KeyGenerator = {
         new KeyGenerator() {
             override protected def generate(target: Any, method: Method, params: AnyRef*): Object = {
-                  var sb = new StringBuilder()
-                  sb.append(target.getClass().getName())
-                  sb.append(method.getName())
+                  var sb = new StringBuilder
+                  sb.append(target.getClass.getName)
+                  sb.append(method.getName)
                   for(param <- params) {
-                      sb.append(param.toString())
+                      sb.append(param.toString)
                   }
-                  sb.toString()
+                  sb.toString
               }
         };
     }
