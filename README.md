@@ -1,4 +1,4 @@
-﻿### SpringBoot-WebSocket ###
+### SpringBoot-WebSocket ###
 
 一个基于[WebSocket](http://websocket.org/index.html)和[LayIM](https://www.layui.com/)的即时通讯系统，后台使用了[Gradle](https://gradle.org/)集成了[Spring Boot](http://projects.spring.io/spring-boot/)、[Scala](http://www.scala-lang.org/)、[Mybatis](http://blog.mybatis.org/)以及[Redis](https://redis.io/)等
 
@@ -21,6 +21,15 @@
 * Redis
 * Alibaba Druid
 * Java Mail
+
+### 界面
+
+![](https://github.com/scalad/LayIM/blob/master/doc/image/page_index.png)
+
+![](https://github.com/scalad/LayIM/blob/master/doc/image/word_emoji_image_send.png)
+
+![](https://github.com/scalad/LayIM/blob/master/doc/image/file_send.png)
+
 
 ### application.properties配置文件 ###
     
