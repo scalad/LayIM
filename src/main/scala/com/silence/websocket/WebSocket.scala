@@ -18,40 +18,64 @@ import com.silence.service.RedisService
 import com.silence.common.SystemConstant
 import com.silence.util.WebUtil
 import com.silence.util.WebSocketUtil
+import com.silence.service.UserService
+import com.silence.enties.User
+import java.util.List
+import scala.collection.JavaConversions
 
+/**
+ * @description websocket服务器处理消息
+ * @date 2017-04-09
+ * @author silence
+ */
 @ServerEndpoint(value = "/websocket/{uid}")
 @Component
 class WebSocket {
   
-    //日志
     private final val LOGGER: Logger = LoggerFactory.getLogger(classOf[WebSocket])
-    //redis相关操作
+    
     private lazy val redisService: RedisService = WebUtil.getBean(classOf[RedisService])
-    //对json的支持
+    
+    private lazy val userService: UserService = WebUtil.getBean(classOf[UserService])
+  
     private final val gson: Gson = new Gson    
-    //用户id
+    
     private var uid: Integer = _
     
     /**
      * @description 发送消息
      * @message Message
      */
-    def sendInfo(message: Message): Unit = {
+    def sendMessage(message: Message): Unit = {
         //封装返回消息格式
         val receive = getReceiveType(message)
         val key: Integer = message.getTo.getId
-        //在线
-    		if(WebSocketUtil.getSessions.contains(key)) {
-    		    val session: Session = WebSocketUtil.getSessions.get(key).get
-    		    WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
-    		} else {
-    		    
-    		}
-        /*WebSocketUtil.getSessions.foreach(e =>{
-            val (k, v) = e
-            LOGGER.info("发送消息 给sessionid = " + k)
-            WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), v)
-        })*/
+        //聊天类型，可能来自朋友或群组
+        if("friend".equals(message.getTo.getType)) {            
+          	//是否在线
+          	if(WebSocketUtil.getSessions.containsKey(key)) {
+          		  val session: Session = WebSocketUtil.getSessions.get(key)
+          			WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
+          	} else {
+          		  //处理离线消息
+          	}
+        } else {
+            receive.setId(message.getTo.getId)
+            var gid = message.getTo.getId
+        		//找到群组id里面的所有用户
+            val users:List[User] = userService.findUserByGroupId(gid)
+            //过滤掉本身的uid
+            JavaConversions.collectionAsScalaIterable(users).filter(_.id != message.getMine.getId)
+              .foreach { user => {
+                  	  //是否在线
+                  	  if(WebSocketUtil.getSessions.containsKey(user.getId)) {
+                  		  val session: Session = WebSocketUtil.getSessions.get(user.getId)
+                  				  WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
+                  	  } else {
+                  		  
+                  	  }
+            }}
+        }
     }
      
     /**
@@ -62,7 +86,7 @@ class WebSocket {
     @OnOpen
     def onOpen(session: Session, @PathParam("uid") uid: Integer): Unit =  {
     		this.uid = uid
-        WebSocketUtil.getSessions().put(uid, session)
+        WebSocketUtil.sessions.put(uid, session)
         LOGGER.info("userId = " + uid + ",sessionId = " + session.getId + ",新连接加入!")
         redisService.setMap(SystemConstant.ONLINE_USER_MAP, uid+ "", session.getId)
     }
@@ -76,7 +100,7 @@ class WebSocket {
     def onMessage(message: String, session: Session) {
         val mess = gson.fromJson(message.replaceAll("type", "Type"), classOf[Message])
         LOGGER.info("来自客户端的消息: " + mess)
-        sendInfo(mess)
+        sendMessage(mess)
     }
     
     /**

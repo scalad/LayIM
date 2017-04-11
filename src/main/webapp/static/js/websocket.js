@@ -38,21 +38,6 @@ var im = {
 	handleMessage : function(msg) {
 		console.log(msg.data);
 		layim.getMessage(JSON.parse(msg.data));
-		switch (msg.type) {
-		case 'friend':
-			layim.getMessage(msg.data);
-			break;
-		case 'SERVICE_ONLINE_STATUS':
-			//更改状态
-			layim.setFriendStatus(msg.msg.id, msg.msg.status);
-			break;
-		case 'SERVICE_MESSAGE_COUNT':
-			if(msg.msg != 0)
-				layim.msgbox(msg.msg); //设置消息盒子
-			break;
-		default:
-			break;
-		}
 	},
 	sendData:function(data){
 		this.waitForConnection(function () {
@@ -75,6 +60,10 @@ layui.use(['layim', 'jquery'], function(layim){
 	var $ = layui.jquery;
 	window.layim = layui.layim;
 	im.init();
+	//屏蔽右键菜单
+	$(document).bind("contextmenu",function(e){
+        return false;
+    });
 	if(!/^http(s*):\/\//.test(location.href)){
 		layer.open({
 		  	type: 1,
@@ -237,7 +226,7 @@ layui.use(['layim', 'jquery'], function(layim){
 	      console.log(res.data.id)
 	      if(type === 'friend'){
 	          //模拟标注好友状态
-	      	  //layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
+	      	  layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
 	      } else if(type === 'group'){
 		      //模拟系统消息
 		      layim.getMessage({

@@ -130,6 +130,10 @@
 	    //登陆
 	    form.on('submit(login)', function (data){
 		    var d = {'email': $("#email").val(),'password': $("#password").val()};
+	    	//loading层
+	    	var index = layer.load(1, {
+	    	    shade: [0.6,'#fff'] //0.1透明度的白色背景
+	    	});
 	    	$.ajax({
 	    		url:"user/login",
 	    		dataType:"JSON",
@@ -137,6 +141,7 @@
 	    		type:"POST",
 	    		data:JSON.stringify(d),
 	    		success:function(data) {
+	    			layer.close(index);
 	    			if (data.code == 1) {
 	    				layer.msg("邮箱或密码错误！");
 	    				$("#password").val("");

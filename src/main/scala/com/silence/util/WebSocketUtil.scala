@@ -1,8 +1,8 @@
 package com.silence.util
 
-import scala.collection.mutable.HashMap
 import scala.beans.BeanProperty
 import javax.websocket.Session
+import java.util.HashMap
 
 object WebSocketUtil {
   

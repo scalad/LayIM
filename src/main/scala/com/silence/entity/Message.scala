@@ -18,6 +18,6 @@ class Message {
     //对方信息
     @BeanProperty var to: To = _
 
-    override def toString = Type + ", mine = " + mine.toString + ",to = " + to.toString
+    override def toString = "type = " + Type + ", mine = " + mine + ",to = " + to
     
 }

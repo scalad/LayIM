@@ -24,6 +24,6 @@ class Mine {
     //消息内容
     @BeanProperty var content: String = _
   
-    override def toString = id + ", " + username + ", " + mine + ", " + avatar + ", " + content + ", "
+    override def toString = "id = " + id + ", username = " + username + ", mine = " + mine + ", avatar = " + avatar + ", content = " + content
     
 }

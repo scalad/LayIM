@@ -481,6 +481,7 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
     });
   };
   
+  var othis;
   //屏蔽主面板右键菜单
   var banRightMenu = function(){
     layimMain.on('contextmenu', function(event){
@@ -498,6 +499,34 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
       var othis = $(this);
       var html = '<ul data-id="'+ othis[0].id +'" data-index="'+ othis.data('index') +'"><li layim-event="menuHistory" data-type="one">移除该会话</li><li layim-event="menuHistory" data-type="all">清空全部会话列表</li></ul>';
       
+      if(othis.hasClass('layim-null')) return;
+      
+      layer.tips(html, this, {
+        tips: 1
+        ,time: 0
+        ,anim: 5
+        ,fixed: true
+        ,skin: 'layui-box layui-layim-contextmenu'
+        ,success: function(layero){
+          var stopmp = function(e){ stope(e); };
+          layero.off('mousedown', stopmp).on('mousedown', stopmp);
+        }
+      });
+      $(document).off('mousedown', hide).on('mousedown', hide);
+      $(window).off('resize', hide).on('resize', hide);
+      
+    });
+    
+    //自定义好友管理右键菜单
+    layimMain.find('.layim-list-friend .layui-layim-list').on('contextmenu', 'li', function(e){
+      othis = $(this);
+      var html = '<ul id="contextmenu_' + othis[0].id + '" data-id="' + othis[0].id + '" data-index="' + othis.data('index') + '">';
+      	  html += '<li layim-event="menu_chat"><i class="layui-icon" >&#xe611;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '发送消息</li>';
+          html += '<li layim-event="menu_profile"><i class="layui-icon">&#xe60a;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '查看资料</li>';
+          html += '<li layim-event="menu_history"><i class="layui-icon" >&#xe60e;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '消息记录</li>';
+          html += '<li layim-event="menu_nomsg"><i class="layui-icon" >&#xe617;</i>&nbsp;&nbsp;&nbsp;&nbsp;'  + '屏蔽消息</li>';
+          html += '<li layim-event="menu_delete"><i class="layui-icon" >&#x1006;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '删除好友</li>';
+          html += '<li layim-event="menu_moveto"><i class="layui-icon" >&#xe623;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '移动至</li></ul>';
       if(othis.hasClass('layim-null')) return;
       
       layer.tips(html, this, {
@@ -1291,7 +1320,7 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
   
   //事件
   var anim = 'layui-anim-upbit', events = {
-    //在线状态
+	//在线状态		  
     status: function(othis, e){
       var hide = function(){
         othis.next().hide().removeClass(anim);
@@ -1759,7 +1788,17 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
       
       layer.closeAll('tips');
     }
-    
+    //发送消息
+	,menu_chat: function(){
+		console.log("打开发送消息窗口!");
+		events.chat(othis);
+		layer.closeAll("tips");
+	}
+	//删除好友
+	,menu_delete: function(){
+		console.log(othis);
+		layer.closeAll("tips");
+	}
   };
   
   //暴露接口

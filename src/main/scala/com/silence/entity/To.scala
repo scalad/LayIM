@@ -27,6 +27,6 @@ class To {
     //聊天类型，一般分friend和group两种，group即群聊
     @BeanProperty var Type: String = _
     
-    override def toString = id + ", " + username + ", " + sign + ", " + avatar + ", " + status + ", " + Type  
+    override def toString = "id = " + id + ", username = " + username + ", sign = " + sign + ", avatar = " + avatar + ", status = " + status + ", type = " + Type  
     
 }

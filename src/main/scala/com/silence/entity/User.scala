@@ -54,4 +54,6 @@ class User extends Serializable {
     //激活码
     @BeanProperty var active: String = _
     
+    override def toString = "id = " + id + ", username = " + username + ", password = " + password + ", sign = " + sign + ", email = " + email + ", avatar = " + avatar + ", createDate = " + createDate + ", sex = " + sex + ", status = " + status 
+    
 }
