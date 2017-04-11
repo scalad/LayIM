@@ -30,6 +30,7 @@
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/file_send.png)
 
+![](https://github.com/scalad/LayIM/blob/master/doc/image/group_members.png)
 
 ### application.properties配置文件 ###
     
