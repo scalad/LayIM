@@ -32,6 +32,8 @@
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/group_members.png)
 
+![](https://github.com/scalad/LayIM/blob/master/doc/image/right_key.png)
+
 ### application.properties配置文件 ###
     
 	# Application
