@@ -8,6 +8,9 @@ import com.silence.domain.GroupList
 import com.silence.domain.FriendList
 import org.apache.ibatis.annotations.Update
 import org.apache.ibatis.annotations.Param
+import com.silence.entity.Receive
+import org.apache.ibatis.annotations.Results
+import org.apache.ibatis.annotations.Result
 
 /**
  * @description User Dao
@@ -16,6 +19,23 @@ import org.apache.ibatis.annotations.Param
  *
  */
 trait UserMapper {
+    
+    /**
+     * @description 查询消息
+     * @param uid
+     * @param status 历史消息还是离线消息 0代表离线 1表示已读
+     */
+    @Results(value = Array(new Result(property="id",column="mid")))
+    @Select(Array("select toid,fromid,mid,content,type,timestamp,status from t_message where toid = #{uid} and status = #{status}"))
+    def findMessage(@Param("uid") uid: Integer, @Param("status") status: Integer): List[Receive]
+  
+    /**
+     * @description 保存用户聊天记录
+     * @param receive 聊天记录信息
+     * @return Int
+     */
+    @Insert(Array("insert into t_message(mid,toid,fromid,content,type,timestamp,status) values(#{id},#{toid},#{fromid},#{content},#{type},#{timestamp},#{status})"))
+    def saveMessage(receive: Receive): Int
     
     /**
      * @description 更新签名

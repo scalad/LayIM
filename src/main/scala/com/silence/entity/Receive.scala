@@ -8,7 +8,10 @@ import scala.beans.BeanProperty
  * @author silence
  */
 class Receive {
-    
+  
+    //发送给哪个用户
+    @BeanProperty var toid: Integer = _
+  
     //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
     @BeanProperty var id: Integer = _
     
@@ -35,5 +38,12 @@ class Receive {
     
     //服务端动态时间戳
     @BeanProperty var timestamp: Long = _
+    
+    //消息的状态
+    @BeanProperty var status: Int = _
+           
+    override def toString = "id = " + id + ", username = " + username + 
+      ", avatar = " + avatar +",Type = " + Type + ", content = " + content + ", cid = " + cid + ", mine = " + mine +
+      ", fromid = " + fromid + ", timestamp = " + timestamp + ", status =" + status
     
 }

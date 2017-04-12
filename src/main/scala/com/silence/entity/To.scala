@@ -10,7 +10,7 @@ import scala.beans.BeanProperty
 class To {
   
     //对方的id
-    @BeanProperty var id: Int = _
+    @BeanProperty var id: Integer = _
     
     //名字
     @BeanProperty var username: String = _

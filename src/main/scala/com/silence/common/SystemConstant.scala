@@ -32,6 +32,6 @@ object SystemConstant {
     final val SUBJECT: String = "LayIM即时通讯系统邮箱激活邮件"
     
     //Redis Key相关
-    final val ONLINE_USER_MAP: String = "ONLINE_USER_HASH"
+    final val ONLINE_USER: String = "ONLINE_USER"
     
 }

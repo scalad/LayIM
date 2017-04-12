@@ -21,6 +21,7 @@ import com.silence.util.WebSocketUtil
 import com.silence.service.UserService
 import com.silence.enties.User
 import java.util.List
+import java.util.HashMap
 import scala.collection.JavaConversions
 
 /**
@@ -48,6 +49,7 @@ class WebSocket {
      */
     def sendMessage(message: Message): Unit = {
         //封装返回消息格式
+    		var gid = message.getTo.getId
         val receive = getReceiveType(message)
         val key: Integer = message.getTo.getId
         //聊天类型，可能来自朋友或群组
@@ -57,11 +59,11 @@ class WebSocket {
           		  val session: Session = WebSocketUtil.getSessions.get(key)
           			WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
           	} else {
-          		  //处理离线消息
+          	    //保存为离线消息
+          		  userService.saveMessage(receive)
           	}
         } else {
-            receive.setId(message.getTo.getId)
-            var gid = message.getTo.getId
+            receive.setId(gid)
         		//找到群组id里面的所有用户
             val users:List[User] = userService.findUserByGroupId(gid)
             //过滤掉本身的uid
@@ -69,10 +71,14 @@ class WebSocket {
               .foreach { user => {
                   	  //是否在线
                   	  if(WebSocketUtil.getSessions.containsKey(user.getId)) {
-                  		  val session: Session = WebSocketUtil.getSessions.get(user.getId)
-                  				  WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
+                  		    val session: Session = WebSocketUtil.getSessions.get(user.getId)
+                  		    receive.setId(gid)
+                  				WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
                   	  } else {
-                  		  
+                  	      //保存为离线消息
+                  	      receive.setToid(user.getId)
+                  	      receive.setId(key)
+          		            userService.saveMessage(receive)               		  
                   	  }
             }}
         }
@@ -88,7 +94,7 @@ class WebSocket {
     		this.uid = uid
         WebSocketUtil.sessions.put(uid, session)
         LOGGER.info("userId = " + uid + ",sessionId = " + session.getId + ",新连接加入!")
-        redisService.setMap(SystemConstant.ONLINE_USER_MAP, uid+ "", session.getId)
+        redisService.setSet(SystemConstant.ONLINE_USER, uid + "")
     }
     
     /**
@@ -100,7 +106,25 @@ class WebSocket {
     def onMessage(message: String, session: Session) {
         val mess = gson.fromJson(message.replaceAll("type", "Type"), classOf[Message])
         LOGGER.info("来自客户端的消息: " + mess)
-        sendMessage(mess)
+        mess.getType match {
+            case "message" => {
+                LOGGER.info("发送好友消息和群消息!");
+                sendMessage(mess)    
+            };
+            case "checkOnline" => {
+                LOGGER.info("监测在线状态" + mess.getTo.toString)
+                val uids = redisService.getSets(SystemConstant.ONLINE_USER)
+                var result = new HashMap[String, String]
+                result.put("type", "checkOnline")
+                if (uids.contains(mess.getTo.getId.toString)) {
+                    result.put("status", "在线")
+                    WebSocketUtil.sendMessage(gson.toJson(result), session)
+                } else {
+                    result.put("status", "离线")
+                  	WebSocketUtil.sendMessage(gson.toJson(result), session)
+                }
+            }
+        }
     }
     
     /**
@@ -111,7 +135,7 @@ class WebSocket {
     def onClose(session: Session) = {
         LOGGER.info("userId = " + uid + ",sessionId = " + session.getId + "断开连接!")
         WebSocketUtil.getSessions().remove(uid)
-        
+        redisService.removeSetValue(SystemConstant.ONLINE_USER, uid + "")
     }
     
     /**
@@ -122,7 +146,6 @@ class WebSocket {
     @OnError
     def onError(session: Session, error: Throwable) = {
     		LOGGER.info(session.getId + " 发生错误" + error.printStackTrace)
-    		WebSocketUtil.getSessions().remove(uid)
         onClose(session);
     }
  
@@ -137,11 +160,11 @@ class WebSocket {
         var receive = new Receive
         receive.setId(mine.getId)
         receive.setFromid(mine.getId)
+        receive.setToid(to.getId)
         receive.setUsername(mine.getUsername)
         receive.setType(to.getType)
         receive.setAvatar(mine.getAvatar)
         receive.setContent(mine.getContent)
-        receive.setMine(false)
         receive.setTimestamp(DateUtil.getLongDateTime)
         receive
     }

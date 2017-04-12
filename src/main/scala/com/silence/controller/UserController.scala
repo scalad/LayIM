@@ -29,6 +29,8 @@ import java.util.HashMap
 import com.silence.common.SystemConstant
 import com.silence.util.FileUtil
 import org.springframework.ui.Model
+import com.silence.entity.Receive
+import scala.collection.JavaConversions
 
 @Controller
 @Api(value = "用户相关操作")
@@ -38,6 +40,24 @@ class UserController @Autowired()(private val userService : UserService){
     private final val LOGGER:Logger = LoggerFactory.getLogger(classOf[UserController])
     
     private final val gson: Gson = new Gson
+    
+    /**
+     * @description 获取离线消息
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/getOffLineMessage"), method = Array(RequestMethod.POST))
+    def getOffLineMessage(request: HttpServletRequest): String = {
+        val user = request.getSession.getAttribute("user").asInstanceOf[User]
+        		LOGGER.info("查询 uid = " + user.getId + " 的离线消息")
+        val receives: List[Receive] = userService.findMessage(user.getId, 0)
+        JavaConversions.collectionAsScalaIterable(receives).foreach { receive => {
+            val user = userService.findUserById(receive.getId)
+            receive.setUsername(user.getUsername)
+            receive.setAvatar(user.getAvatar)
+        } }
+        gson.toJson(new ResultSet(receives)).replaceAll("Type", "type")
+    }
+        
     
     /**
      * @description 更新签名   
@@ -117,7 +137,9 @@ class UserController @Autowired()(private val userService : UserService){
     def init(@PathVariable("userId") userId: Int): String = {
     		var data = new FriendAndGroupInfo
     		//用户信息
-        data.mine = userService.findUserById(userId)
+    		var user = userService.findUserById(userId)
+    		user.setStatus("online")
+        data.mine = user
         //用户群组列表
         data.group = userService.findGroupsById(userId)
         //用户好友列表

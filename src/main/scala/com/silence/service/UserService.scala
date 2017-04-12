@@ -20,6 +20,7 @@ import com.silence.util.DateUtil
 import com.silence.common.SystemConstant
 import com.silence.util.WebUtil
 import javax.servlet.http.HttpServletRequest
+import com.silence.entity.Receive
 
 /**
  * @description 用户信息相关操作
@@ -33,6 +34,24 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     //电子邮件相关服务
     @Autowired private var mailService: MailService = _
 
+    /**
+     * @description 查询消息
+     * @param uid
+     * @param status 历史消息还是离线消息 0代表离线 1表示已读
+     */
+    def findMessage(uid: Integer, status: Integer):List[Receive] = {
+        userMapper.findMessage(uid, status)
+    }
+    
+    /**
+     * @description 保存用户聊天记录
+     * @param receive 聊天记录信息
+     * @return Int
+     */
+    def saveMessage(receive: Receive): Int = {
+        userMapper.saveMessage(receive)
+    }
+    
     /**
      * @description 用户更新签名
      * @param user

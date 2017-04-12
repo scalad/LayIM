@@ -234,7 +234,7 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
       ,'{{# } }}'
       ,'<li class="layui-icon layim-tool-skin" layim-event="skin" title="更换背景">&#xe61b;</li>'
       ,'{{# if(!d.base.copyright){ }}'
-      ,'<li class="layui-icon layim-tool-about" layim-event="about" title="关于">&#xe60b;</li>'
+      ,'<li class="layui-icon layim-tool-setting" layim-event="setting" title="设置">&#xe620;</li>'
       ,'{{# } }}'
     ,'</ul>'
     ,'<div class="layui-layim-search"><input><label class="layui-icon" layim-event="closeSearch">&#x1007;</label></div>'
@@ -1497,11 +1497,20 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
     }
     
     //关于
-    ,about: function(){
-      layer.alert('版本： '+ v + '<br>版权所有：<a href="http://layim.layui.com" target="_blank">layim.layui.com</a>', {
-        title: '关于 LayIM'
-        ,shade: false
-      });
+    ,setting: function(){
+    	layer.tab({
+    		  area: ['800px', '500px'],
+    		  tab: [{
+    		    title: 'TAB1', 
+    		    content: '内容1'
+    		  }, {
+    		    title: 'TAB2', 
+    		    content: '内容2'
+    		  }, {
+    		    title: 'TAB3', 
+    		    content: '内容3'
+    		  }]
+    	});
     }
     
     //生成换肤

@@ -1,69 +1,13 @@
 var socket = null;
-var im = {
-	init: function() {
-		if ('WebSocket' in window) {
-			var uid = getUid();
-			if (!uid) {
-				console.log('当前用户未登陆，应该跳到login');
-			} else {
-				var host = window.location.host
-				if(window.location.post != ""){
-					host = host + ":" + window.location.port;
-				}
-				var socketUrl = 'ws://' + host + '/websocket/'+uid;
-				socket = new WebSocket(socketUrl);
-				im.startListener();
-			}
-		} else {
-			alert('当前浏览器不支持WebSocket功能，请更换浏览器访问。');
-		}
-	},
-	startListener : function() {
-		if (socket) {
-			socket.onerror = function() {
-				console.log("连接失败!");
-			};
-			socket.onopen = function(event) {
-				console.log("连接成功");
-			}
-			socket.onmessage = function(event) {
-				console.log("接收到消息");
-				im.handleMessage(event);
-			}
-			socket.onclose = function() {
-				console.log("关闭连接！!");
-			}
-		}
-	},
-	handleMessage : function(msg) {
-		console.log(msg.data);
-		layim.getMessage(JSON.parse(msg.data));
-	},
-	sendData:function(data){
-		this.waitForConnection(function () {
-			socket.send(data);
-	    }, 500);
-	},
-	waitForConnection : function (callback, interval) {//判断连接是否建立
-	    if (socket.readyState === 1) {
-	        callback();
-	    } else {
-	        var that = this;
-	        setTimeout(function () {
-	            that.waitForConnection(callback, interval);
-	        }, interval);
-	    }
-	}
-}
-
 layui.use(['layim', 'jquery'], function(layim){
 	var $ = layui.jquery;
+	//把layim对象添加到window上
 	window.layim = layui.layim;
-	im.init();
 	//屏蔽右键菜单
 	$(document).bind("contextmenu",function(e){
         return false;
     });
+	//确定只有部署到服务器
 	if(!/^http(s*):\/\//.test(location.href)){
 		layer.open({
 		  	type: 1,
@@ -72,20 +16,83 @@ layui.use(['layim', 'jquery'], function(layim){
 		  	content: '<center>请部署到服务器上查看该演示！</center>'
 		});
 	}
+	//声明websocket属性
+	var im = {
+		init: function() {
+			if ('WebSocket' in window) {
+				var uid = getUid();
+				if (!uid) {
+					console.log('当前用户未登陆，应该跳到login');
+				} else {
+					var host = window.location.host
+					if(window.location.post != ""){
+						host = host + ":" + window.location.port;
+					}
+					var socketUrl = 'ws://' + host + '/websocket/'+uid;
+					socket = new WebSocket(socketUrl);
+					im.startListener();
+				}
+			} else {
+				layer.msg('当前浏览器不支持WebSocket功能，请更换浏览器访问!');
+			}
+		},
+		startListener : function() {
+			if (socket) {
+				socket.onerror = function() {
+					layer.msg("连接失败!");
+				};
+				socket.onopen = function(event) {
+					console.log("连接成功");
+				};
+				socket.onmessage = function(event) {
+					console.log("接收到消息");
+					im.handleMessage(event.data);
+				};
+				socket.onclose = function() {
+					console.log("关闭连接！!");
+					im.waitForConnection(function(){
+						im.init();
+					},5);
+				}
+			}
+		},
+		//处理接收到的消息
+		handleMessage : function(data) {
+			console.log(data);
+			json = eval("(" + data + ")");
+			var type = json.type;
+			if("friend" == type || "group" == type) {				
+				layim.getMessage(JSON.parse(data));
+			} else if("checkOnline" == type){
+				var style;
+				if(json.status == "在线"){
+					style = "color:#00EE00;";
+				} else {
+					style = "color:#FF5722;";
+				}
+				layim.setChatStatus('<span style="' + style +'">' + json.status + '</span>');
+			}
+		},
+		sendData:function(data){
+			this.waitForConnection(function () {
+				socket.send(data);
+		    }, 500);
+		},
+		waitForConnection : function (callback, interval) {//判断连接是否建立
+		    if (socket.readyState === 1) {
+		        callback();
+		    } else {
+		        var that = this;
+		        setTimeout(function () {
+		            that.waitForConnection(callback, interval);
+		        }, interval);
+		    }
+		}
+	}
+
+	//初始化WebSocket对象
+	im.init();
 	
-  	//演示自动回复
-  	var autoReplay = [
-    	'您好，我现在有事不在，一会再和您联系。', 
-    	'你没发错吧？face[微笑] ',
-    	'洗澡中，请勿打扰，偷窥请购票，个体四十，团体八折，订票电话：一般人我不告诉他！face[哈哈] ',
-    	'你好，我是主人的美女秘书，有什么事就跟我说吧，等他回来我会转告他的。face[心] face[心] face[心] ',
-	    'face[威武] face[威武] face[威武] face[威武] ',
-	    '<（@￣︶￣@）>',
-	    '你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。',
-	    'face[黑线]  你慢慢说，别急……',
-	    '(*^__^*) face[嘻嘻] ，是贤心吗？'
-  	];
-  
 	//基础配置
 	layim.config({
 		//主面板最小化后显示的名称
@@ -174,7 +181,7 @@ layui.use(['layim', 'jquery'], function(layim){
 	  
 	  //监听layim建立就绪
 	  layim.on('ready', function(res){
-	      layim.msgbox(5); //模拟消息盒子有新消息，实际使用时，一般是动态获得	
+	      layim.msgbox(5); //模拟消息盒子有新消息，实际使用时，一般是动态获得
 	  });
 	
 	  //监听发送消息
@@ -183,36 +190,13 @@ layui.use(['layim', 'jquery'], function(layim){
 	      var To = data.to;
 	      console.log(data);
 	      socket.send(JSON.stringify({
-	    	 type:"chatMessage",
+	    	 type:"message",
 	    	 mine:mine,
 	    	 to:To
 	      }));
 	      if(To.type === 'friend'){
 		      layim.setChatStatus('<span style="color:#FF5722;">对方正在输入。。。</span>');
 	      }
-	      //演示自动回复
-	      /*setTimeout(function(){
-		      var obj = {};
-		      if(To.type === 'group'){
-		          obj = {
-			          username: '模拟群员'+(Math.random()*100|0)
-			          ,avatar: layui.cache.dir + 'images/face/'+ (Math.random()*72|0) + '.gif'
-			          ,id: To.id
-			          ,type: To.type
-			          ,content: autoReplay[Math.random()*9|0]
-		          }
-		      } else {
-			        obj = {
-			      	    username: To.name
-			         	,avatar: To.avatar
-			          	,id: To.id
-			          	,type: To.type
-			          	,content: autoReplay[Math.random()*9|0]
-			        }
-		        	layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
-		      }
-	      	layim.getMessage(obj);
-	      }, 1000);*/
 	  });
 	
 	  //监听查看群员
@@ -223,10 +207,16 @@ layui.use(['layim', 'jquery'], function(layim){
 	  //监听聊天窗口的切换
 	  layim.on('chatChange', function(res){
 	      var type = res.data.type;
-	      console.log(res.data.id)
+	      //如果打开的是好友窗口则监测好友的状态
+	      if("friend" == type){	    	  
+	    	  socket.send(JSON.stringify({
+	    		  type:"checkOnline",
+	    		  mine:null,
+	    		  to:res.data
+	    	  }));
+	      }
 	      if(type === 'friend'){
-	          //模拟标注好友状态
-	      	  layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
+	    	  layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
 	      } else if(type === 'group'){
 		      //模拟系统消息
 		      layim.getMessage({
@@ -236,5 +226,22 @@ layui.use(['layim', 'jquery'], function(layim){
 	        	  ,content: '模拟群员'+(Math.random()*100|0) + '加入群聊'
 	      	  });
 	       }
-	  });  
+	  });
+	  
+	  //获取离线消息
+	  /*$.ajax({
+	  		url:"/user/getOffLineMessage",
+	  		dataType:"JSON",
+	  		type:"POST",
+	  		success:function(data) {
+	  			console.log(data.data.length)
+	  			for(var i = 0; i < data.data.length; i ++){	  				
+	  				layim.getMessage(data.data[i]);
+	  				console.log(JSON.stringify(data.data[i]));
+	  			}
+	  		},
+	  		error:function(data) {
+	  			layer.msg(data.msg + ",服务器错误,请稍后再试！");
+	  		}
+	  });*/
 });
