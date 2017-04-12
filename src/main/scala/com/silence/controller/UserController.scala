@@ -39,6 +39,11 @@ class UserController @Autowired()(private val userService : UserService){
     
     private final val gson: Gson = new Gson
     
+    /**
+     * @description 更新签名   
+     * @param sign
+     * 
+     */
     @ResponseBody
     @RequestMapping(value = Array("/updateSign"), method = Array(RequestMethod.POST))
     def updateSign(request: HttpServletRequest, @RequestParam("sign") sign: String): String = {
@@ -51,6 +56,11 @@ class UserController @Autowired()(private val userService : UserService){
         }
     }
     
+    /**
+     * @description 激活   
+     * @param activeCode
+     * 
+     */
     @RequestMapping(value = Array("/active/{activeCode}"), method = Array(RequestMethod.GET))
     def activeUser(@PathVariable("activeCode") activeCode: String): String = {
         if(userService.activeUser(activeCode) == 1) {
@@ -59,6 +69,11 @@ class UserController @Autowired()(private val userService : UserService){
         "redirect:/#toregister?status=0"
     }
     
+    /**
+     * @description 注册   
+     * @param user
+     * 
+     */
     @ResponseBody
     @RequestMapping(value = Array("/register"), method = Array(RequestMethod.POST))
     def register(@RequestBody user: User, request: HttpServletRequest): String = {
@@ -69,6 +84,11 @@ class UserController @Autowired()(private val userService : UserService){
         }
     }
     
+    /**
+     * @description 登陆
+     * @param user
+     * 
+     */
     @ResponseBody
     @RequestMapping(value = Array("/login"), method = Array(RequestMethod.POST))
     def login(@RequestBody user: User, request: HttpServletRequest): String = {
@@ -86,6 +106,11 @@ class UserController @Autowired()(private val userService : UserService){
         }
     }
 
+    /**
+     * @description  初始化主界面数据
+     * @param userId
+     * 
+     */
     @ResponseBody
     @ApiOperation("初始化聊天界面数据，分组列表好友信息、群列表")
     @RequestMapping(value = Array("/init/{userId}"), method = Array(RequestMethod.POST))
@@ -100,6 +125,11 @@ class UserController @Autowired()(private val userService : UserService){
         gson.toJson(new ResultSet[FriendAndGroupInfo](data))
     }
     
+    /**
+     * @description 获取群成员
+     * @param id
+     * 
+     */
     @ResponseBody
     @RequestMapping(value = Array("/getMembers"), method = Array(RequestMethod.GET))
     def getMembers(@RequestParam("id") id: Int): String = {
