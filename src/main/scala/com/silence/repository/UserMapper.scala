@@ -16,7 +16,7 @@ import org.apache.ibatis.annotations.Param
  *
  */
 trait UserMapper {
-
+    
     /**
      * @description 更新签名
      */
@@ -69,7 +69,7 @@ trait UserMapper {
      * @return List[User]
      */
     @Select(Array("select id,username,avatar,sign,status from t_user where id in(select uid from t_friend_group_friends where fgid = #{fgid})"))
-    def findUsersByFriendGroupId(fgid: Int): List[User]
+    def findUsersByFriendGroupIds(fgid: Int): List[User]
     
     /**
      * @description 保存用户信息

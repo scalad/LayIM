@@ -70,7 +70,7 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
         val u: User = userMapper.matchUser(user.getEmail)
         //密码不匹配
         if(u == null || !SecurityUtil.matchs(user.getPassword, u.getPassword)){
-            return null      
+            return null
         }
         u
     }
@@ -94,7 +94,7 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
         //封装分组列表下的好友信息
         JavaConversions.collectionAsScalaIterable(friends).foreach { 
             friend:FriendList => {
-                friend.list = userMapper.findUsersByFriendGroupId(friend.id)
+                friend.list = userMapper.findUsersByFriendGroupIds(friend.getId)
             }
         }
         friends

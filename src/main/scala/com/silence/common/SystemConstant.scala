@@ -10,6 +10,8 @@ object SystemConstant {
     
     final val LOGGIN_FAIL: String = "登陆失败"
     
+    final val NONACTIVED: String = "用户未激活"
+    
     final val REGISTER_SUCCESS: String = "注册成功"
     
     final val REGISTER_FAIL: String = "登陆失败"

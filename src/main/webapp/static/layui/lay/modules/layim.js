@@ -541,9 +541,9 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
         }
       });
       $(document).off('mousedown', hide).on('mousedown', hide);
-      $(window).off('resize', hide).on('resize', hide);
-      
+      $(window).off('resize', hide).on('resize', hide);    
     });
+        
   }
   
   //主面板最小化状态

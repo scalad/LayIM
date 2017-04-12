@@ -73,10 +73,13 @@ class UserController @Autowired()(private val userService : UserService){
     @RequestMapping(value = Array("/login"), method = Array(RequestMethod.POST))
     def login(@RequestBody user: User, request: HttpServletRequest): String = {
         val u: User = userService.matchUser(user)
-        if(u != null) {
+        //未激活
+        if (u != null && "nonactivated".equals(u.getStatus)) {
+            return gson.toJson(new ResultSet[User](SystemConstant.ERROR, SystemConstant.NONACTIVED))
+        } else if(u != null && !"nonactivated".equals(u.getStatus)) {
             LOGGER.info(user + "成功登陆服务器")
             request.getSession.setAttribute("user", u);
-            gson.toJson(new ResultSet[User](u))
+            return gson.toJson(new ResultSet[User](u))
         } else {        
             var result = new ResultSet[User](SystemConstant.ERROR, SystemConstant.LOGGIN_FAIL)
             gson.toJson(result)
