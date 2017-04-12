@@ -14,7 +14,40 @@ class RedisService {
     private val LOGGER: Logger = LoggerFactory.getLogger(classOf[RedisService])
   
     @Autowired private var redisTemplate: RedisTemplate[String, String] = _
-  
+
+    /**
+     * @description 获取Set集合数据
+     * @param k
+     * @return Set[String]
+     */
+    def getSets(k: String): Set[String] = {
+        redisTemplate.opsForSet.members(k)
+    }
+    
+    /**
+     * @description 移除Set集合中的value
+     * @param k
+     * @param v
+     */
+    def removeSetValue(k: String, v: String): Unit = {
+        if(k == null && v == null){          
+        	  return
+        }
+        redisTemplate.opsForSet().remove(k, v)
+    }
+    
+    /**
+     * @description 保存到Set集合中
+     * @param k
+     * @param v
+     */
+    def setSet(k: String, v: String): Unit = {
+        if(k == null && v == null){          
+        	  return
+        }
+        redisTemplate.opsForSet().add(k, v)
+    }
+    
     /**
      * @description 存储Map格式
      * @param key
@@ -92,7 +125,5 @@ class RedisService {
         val keys: Set[String] = redisTemplate.keys(keyParttern)
         if(keys.size() > 0) redisTemplate.delete(keys)
     }
-    
-  
-    
+ 
 }
