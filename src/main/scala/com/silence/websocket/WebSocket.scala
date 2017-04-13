@@ -48,6 +48,7 @@ class WebSocket {
      * @message Message
      */
     def sendMessage(message: Message): Unit = {
+        LOGGER.info("发送好友消息和群消息!");
         //封装返回消息格式
     		var gid = message.getTo.getId
         val receive = getReceiveType(message)
@@ -109,21 +110,13 @@ class WebSocket {
         LOGGER.info("来自客户端的消息: " + mess)
         mess.getType match {
             case "message" => {
-                LOGGER.info("发送好友消息和群消息!");
                 sendMessage(mess)    
-            };
+            }
             case "checkOnline" => {
-                LOGGER.info("监测在线状态" + mess.getTo.toString)
-                val uids = redisService.getSets(SystemConstant.ONLINE_USER)
-                var result = new HashMap[String, String]
-                result.put("type", "checkOnline")
-                if (uids.contains(mess.getTo.getId.toString)) {
-                    result.put("status", "在线")
-                    WebSocketUtil.sendMessage(gson.toJson(result), session)
-                } else {
-                    result.put("status", "离线")
-                  	WebSocketUtil.sendMessage(gson.toJson(result), session)
-                }
+                WebSocketUtil.checkOnline(mess, session)
+            }
+            case "changOnline" => {
+                LOGGER.info(uid + "改变状态")
             }
         }
     }
