@@ -76,7 +76,8 @@ dependencies {
 
     //JSP
     compile ("org.apache.tomcat.embed:tomcat-embed-jasper:+")
-    compile ("javax.servlet.jsp.jstl:jstl-api:1.2")
+    compile ("javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:1.2.1")
+    compile ("org.apache.taglibs:taglibs-standard-impl:1.2.5")
 
     //shiro
     compile ("org.apache.shiro:shiro-core:1.2.5")
