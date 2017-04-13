@@ -36,17 +36,23 @@
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/file_send.png)
 
-后去群成员
+获取群成员
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/group_members.png)
 
-聊天记录、分页
+聊天记录、分页处理
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/chatLog.png)
 
 右键菜单
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/right_key.png)
+
+注册、登陆
+
+![](https://github.com/scalad/LayIM/blob/master/doc/image/register.png)
+
+![](https://github.com/scalad/LayIM/blob/master/doc/image/login.png)
 
 ### application.properties配置文件 ###
     
@@ -110,5 +116,6 @@
 * gradle bootRun
 * swagger ui reference => http://localhost/swagger-ui.html
 * druid manage reference => http://localhost/druid/index.html
-	* username:admin password:admin
+	* username:admin 
+	* password:admin
 * inded page reference => http://localhost/
