@@ -74,10 +74,8 @@ dependencies {
     compile ("io.springfox:springfox-swagger2:2.2.2")
     compile ("io.springfox:springfox-swagger-ui:2.2.2")
 
-    //JSP
+    //Tomcat
     compile ("org.apache.tomcat.embed:tomcat-embed-jasper:+")
-    compile ("javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:1.2.1")
-    compile ("org.apache.taglibs:taglibs-standard-impl:1.2.5")
 
     //shiro
     compile ("org.apache.shiro:shiro-core:1.2.5")
