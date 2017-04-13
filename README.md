@@ -24,13 +24,27 @@
 
 ### 界面
 
+系统主页
+
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/page_index.png)
+
+发送文字、表情和图片
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/word_emoji_image_send.png)
 
+发送文件
+
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/file_send.png)
 
+后去群成员
+
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/group_members.png)
+
+聊天记录、分页
+
+![](https://github.com/scalad/LayIM/blob/master/doc/image/chatLog.png)
+
+右键菜单
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/right_key.png)
 
