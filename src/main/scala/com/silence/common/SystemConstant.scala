@@ -34,4 +34,6 @@ object SystemConstant {
     //Redis Key相关
     final val ONLINE_USER: String = "ONLINE_USER"
     
+    final val SYSTEM_PAGE: Int = 6
+    
 }

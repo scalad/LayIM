@@ -1,6 +1,7 @@
 package com.silence.entity
 
 import scala.beans.BeanProperty
+import java.lang.Long
 
 /**
  * @description 客户端接收消息类型

@@ -35,22 +35,39 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     @Autowired private var mailService: MailService = _
 
     /**
-     * @description 查询消息
+     * @description 统计查询消息
+     * @param uid 消息所属用户
+     * @param mid 来自哪个用户
+     * @param Type 消息类型，可能来自friend或者group
+     */
+    def countHistoryMessage(uid: Integer, mid: Integer, Type: String):Int = {
+        userMapper.countHistoryMessage(uid, mid, Type)
+    }
+    
+    /**
+     * @description 查询历史消息
+     * @param uid
+     * @param 
+     */
+    def findHistoryMessage(uid: Integer, mid: Integer, Type: String):List[Receive] = {
+        userMapper.findHistoryMessage(uid, mid, Type)
+    }
+
+    
+    /**
+     * @description 查询离线消息
      * @param uid
      * @param status 历史消息还是离线消息 0代表离线 1表示已读
      */
-    def findMessage(uid: Integer, status: Integer):List[Receive] = {
-        userMapper.findMessage(uid, status)
-    }
+    def findOffLineMessage(uid: Integer, status: Integer):List[Receive] = userMapper.findOffLineMessage(uid, status)
+    
     
     /**
      * @description 保存用户聊天记录
      * @param receive 聊天记录信息
      * @return Int
      */
-    def saveMessage(receive: Receive): Int = {
-        userMapper.saveMessage(receive)
-    }
+    def saveMessage(receive: Receive): Int = userMapper.saveMessage(receive)
     
     /**
      * @description 用户更新签名

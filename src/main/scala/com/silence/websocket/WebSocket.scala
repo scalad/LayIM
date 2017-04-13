@@ -57,11 +57,11 @@ class WebSocket {
           	//是否在线
           	if(WebSocketUtil.getSessions.containsKey(key)) {
           		  val session: Session = WebSocketUtil.getSessions.get(key)
+          		  receive.setStatus(1)
           			WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
-          	} else {
-          	    //保存为离线消息
-          		  userService.saveMessage(receive)
           	}
+            //保存为离线消息,默认是为离线消息
+            userService.saveMessage(receive)
         } else {
             receive.setId(gid)
         		//找到群组id里面的所有用户
@@ -73,13 +73,14 @@ class WebSocket {
                   	  if(WebSocketUtil.getSessions.containsKey(user.getId)) {
                   		    val session: Session = WebSocketUtil.getSessions.get(user.getId)
                   		    receive.setId(gid)
+                  		    receive.setStatus(1)
                   				WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
                   	  } else {
                   	      //保存为离线消息
                   	      receive.setToid(user.getId)
                   	      receive.setId(key)
-          		            userService.saveMessage(receive)               		  
                   	  }
+                  	  userService.saveMessage(receive)               		  
             }}
         }
     }

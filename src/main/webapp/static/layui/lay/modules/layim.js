@@ -1757,13 +1757,13 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
         type: 2
         ,maxmin: true
         ,title: '与 '+ thatChat.data.name +' 的聊天记录'
-        ,area: ['450px', '100%']
+        ,area: ['45%', '100%']
         ,shade: false
         ,offset: 'rb'
         ,skin: 'layui-box'
         ,anim: 2
         ,id: 'layui-layim-chatlog'
-        ,content: cache.base.chatLog + '?id=' + thatChat.data.id + '&type=' + thatChat.data.type
+        ,content: cache.base.chatLog + '?id=' + thatChat.data.id + '&Type=' + thatChat.data.type
       });
     }
     

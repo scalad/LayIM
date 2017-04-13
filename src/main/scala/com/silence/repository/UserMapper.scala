@@ -19,7 +19,26 @@ import org.apache.ibatis.annotations.Result
  *
  */
 trait UserMapper {
+
+    /**
+     * @description 统计查询消息
+     * @param uid 消息所属用户
+     * @param mid 来自哪个用户
+     * @param Type 消息类型，可能来自friend或者group
+     */
+    @Select(Array("select count(*) from t_message where (toid = #{uid} and mid = #{mid}) or (toid = #{mid} and mid = #{uid}) and type =#{Type}"))  
+    def countHistoryMessage(@Param("uid") uid: Integer, @Param("mid") mid: Integer, @Param("Type") Type: String): Int
     
+    /**
+     * @description 查询消息
+     * @param uid 消息所属用户
+     * @param mid 来自哪个用户
+     * @param Type 消息类型，可能来自friend或者group
+     */
+    @Results(value = Array(new Result(property="id",column="mid")))
+    @Select(Array("select toid,fromid,mid,content,type,timestamp,status from t_message where (toid = #{uid} and mid = #{mid}) or (toid = #{mid} and mid = #{uid}) and type = #{Type} order by timestamp"))
+    def findHistoryMessage(@Param("uid") uid: Integer, @Param("mid") mid: Integer, @Param("Type") Type: String): List[Receive]
+ 
     /**
      * @description 查询消息
      * @param uid
@@ -27,7 +46,7 @@ trait UserMapper {
      */
     @Results(value = Array(new Result(property="id",column="mid")))
     @Select(Array("select toid,fromid,mid,content,type,timestamp,status from t_message where toid = #{uid} and status = #{status}"))
-    def findMessage(@Param("uid") uid: Integer, @Param("status") status: Integer): List[Receive]
+    def findOffLineMessage(@Param("uid") uid: Integer, @Param("status") status: Integer): List[Receive]
   
     /**
      * @description 保存用户聊天记录

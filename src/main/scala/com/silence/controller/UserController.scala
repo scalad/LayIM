@@ -31,6 +31,11 @@ import com.silence.util.FileUtil
 import org.springframework.ui.Model
 import com.silence.entity.Receive
 import scala.collection.JavaConversions
+import com.github.pagehelper.PageHelper
+import java.util.ArrayList
+import com.silence.entity.ChatHistory
+import com.silence.entity.ChatHistory
+import com.silence.entity.ChatHistory
 
 @Controller
 @Api(value = "用户相关操作")
@@ -42,6 +47,50 @@ class UserController @Autowired()(private val userService : UserService){
     private final val gson: Gson = new Gson
     
     /**
+     * @description 获取聊天记录
+     * @param id 与谁的聊天记录id
+     * @param Type 类型，可能是friend或者是group
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/chatLog"), method = Array(RequestMethod.POST))
+    def chatLog(@RequestParam("id") id: Integer, @RequestParam("Type") Type: String, 
+        @RequestParam("page") page: Int, request: HttpServletRequest, model: Model): String = {
+        val user = request.getSession.getAttribute("user").asInstanceOf[User]
+        PageHelper.startPage(page, SystemConstant.SYSTEM_PAGE)
+        //查找聊天记录
+        val historys:List[Receive] = userService.findHistoryMessage(user.getId, id, Type)
+        val list = new ArrayList[ChatHistory]()
+        val toUser = userService.findUserById(id)
+        JavaConversions.collectionAsScalaIterable(historys).foreach { history => {
+            var chatHistory: ChatHistory = null
+            if(history.getId == id){
+                chatHistory = new ChatHistory(history.getId, toUser.getUsername,toUser.getAvatar,history.getContent,history.getTimestamp)
+            } else {
+                chatHistory = new ChatHistory(history.getId, user.getUsername,user.getAvatar,history.getContent,history.getTimestamp)
+            }
+            list.add(chatHistory)
+        } }
+        gson.toJson(new ResultSet(list))
+    }
+    
+    /**
+     * @description 弹出聊天记录页面
+     * @param id 与谁的聊天记录id
+     * @param Type 类型，可能是friend或者是group
+     */
+    @RequestMapping(value = Array("/chatLogIndex"), method = Array(RequestMethod.GET))
+    def chatLogIndex(@RequestParam("id") id: Integer, @RequestParam("Type") Type: String, 
+        model: Model, request: HttpServletRequest): String = {
+        model.addAttribute("id", id)
+        model.addAttribute("Type", Type)
+        val user = request.getSession.getAttribute("user").asInstanceOf[User]
+        var pages: Int = userService.countHistoryMessage(user.getId, id, Type)
+        pages = if (pages < SystemConstant.SYSTEM_PAGE) pages else (pages / SystemConstant.SYSTEM_PAGE + 1)
+        model.addAttribute("pages", pages)
+        "chatLog"
+    }
+    
+    /**
      * @description 获取离线消息
      */
     @ResponseBody
@@ -49,7 +98,7 @@ class UserController @Autowired()(private val userService : UserService){
     def getOffLineMessage(request: HttpServletRequest): String = {
         val user = request.getSession.getAttribute("user").asInstanceOf[User]
         		LOGGER.info("查询 uid = " + user.getId + " 的离线消息")
-        val receives: List[Receive] = userService.findMessage(user.getId, 0)
+        val receives: List[Receive] = userService.findOffLineMessage(user.getId, 0)
         JavaConversions.collectionAsScalaIterable(receives).foreach { receive => {
             val user = userService.findUserById(receive.getId)
             receive.setUsername(user.getUsername)
