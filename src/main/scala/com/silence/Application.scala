@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.mybatis.spring.annotation.MapperScan
 import org.springframework.context.ApplicationContext
 import com.silence.util.WebUtil
+import scala.beans.BeanProperty
 
 @SpringBootApplication
 //启动swagger注解
@@ -19,11 +20,12 @@ class Config extends App
 
 object Application extends SpringBootServletInitializer {
 
+    @BeanProperty var applicationContext: ApplicationContext = null
+    
     def main(args: Array[String]): Unit = {
       
-    		val applicationContext: ApplicationContext = SpringApplication.run(classOf[Config])
-    		WebUtil.setApplicationContext(applicationContext)
-
+    		applicationContext = SpringApplication.run(classOf[Config])
+    		
     }
         
     override protected def configure(builder: SpringApplicationBuilder): SpringApplicationBuilder = {

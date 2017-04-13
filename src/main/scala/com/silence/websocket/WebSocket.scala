@@ -11,18 +11,12 @@ import org.springframework.stereotype.Component
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import com.google.gson.Gson
-import com.silence.util.DateUtil
 import com.silence.entity.Message
-import com.silence.entity.Receive
 import com.silence.service.RedisService
 import com.silence.common.SystemConstant
 import com.silence.util.WebUtil
 import com.silence.util.WebSocketUtil
-import com.silence.service.UserService
-import com.silence.enties.User
-import java.util.List
-import java.util.HashMap
-import scala.collection.JavaConversions
+import com.silence.Application
 
 /**
  * @description websocket服务器处理消息
@@ -35,57 +29,12 @@ class WebSocket {
   
     private final val LOGGER: Logger = LoggerFactory.getLogger(classOf[WebSocket])
     
-    private lazy val redisService: RedisService = WebUtil.getBean(classOf[RedisService])
+    private lazy val redisService: RedisService = Application.getApplicationContext.getBean(classOf[RedisService])
     
-    private lazy val userService: UserService = WebUtil.getBean(classOf[UserService])
-  
     private final val gson: Gson = new Gson    
     
     private var uid: Integer = _
     
-    /**
-     * @description 发送消息
-     * @message Message
-     */
-    def sendMessage(message: Message): Unit = {
-        LOGGER.info("发送好友消息和群消息!");
-        //封装返回消息格式
-    		var gid = message.getTo.getId
-        val receive = getReceiveType(message)
-        val key: Integer = message.getTo.getId
-        //聊天类型，可能来自朋友或群组
-        if("friend".equals(message.getTo.getType)) {            
-          	//是否在线
-          	if(WebSocketUtil.getSessions.containsKey(key)) {
-          		  val session: Session = WebSocketUtil.getSessions.get(key)
-          		  receive.setStatus(1)
-          			WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
-          	}
-            //保存为离线消息,默认是为离线消息
-            userService.saveMessage(receive)
-        } else {
-            receive.setId(gid)
-        		//找到群组id里面的所有用户
-            val users:List[User] = userService.findUserByGroupId(gid)
-            //过滤掉本身的uid
-            JavaConversions.collectionAsScalaIterable(users).filter(_.id != message.getMine.getId)
-              .foreach { user => {
-                  	  //是否在线
-                  	  if(WebSocketUtil.getSessions.containsKey(user.getId)) {
-                  		    val session: Session = WebSocketUtil.getSessions.get(user.getId)
-                  		    receive.setId(gid)
-                  		    receive.setStatus(1)
-                  				WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
-                  	  } else {
-                  	      //保存为离线消息
-                  	      receive.setToid(user.getId)
-                  	      receive.setId(key)
-                  	  }
-                  	  userService.saveMessage(receive)               		  
-            }}
-        }
-    }
-     
     /**
      * @description 首次创建链接
      * @param session
@@ -110,13 +59,16 @@ class WebSocket {
         LOGGER.info("来自客户端的消息: " + mess)
         mess.getType match {
             case "message" => {
-                sendMessage(mess)    
+                WebSocketUtil.sendMessage(mess)    
             }
             case "checkOnline" => {
                 WebSocketUtil.checkOnline(mess, session)
             }
             case "changOnline" => {
                 LOGGER.info(uid + "改变状态")
+            }
+            case _ => {
+                LOGGER.info("No Mapping Message!")
             }
         }
     }
@@ -143,23 +95,4 @@ class WebSocket {
         onClose(session);
     }
  
-    /**
-     * @description 封装返回消息格式
-     * @param Message
-     * @return Receive
-     */
-    def getReceiveType(message: Message): Receive = {
-        val mine = message.getMine
-        val to = message.getTo
-        var receive = new Receive
-        receive.setId(mine.getId)
-        receive.setFromid(mine.getId)
-        receive.setToid(to.getId)
-        receive.setUsername(mine.getUsername)
-        receive.setType(to.getType)
-        receive.setAvatar(mine.getAvatar)
-        receive.setContent(mine.getContent)
-        receive.setTimestamp(DateUtil.getLongDateTime)
-        receive
-    }
 }
