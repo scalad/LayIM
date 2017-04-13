@@ -25,12 +25,12 @@ class ScheduledTasks {
     /**
      * 每1分钟执行一次
      */
-    @Scheduled(cron = "0 */1 *  * * * ")
+    //@Scheduled(cron = "0 */1 *  * * * ")
     def redisTask = {
         LOGGER.info("Scheduling Tasks Examples By Cron: The time is now " + DateUtil.getDateString)
     }
     
-    @Scheduled(fixedRate = 1000 * 30)
+    //@Scheduled(fixedRate = 1000 * 30)
     def dataBaseTask = {
         LOGGER.info("Scheduling Tasks Examples: The time is now " + DateUtil.getDateString)
     }
