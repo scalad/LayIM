@@ -117,13 +117,15 @@ object WebSocketUtil {
     
     /**
      * @description 用户在线切换状态
-     * @param uid
-     * @param redisService
+     * @param uid 用户id
+     * @param status 状态
      */
-    def changeOnline(uid: Integer, rediserService: RedisService) = synchronized {
-        
-        rediserService.removeSetValue(SystemConstant.ONLINE_USER, uid + "")
-        
+    def changeOnline(uid: Integer, status: String) = synchronized {
+        if ("online".equals(status)) {
+            redisService.setSet(SystemConstant.ONLINE_USER, uid + "")
+        } else {
+          	redisService.removeSetValue(SystemConstant.ONLINE_USER, uid + "")          
+        }
     }
    
 }

@@ -65,7 +65,7 @@ class WebSocket {
                 WebSocketUtil.checkOnline(mess, session)
             }
             case "changOnline" => {
-                LOGGER.info(uid + "改变状态")
+                WebSocketUtil.changeOnline(uid, mess.getMsg)
             }
             case _ => {
                 LOGGER.info("No Mapping Message!")

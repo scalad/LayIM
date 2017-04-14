@@ -8,7 +8,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.mybatis.spring.annotation.MapperScan
 import org.springframework.context.ApplicationContext
-import com.silence.util.WebUtil
 import scala.beans.BeanProperty
 
 @SpringBootApplication

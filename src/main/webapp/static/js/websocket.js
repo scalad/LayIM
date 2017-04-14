@@ -148,7 +148,12 @@ layui.use(['layim', 'jquery'], function(layim){
 	
 	  //监听在线状态的切换事件
 	  layim.on('online', function(data){
-	      console.log(data);
+		  socket.send(JSON.stringify({
+		    	 type:"changOnline",
+		    	 mine:null,
+		    	 to:null,
+		    	 msg:data
+		  }));
 	  });
 	  
 	  //监听签名修改
@@ -214,9 +219,6 @@ layui.use(['layim', 'jquery'], function(layim){
 	    		  mine:null,
 	    		  to:res.data
 	    	  }));
-	      }
-	      if(type === 'friend'){
-	    	  layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
 	      } else if(type === 'group'){
 		      //模拟系统消息
 		      layim.getMessage({
