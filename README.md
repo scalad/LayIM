@@ -52,6 +52,10 @@
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/right_key.png)
 
+在线、隐身切换
+
+![](https://github.com/scalad/LayIM/blob/master/doc/image/hide_and_online.png)
+
 注册、登陆
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/register.png)
