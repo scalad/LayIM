@@ -7,13 +7,11 @@
 <title>聊天记录</title>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <style>
-body .layim-chat-main{height: auto;}
+body .layim-chat-main{height: auto;} #page{text-align: center;}
 </style>
 </head>
 <body>
-	<center>
 	<div id="page"></div>
-	</center>
 	<div class="layim-chat-main">
 	  <ul id="LAY_view"></ul>
 	</div>
