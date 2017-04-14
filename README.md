@@ -44,6 +44,10 @@
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/chatLog.png)
 
+群聊天记录、分页处理
+
+![](https://github.com/scalad/LayIM/blob/master/doc/image/group_log.png)
+
 右键菜单
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/right_key.png)
