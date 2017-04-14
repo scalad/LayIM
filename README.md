@@ -1,6 +1,6 @@
 ### SpringBoot-WebSocket ###
 
-一个基于[WebSocket](http://websocket.org/index.html)和[LayIM](https://www.layui.com/)的即时通讯系统，后台使用了[Gradle](https://gradle.org/)集成了[Spring Boot](http://projects.spring.io/spring-boot/)、[Scala](http://www.scala-lang.org/)、[Mybatis](http://blog.mybatis.org/)以及[Redis](https://redis.io/)等
+一个基于[WebSocket](http://websocket.org/index.html)和[LayIM](https://www.layui.com/)的即时通讯系统，后台使用了[Gradle](https://gradle.org/)集成了[Spring Boot](http://projects.spring.io/spring-boot/)、[Scala](http://www.scala-lang.org/)、[Mybatis](http://blog.mybatis.org/)、[DevTools SpringBoot热部署方案](https://github.com/scalad/Note/tree/master/SpringBoot_DevTools)以及[Redis](https://redis.io/)等
 
 ### 需要 ###
 * Scala 2.1+
