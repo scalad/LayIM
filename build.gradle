@@ -4,8 +4,11 @@ apply plugin: 'eclipse'
 apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 
-bootRun {
-    addResources = true
+eclipse {
+	classpath {
+		downloadSources = false
+    	downloadJavadoc = false
+	}
 }
 
 buildscript {
