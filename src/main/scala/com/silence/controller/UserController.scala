@@ -58,19 +58,8 @@ class UserController @Autowired()(private val userService : UserService){
         val user = request.getSession.getAttribute("user").asInstanceOf[User]
         PageHelper.startPage(page, SystemConstant.SYSTEM_PAGE)
         //查找聊天记录
-        val historys:List[Receive] = userService.findHistoryMessage(user.getId, id, Type)
-        val list = new ArrayList[ChatHistory]()
-        val toUser = userService.findUserById(id)
-        JavaConversions.collectionAsScalaIterable(historys).foreach { history => {
-            var chatHistory: ChatHistory = null
-            if(history.getId == id){
-                chatHistory = new ChatHistory(history.getId, toUser.getUsername,toUser.getAvatar,history.getContent,history.getTimestamp)
-            } else {
-                chatHistory = new ChatHistory(history.getId, user.getUsername,user.getAvatar,history.getContent,history.getTimestamp)
-            }
-            list.add(chatHistory)
-        } }
-        gson.toJson(new ResultSet(list))
+        val historys:List[ChatHistory] = userService.findHistoryMessage(user, id, Type)
+        gson.toJson(new ResultSet(historys))
     }
     
     /**

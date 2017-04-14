@@ -26,7 +26,8 @@ trait UserMapper {
      * @param mid 来自哪个用户
      * @param Type 消息类型，可能来自friend或者group
      */
-    @Select(Array("select count(*) from t_message where (toid = #{uid} and mid = #{mid}) or (toid = #{mid} and mid = #{uid}) and type =#{Type}"))  
+    @Select(Array("<script> select count(*) from t_message where type = #{Type} and " +
+      "<choose><when test='uid!=null and mid !=null'>(toid = #{uid} and mid = #{mid}) or (toid = #{mid} and mid = #{uid}) </when><when test='mid != null'> mid = #{mid} </when></choose> order by timestamp </script>"))
     def countHistoryMessage(@Param("uid") uid: Integer, @Param("mid") mid: Integer, @Param("Type") Type: String): Int
     
     /**
@@ -36,7 +37,8 @@ trait UserMapper {
      * @param Type 消息类型，可能来自friend或者group
      */
     @Results(value = Array(new Result(property="id",column="mid")))
-    @Select(Array("select toid,fromid,mid,content,type,timestamp,status from t_message where (toid = #{uid} and mid = #{mid}) or (toid = #{mid} and mid = #{uid}) and type = #{Type} order by timestamp"))
+    @Select(Array("<script> select toid,fromid,mid,content,type,timestamp,status from t_message where type = #{Type} and " +
+      "<choose><when test='uid!=null and mid !=null'>(toid = #{uid} and mid = #{mid}) or (toid = #{mid} and mid = #{uid}) </when><when test='mid != null'> mid = #{mid} </when></choose> order by timestamp </script>"))
     def findHistoryMessage(@Param("uid") uid: Integer, @Param("mid") mid: Integer, @Param("Type") Type: String): List[Receive]
  
     /**

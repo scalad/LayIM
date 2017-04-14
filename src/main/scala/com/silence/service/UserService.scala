@@ -21,6 +21,8 @@ import com.silence.common.SystemConstant
 import com.silence.util.WebUtil
 import javax.servlet.http.HttpServletRequest
 import com.silence.entity.Receive
+import java.util.ArrayList
+import com.silence.entity.ChatHistory
 
 /**
  * @description 用户信息相关操作
@@ -41,7 +43,10 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @param Type 消息类型，可能来自friend或者group
      */
     def countHistoryMessage(uid: Integer, mid: Integer, Type: String):Int = {
-        userMapper.countHistoryMessage(uid, mid, Type)
+        Type match {
+            case "friend" => userMapper.countHistoryMessage(uid, mid, Type)  
+            case "group" => userMapper.countHistoryMessage(null, mid, Type)
+        }
     }
     
     /**
@@ -49,11 +54,41 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @param uid
      * @param 
      */
-    def findHistoryMessage(uid: Integer, mid: Integer, Type: String):List[Receive] = {
-        userMapper.findHistoryMessage(uid, mid, Type)
+    def findHistoryMessage(user: User, mid: Integer, Type: String):List[ChatHistory] = {
+    		val list = new ArrayList[ChatHistory]()
+        //单人聊天记录
+        if ("friend".equals(Type)) {          
+          	//查找聊天记录
+          	val historys:List[Receive] = userMapper.findHistoryMessage(user.getId, mid, Type)
+    		  	val toUser = findUserById(mid)
+    			  JavaConversions.collectionAsScalaIterable(historys).foreach { history => {
+    				    var chatHistory: ChatHistory = null
+  						  if(history.getId == mid){
+      							chatHistory = new ChatHistory(history.getId, toUser.getUsername,toUser.getAvatar,history.getContent,history.getTimestamp)
+  	  					} else {
+  		    					chatHistory = new ChatHistory(history.getId, user.getUsername,user.getAvatar,history.getContent,history.getTimestamp)
+  				  		}
+  			        list.add(chatHistory)
+  			    } }
+        }
+        //群聊天记录
+        if ("group".equals(Type)) {
+            //查找聊天记录
+          	val historys:List[Receive] = userMapper.findHistoryMessage(null, mid, Type)
+            JavaConversions.collectionAsScalaIterable(historys).foreach { history => {
+                var chatHistory: ChatHistory = null
+                val u = findUserById(history.getFromid)
+                if (history.getFromid().equals(user.getId)) {                  
+                	  chatHistory = new ChatHistory(user.getId, user.getUsername,user.getAvatar,history.getContent,history.getTimestamp)
+                } else {
+                    chatHistory = new ChatHistory(history.getId, u.getUsername,u.getAvatar,history.getContent,history.getTimestamp)
+                }
+                list.add(chatHistory)
+            }}
+        }
+        return list
     }
 
-    
     /**
      * @description 查询离线消息
      * @param uid

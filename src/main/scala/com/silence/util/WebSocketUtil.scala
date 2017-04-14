@@ -16,6 +16,11 @@ import com.silence.service.UserService
 import java.util.List
 import com.silence.Application
 
+/**
+ * @description WebSocket工具 单例
+ * @date 2017-04-14
+ * @author silence
+ */
 object WebSocketUtil {
   
     private final val LOGGER: Logger = LoggerFactory.getLogger(WebSocketUtil.getClass)
@@ -55,19 +60,17 @@ object WebSocketUtil {
             //过滤掉本身的uid
             JavaConversions.collectionAsScalaIterable(users).filter(_.id != message.getMine.getId)
               .foreach { user => {
-                  	  //是否在线
-                  	  if(WebSocketUtil.getSessions.containsKey(user.getId)) {
-                  		    val session: Session = WebSocketUtil.getSessions.get(user.getId)
-                  		    receive.setId(gid)
-                  		    receive.setStatus(1)
-                  				WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
-                  	  } else {
-                  	      //保存为离线消息
-                  	      receive.setToid(user.getId)
-                  	      receive.setId(key)
-                  	  }
-                  	  userService.saveMessage(receive)               		  
+              	  //是否在线
+              	  if(WebSocketUtil.getSessions.containsKey(user.getId)) {
+              		    val session: Session = WebSocketUtil.getSessions.get(user.getId)
+              		    receive.setStatus(1)
+              				WebSocketUtil.sendMessage(gson.toJson(receive).replaceAll("Type", "type"), session)
+              	  } else {
+              	      receive.setId(key)
+              	  }
             }}
+            //保存为离线消息
+            userService.saveMessage(receive)               		  
         }
     }
     
