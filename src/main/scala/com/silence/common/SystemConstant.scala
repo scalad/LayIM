@@ -36,4 +36,6 @@ object SystemConstant {
     
     final val SYSTEM_PAGE: Int = 6
     
+    final val USER_PAGE: Int = 21
+    
 }

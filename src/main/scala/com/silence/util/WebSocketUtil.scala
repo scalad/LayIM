@@ -93,7 +93,11 @@ object WebSocketUtil {
           }
     }
     
-    
+    /**
+     * @description 发送消息
+     * @param message
+     * @param session
+     */
     def sendMessage(message: String, session: Session): Unit = synchronized {
         session.getBasicRemote().sendText(message)
     }

@@ -36,6 +36,8 @@ import java.util.ArrayList
 import com.silence.entity.ChatHistory
 import com.silence.entity.ChatHistory
 import com.silence.entity.ChatHistory
+import org.springframework.core.annotation.AnnotationUtils.DefaultValueHolder
+import com.silence.domain.ResultPageSet
 
 @Controller
 @Api(value = "用户相关操作")
@@ -45,6 +47,26 @@ class UserController @Autowired()(private val userService : UserService){
     private final val LOGGER:Logger = LoggerFactory.getLogger(classOf[UserController])
     
     private final val gson: Gson = new Gson
+    
+    /**
+     * @description 查找好友、群
+     * @param page
+     * @param key
+     * @param Type
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/findUsers"), method = Array(RequestMethod.GET))
+    def findUsers(@RequestParam(value = "page",defaultValue = "1") page: Int,
+                  @RequestParam(value = "key", required = false) key: String,
+                  @RequestParam("Type") Type: String): String = {
+    		val count = userService.countUsers(key, Type)
+				val pages = if (count < SystemConstant.USER_PAGE) count else (count / SystemConstant.USER_PAGE + 1)
+    		PageHelper.startPage(page, SystemConstant.USER_PAGE)
+    		val users = userService.findUsers(key, Type)
+    		var result = new ResultPageSet(users)
+    		result.setPages(pages)
+        gson.toJson(result)
+    }
     
     /**
      * @description 获取聊天记录
@@ -240,7 +262,13 @@ class UserController @Autowired()(private val userService : UserService){
         LOGGER.info("文件" + file.getOriginalFilename + "上传成功") 
         gson.toJson(new ResultSet[HashMap[String, String]](result))
     }
-        
+    
+    /**
+     * @description 跳转主页
+     * @param model
+     * @param request
+     * @return
+     */
     @RequestMapping(value = Array("/index"), method = Array(RequestMethod.GET))
     def index(model: Model, request: HttpServletRequest): String = {
         val user = request.getSession.getAttribute("user")
@@ -248,4 +276,16 @@ class UserController @Autowired()(private val userService : UserService){
         LOGGER.info("用户" + user + "登陆服务器")
         "index"
     }
+    
+    /**
+     * @description 根据id查找用户信息
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/findUser"), method = Array(RequestMethod.POST))
+    def findUserById(@RequestParam("id") id: Integer): String = {
+        gson.toJson(new ResultSet(userService.findUserById(id)))
+    }
+    
 }

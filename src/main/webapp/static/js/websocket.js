@@ -1,4 +1,5 @@
 var socket = null;
+var show;
 layui.use(['layim', 'jquery'], function(layim){
 	var $ = layui.jquery;
 	//把layim对象添加到window上
@@ -142,7 +143,7 @@ layui.use(['layim', 'jquery'], function(layim){
 	    //,voice: true //声音提醒，默认开启，声音文件为：default.wav
 	    
 	    ,msgbox: layui.cache.dir + 'css/modules/layim/html/msgbox.html' //消息盒子页面地址，若不开启，剔除该项即可
-	    ,find: layui.cache.dir + 'css/modules/layim/html/find.html' //发现页面地址，若不开启，剔除该项即可
+	    ,find: '#' //发现页面地址，若不开启，剔除该项即可
 	    ,chatLog: '/user/chatLogIndex' //聊天记录页面地址，若不开启，剔除该项即可
 	  });
 	
@@ -187,8 +188,20 @@ layui.use(['layim', 'jquery'], function(layim){
 	  //监听layim建立就绪
 	  layim.on('ready', function(res){
 	      layim.msgbox(5); //模拟消息盒子有新消息，实际使用时，一般是动态获得
+	      $(".layui-layim-user").css("cursor","pointer");
+	      var mine = layim.cache().mine;
+	      console.log(mine);
+	      $(".layui-layim-user").bind("click", function(){
+	    	  layer.open({
+	    		  type: 1,
+	    		  title: "个人信息",
+	    		  skin: 'layui-layer-rim',
+	    		  area: ['50%', '60%'], 
+	    		  content: mine.id + mine.username + mine.sign +"<div class='layim-chat-other'><img src='" + mine.avatar + "'/></div>"
+	    	  });
+	      })
 	  });
-	
+	  
 	  //监听发送消息
 	  layim.on('sendMessage', function(data){
 		  var mine = data.mine
@@ -230,6 +243,29 @@ layui.use(['layim', 'jquery'], function(layim){
 	       }
 	  });
 	  
+	  //显示添加好友面板
+	  show = function(item) {
+		  var mine = layim.cache().mine;
+		  var $item = $(item);
+		  var img = $item.find("img").attr("src");
+		  var username = $item.find("cite").text();
+		  var id = $item.attr("layim-data-uid");
+		  layim.add({
+			  type: 'friend' //friend：申请加好友、group：申请加群
+			  ,username: username //好友昵称，若申请加群，参数为：groupname
+			  ,avatar: img
+			  ,submit: function(group, remark, index){ //一般在此执行Ajax和WS，以通知对方
+				  socket.send(JSON.stringify({
+		    		  type:"addFriend",
+		    		  mine:mine,
+		    		  to:null,
+		    		  msg:{"group":group,"remark":remark}
+		    	  }));
+				  layer.close(index);
+			  }
+		  });
+			    
+	  }
 	  //获取离线消息
 	  /*$.ajax({
 	  		url:"/user/getOffLineMessage",

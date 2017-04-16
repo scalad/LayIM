@@ -20,6 +20,12 @@ import org.apache.ibatis.annotations.Result
  */
 trait UserMapper {
 
+    @Select(Array("<script> select count(*) from t_user <if test='email != null'> and email like %#{email}%</if></script>"))
+    def countUser(@Param("email")  email: String): Int
+  
+    @Select(Array("<script> select id,username,status,sign,avatar,email from t_user <if test='email != null'> and email like %#{email}%</if></script>"))
+    def findUsers(@Param("email") email: String): List[User]
+  
     /**
      * @description 统计查询消息
      * @param uid 消息所属用户
@@ -85,7 +91,7 @@ trait UserMapper {
      * @param id
      * @return User
      */
-    @Select(Array("select id,username,status,sign,avatar from t_user where id = #{id}"))
+    @Select(Array("select id,username,status,sign,avatar,email,sex,create_date from t_user where id = #{id}"))
     def findUserById(id: Int): User
     
     /**

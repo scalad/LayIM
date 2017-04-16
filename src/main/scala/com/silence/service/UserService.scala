@@ -36,6 +36,25 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     //电子邮件相关服务
     @Autowired private var mailService: MailService = _
 
+    def countUsers(key: String, Type: String): Int = {
+        if (key == null || "".equals(key)) 
+            userMapper.countUser(null)
+        else
+          userMapper.countUser(key)
+    }
+    
+    /**
+     * @description 查找好友群相关
+     * @param key
+     * @Type 查找类型
+     */
+    def findUsers(key: String, Type: String): List[User] = {
+        if (key == null || "".equals(key))
+            userMapper.findUsers(null)
+        else
+            userMapper.findUsers(key)
+    }
+    
     /**
      * @description 统计查询消息
      * @param uid 消息所属用户
@@ -177,8 +196,8 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @return User
      */
     @Cacheable(value = Array("findUserById"), keyGenerator = "wiselyKeyGenerator")
-    def findUserById(id: Int): User = {
-        userMapper.findUserById(id)
+    def findUserById(id: Integer): User = {
+        if (id != null) userMapper.findUserById(id) else null
     }
     
     /**

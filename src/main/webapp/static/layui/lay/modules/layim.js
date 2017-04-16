@@ -7,13 +7,14 @@
     
  */
  
-layui.define(['layer', 'laytpl', 'upload'], function(exports){
+layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
   
   var v = '3.0.1 Pro';
   var $ = layui.jquery;
   var layer = layui.layer;
   var laytpl = layui.laytpl;
   var device = layui.device();
+  var flow = layui.flow;
   
   var SHOW = 'layui-show', THIS = 'layim-this', MAX_ITEM = 20;
   
@@ -922,7 +923,7 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
     })).render({data: obj});
     historyElem.prepend(historyList);
     historyElem.find('.layim-null').remove();
-  };
+  }; 
   
   //发送消息
   var sendMessage = function(){
@@ -1317,7 +1318,7 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
       obj.value = result.join('');
     }
   };
-  
+
   //事件
   var anim = 'layui-anim-upbit', events = {
 	//在线状态		  
@@ -1457,26 +1458,48 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
         ,title: '消息盒子'
         ,shade: false
         ,maxmin: true
-        ,area: ['600px', '520px']
+        ,area: ['60%', '50%']
         ,skin: 'layui-box layui-layer-border'
         ,resize: false
         ,content: cache.base.msgbox
       });
     }
-    
+
     //弹出查找页面
     ,find: function(){
       layer.close(events.find.index);
-      return events.find.index = layer.open({
-        type: 2
+      var html = '<div class="layui-layer-content"><ul id="layim-users" style="padding-top:5px;" class="layim-members-list"></ul></div>';
+      var findIndex = layer.open({
+        type: 1
         ,title: '查找'
         ,shade: false
         ,maxmin: true
-        ,area: ['1000px', '520px']
+        ,area: ['585px', '600px']
         ,skin: 'layui-box layui-layer-border'
         ,resize: false
-        ,content: cache.base.find
+        ,content: html
       });
+      //使用流加载
+      flow.load({
+    	  elem: '#layim-users' //指定列表容器
+          ,isAuto: false
+    	  ,done: function(page, next){
+    	  var lis = [];
+    	  $.get('/user/findUsers?page='+page + "&Type=friend", function(res){
+    		  res = eval("(" + res + ")");
+    	      layui.each(res.data, function(index, item){
+    	    	  var img = '<img style="width: 40px; height: 40px; border-radius: 100%;" src ="' + item.avatar + '"/>';
+    	    	  var cite = '<cite style="display: block;padding-top:10px; font-size: 14px;">' + item.username + '</cite>';
+    	    	  var a = '<a style="cursor:pointer" layim-data-uid=' + item.id + ' onclick="show(this);">' + img + cite + '</a>';
+    	    	  var li = '<li class="layim-user" style="margin:20px 20px;display: inline-block;">'+ a +' </li>';	    	  
+    	          lis.push(li);
+    	      }); 
+    	      next(lis.join(''), page < res.pages);
+    	  });
+      }
+      });
+      events.find.index = findIndex;
+      return events.find.index; 
     }
     
     //弹出更换背景
@@ -1496,10 +1519,10 @@ layui.define(['layer', 'laytpl', 'upload'], function(exports){
       });
     }
     
-    //关于
+    //设置
     ,setting: function(){
     	layer.tab({
-    		  area: ['800px', '500px'],
+    		  area: ['80%', '80%'],
     		  tab: [{
     		    title: 'TAB1', 
     		    content: '内容1'
