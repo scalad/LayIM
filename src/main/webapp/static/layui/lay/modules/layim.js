@@ -1458,7 +1458,7 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
         ,title: '消息盒子'
         ,shade: false
         ,maxmin: true
-        ,area: ['60%', '50%']
+        ,area: ['450px', '600px']
         ,skin: 'layui-box layui-layer-border'
         ,resize: false
         ,content: cache.base.msgbox
