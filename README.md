@@ -48,6 +48,14 @@
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/group_log.png)
 
+查找好友并添加好友、现在默认查找全部
+
+![](https://github.com/scalad/LayIM/blob/master/doc/image/find_and_add.png)
+
+消息盒子并同意添加好友
+
+![](https://github.com/scalad/LayIM/blob/master/doc/image/messageBox.png)
+
 右键菜单
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/right_key.png)
