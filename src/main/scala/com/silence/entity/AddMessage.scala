@@ -22,7 +22,7 @@ class AddMessage {
     //0未处理，1同意，2拒绝
     @BeanProperty var agree: Int = _
     //类型，可能是添加好友或群组
-    @BeanProperty var Type: String = _
+    @BeanProperty var Type: Int = _
     //申请时间
     @BeanProperty var time: Date = _
   

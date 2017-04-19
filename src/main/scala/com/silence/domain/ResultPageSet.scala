@@ -15,4 +15,10 @@ class ResultPageSet[T] extends ResultSet[T]{
         this
         this.data = data      
     }
+    
+    def this(data: T, pages: Int) = {
+        this
+        this.data = data
+        this.pages = pages
+    }
 }

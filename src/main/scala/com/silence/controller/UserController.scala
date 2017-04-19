@@ -48,6 +48,40 @@ class UserController @Autowired()(private val userService : UserService){
     
     private final val gson: Gson = new Gson
     
+    
+    /**
+     * @description 添加好友
+     * @param uid 对方用户ID
+     * @param fromGroup 对方设定的好友分组
+     * @param group 我设定的好友分组
+     * @param messageBoxId 消息盒子的消息id
+     * @return String
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/agreeFriend"), method = Array(RequestMethod.POST))
+    def agreeFriend(@RequestParam("uid") uid: Integer,@RequestParam("from_group") fromGroup: Integer,
+        @RequestParam("group") group: Integer, @RequestParam("messageBoxId") messageBoxId: Integer,
+        request: HttpServletRequest): String = {
+        val user = request.getSession.getAttribute("user").asInstanceOf[User]
+        val result = userService.addFriend(user.getId, group, uid, fromGroup, messageBoxId)
+        gson.toJson(new ResultSet(result))
+    }
+    
+    /**
+     * @description 查询消息盒子信息
+     * @param uid
+     * @param page
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/findAddInfo"), method = Array(RequestMethod.GET))
+    def findAddInfo(@RequestParam("uid") uid: Integer, @RequestParam("page") page: Int): String = {
+        PageHelper.startPage(page, SystemConstant.ADD_MESSAGE_PAGE)
+        val list = userService.findAddInfo(uid)
+        val count = userService.countUnHandMessage(uid, null).toInt
+        val pages = if (count < SystemConstant.ADD_MESSAGE_PAGE) 1 else count / SystemConstant.ADD_MESSAGE_PAGE + 1
+        gson.toJson(new ResultPageSet(list, pages)).replaceAll("Type", "type")
+    }
+    
     /**
      * @description 查找好友、群
      * @param page
@@ -60,7 +94,7 @@ class UserController @Autowired()(private val userService : UserService){
                   @RequestParam(value = "key", required = false) key: String,
                   @RequestParam("Type") Type: String): String = {
     		val count = userService.countUsers(key, Type)
-				val pages = if (count < SystemConstant.USER_PAGE) count else (count / SystemConstant.USER_PAGE + 1)
+				val pages = if (count < SystemConstant.USER_PAGE) 1 else (count / SystemConstant.USER_PAGE + 1)
     		PageHelper.startPage(page, SystemConstant.USER_PAGE)
     		val users = userService.findUsers(key, Type)
     		var result = new ResultPageSet(users)

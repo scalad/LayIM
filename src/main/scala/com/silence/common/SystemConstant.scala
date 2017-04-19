@@ -38,4 +38,6 @@ object SystemConstant {
     
     final val USER_PAGE: Int = 21
     
+    final val ADD_MESSAGE_PAGE: Int = 4
+    
 }

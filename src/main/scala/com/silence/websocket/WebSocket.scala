@@ -36,19 +36,6 @@ class WebSocket {
     private var uid: Integer = _
     
     /**
-     * @description 首次创建链接
-     * @param session
-     * @param uid
-     */
-    @OnOpen
-    def onOpen(session: Session, @PathParam("uid") uid: Integer): Unit =  {
-    		this.uid = uid
-        WebSocketUtil.sessions.put(uid, session)
-        LOGGER.info("userId = " + uid + ",sessionId = " + session.getId + ",新连接加入!")
-        redisService.setSet(SystemConstant.ONLINE_USER, uid + "")
-    }
-    
-    /**
      * @description 服务器接收到消息调用
      * @param message 消息体
      * @param session 
@@ -62,15 +49,36 @@ class WebSocket {
                 WebSocketUtil.sendMessage(mess)    
             }
             case "checkOnline" => {
-                WebSocketUtil.checkOnline(mess, session)
+                val result = WebSocketUtil.checkOnline(mess, session)
+                WebSocketUtil.sendMessage(gson.toJson(result), session)
             }
             case "changOnline" => {
                 WebSocketUtil.changeOnline(uid, mess.getMsg)
+            }
+            case "addFriend" => {
+                WebSocketUtil.addFriend(uid, mess)
+            }
+            case "unHandMessage" => {
+                val result = WebSocketUtil.countUnHandMessage(uid)
+                WebSocketUtil.sendMessage(gson.toJson(result), session)
             }
             case _ => {
                 LOGGER.info("No Mapping Message!")
             }
         }
+    }
+    
+    /**
+     * @description 首次创建链接
+     * @param session
+     * @param uid
+     */
+    @OnOpen
+    def onOpen(session: Session, @PathParam("uid") uid: Integer): Unit =  {
+    		this.uid = uid
+        WebSocketUtil.sessions.put(uid, session)
+        LOGGER.info("userId = " + uid + ",sessionId = " + session.getId + ",新连接加入!")
+        redisService.setSet(SystemConstant.ONLINE_USER, uid + "")
     }
     
     /**

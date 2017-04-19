@@ -14,7 +14,7 @@ class Add {
     //附言
     @BeanProperty var remark: String = _
     //类型，好友或群组
-    @BeanProperty var Type: String = _
+    @BeanProperty var Type: Int = _
     
     override def toString = "groupId=" + groupId + ", remark=" + remark + ", Type=" + Type
 }

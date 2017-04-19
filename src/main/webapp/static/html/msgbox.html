@@ -12,7 +12,6 @@
 .layim-msgbox .layim-msgbox-system{padding: 0 10px 10px 10px;}
 .layim-msgbox li p span{padding-left: 5px; color: #999;}
 .layim-msgbox li p em{font-style: normal; color: #FF5722;}
-
 .layim-msgbox-avatar{position: absolute; left: 0; top: 0; width: 50px; height: 50px;}
 .layim-msgbox-user{padding-top: 5px;}
 .layim-msgbox-content{margin-top: 3px;}
@@ -27,7 +26,7 @@
 <textarea title="消息模版" id="LAY_tpl" style="display:none;">
 {{# layui.each(d.data, function(index, item){
   if(item.from){ }}
-    <li data-uid="{{ item.from }}" data-fromGroup="{{ item.from_group }}">
+    <li data-uid="{{ item.from }}" data-fromGroup="{{ item.from_group }}" data-messageBoxId="{{item.id}}">
       <a href="/u/{{ item.from }}/" target="_blank">
         <img src="{{ item.user.avatar }}" class="layui-circle layim-msgbox-avatar">
       </a>
@@ -40,8 +39,14 @@
         <span>{{ item.remark ? '附言: '+item.remark : '' }}</span>
       </p>
       <p class="layim-msgbox-btn">
-        <button class="layui-btn layui-btn-small" data-type="agree">同意</button>
+      {{#  if(item.read === 0){ }}
+	  	<button class="layui-btn layui-btn-small" data-type="agree">同意</button>
         <button class="layui-btn layui-btn-small layui-btn-primary" data-type="refuse">拒绝</button>
+	  {{#  } else if(item.read === 1){ }}
+		已同意
+	  {{#  } else if(item.read === 2){ }}
+	  	已经拒绝
+	  {{# } }}   
       </p>
     </li>
   {{# } else { }}
@@ -53,6 +58,7 @@
 </textarea>
 <script src="/static/layui/layui.js"></script>
 <script>
+var uid = location.href.split("?")[1].split("&")[0].split("=")[1];
 layui.use(['layim', 'flow'], function(){
   var layim = layui.layim
   ,layer = layui.layer
@@ -64,11 +70,12 @@ layui.use(['layim', 'flow'], function(){
   //请求消息
   var renderMsg = function(page, callback){
   	  //实际部署时，请将下述 getmsg.json 改为你的接口地址
-      $.get('/static/layui/css/modules/layim/html/getmsg.json', {
+      $.get('/user/findAddInfo?uid=' + uid, {
       	  page: page || 1
       }, function(res){
+    	  res = eval("(" + res + ")");
           if(res.code != 0){
-      	  		return layer.msg(res.msg);
+      	      return layer.msg(res.msg);
       	  }
 	      //记录来源用户信息
 	      layui.each(res.data, function(index, item){
@@ -108,9 +115,10 @@ layui.use(['layim', 'flow'], function(){
     agree: function(othis){
       var li = othis.parents('li')
       ,uid = li.data('uid')
-      ,from_group = li.data('fromGroup')
-      ,user = cache[uid];
-
+      ,from_group = li.data('fromgroup')
+      ,user = cache[uid]
+      ,messageBoxId = li.data('messageboxid');
+      console.log(messageBoxId);
       //选择分组
       parent.layui.layim.setFriendGroup({
         type: 'friend'
@@ -118,31 +126,19 @@ layui.use(['layim', 'flow'], function(){
         ,avatar: user.avatar
         ,group: parent.layui.layim.cache().friend //获取好友分组数据
         ,submit: function(group, index){
-          
-          //将好友追加到主面板
-          parent.layui.layim.addList({
-            type: 'friend'
-            ,avatar: user.avatar //好友头像
-            ,username: user.username //好友昵称
-            ,groupid: group //所在的分组id
-            ,id: uid //好友ID
-            ,sign: user.sign //好友签名
-          });
-          parent.layer.close(index);
-          othis.parent().html('已同意');
-        
-        
+         
           //实际部署时，请开启下述注释，并改成你的接口地址
-          /*
-          $.post('/im/agreeFriend', {
+          $.post('/user/agreeFriend', {
             uid: uid //对方用户ID
             ,from_group: from_group //对方设定的好友分组
             ,group: group //我设定的好友分组
+            ,messageBoxId: messageBoxId
           }, function(res){
+        	res = eval("(" + res + ")");
             if(res.code != 0){
               return layer.msg(res.msg);
             }
-
+            layer.msg(res.msg);
             //将好友追加到主面板
             parent.layui.layim.addList({
               type: 'friend'
@@ -155,7 +151,6 @@ layui.use(['layim', 'flow'], function(){
             parent.layer.close(index);
             othis.parent().html('已同意');
           });
-          */
           
         }
       });
@@ -167,7 +162,7 @@ layui.use(['layim', 'flow'], function(){
       ,uid = li.data('uid');
 
       layer.confirm('确定拒绝吗？', function(index){
-        $.post('/im/refuseFriend', {
+        $.post('/user/refuseFriend', {
           uid: uid //对方用户ID
         }, function(res){
           if(res.code != 0){

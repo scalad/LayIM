@@ -72,6 +72,9 @@ layui.use(['layim', 'jquery'], function(layim){
 					style = "color:#FF5722;";
 				}
 				layim.setChatStatus('<span style="' + style +'">' + json.status + '</span>');
+			} else if("unHandMessage" == type){
+				//消息盒子未处理的消息
+				layim.msgbox(json.count); 
 			}
 		},
 		sendData:function(data){
@@ -142,7 +145,7 @@ layui.use(['layim', 'jquery'], function(layim){
 	    ,notice: true //是否开启桌面消息提醒，默认false
 	    //,voice: true //声音提醒，默认开启，声音文件为：default.wav
 	    
-	    ,msgbox: '/static/html/msgbox.html' //消息盒子页面地址，若不开启，剔除该项即可
+	    ,msgbox: '/static/html/msgbox.html?uid='+getUid() //消息盒子页面地址，若不开启，剔除该项即可
 	    ,find: '#' //发现页面地址，若不开启，剔除该项即可
 	    ,chatLog: '/user/chatLogIndex' //聊天记录页面地址，若不开启，剔除该项即可
 	  });
@@ -186,8 +189,14 @@ layui.use(['layim', 'jquery'], function(layim){
 	  });
 	  
 	  //监听layim建立就绪
-	  layim.on('ready', function(res){
-	      layim.msgbox(5); //模拟消息盒子有新消息，实际使用时，一般是动态获得
+	  layim.on('ready', function(res){	      
+		  //请求未处理的消息
+		  socket.send(JSON.stringify({
+		    	 type:"unHandMessage",
+		    	 mine:null,
+		    	 to:null
+		  }));
+		  //个人信息
 	      $(".layui-layim-user").css("cursor","pointer");
 	      var mine = layim.cache().mine;
 	      console.log(mine);
@@ -259,9 +268,9 @@ layui.use(['layim', 'jquery'], function(layim){
 		    		  type:"addFriend",
 		    		  mine:mine,
 		    		  to:{"id":id},
-		    		  msg:JSON.stringify({"groupId":group,"remark":remark,"Type":"friend"})
+		    		  msg:JSON.stringify({"groupId":group,"remark":remark,"Type":"0"})
 		    	  }));
-				  layer.close(index);
+				  layer.msg("发送成功!");
 			  }
 		  });
 			    

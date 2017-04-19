@@ -23,6 +23,9 @@ import javax.servlet.http.HttpServletRequest
 import com.silence.entity.Receive
 import java.util.ArrayList
 import com.silence.entity.ChatHistory
+import com.silence.entity.AddMessage
+import com.silence.domain.AddInfo
+import com.silence.entity.AddFriends
 
 /**
  * @description 用户信息相关操作
@@ -36,6 +39,75 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     //电子邮件相关服务
     @Autowired private var mailService: MailService = _
 
+    /**
+     * @description 添加好友操作
+     * @param mid 我的id
+     * @param mgid 我设定的分组
+     * @param tid 对方的id
+     * @param tgid 对方设定的分组
+     * @param messageBoxId 消息盒子的消息id
+     */
+    @Transactional
+    def addFriend(mid: Integer, mgid: Integer, tid: Integer, tgid: Integer, messageBoxId: Integer): Boolean = {
+        val add = new AddFriends(mid, mgid, tid, tgid)
+        if (userMapper.addFriend(add) != 0) {
+            var addMessage = new AddMessage
+            addMessage.setAgree(1)
+            addMessage.setId(messageBoxId)
+            updateAddMessage(addMessage)
+        }
+        true
+    }
+    
+    /**
+     * @description 创建好友分组列表
+     * @param uid
+     * @param groupName
+     */
+    def createFriendGroup(uid: Integer, groupName: String): Boolean = {
+        if (uid == null || groupName == null || "".equals(uid) || "".equals(groupName))
+            return false
+        else
+            userMapper.createFriendGroup(uid, groupName) == 1
+    }
+    
+    /**
+     * @description 统计消息
+     * @param uid
+     */
+    def countUnHandMessage(uid: Integer, agree: Integer): Integer = userMapper.countUnHandMessage(uid, agree)
+    
+    /**
+     * @description 查询添加好友、群组信息
+     * @param uid
+     * @return List[AddInfo]
+     */
+    def findAddInfo(uid: Integer): List[AddInfo] = {
+        val list = userMapper.findAddInfo(uid)
+        JavaConversions.collectionAsScalaIterable(list).foreach { info => {
+            info.setContent("申请添加你为好友")
+            info.setHref(null)
+            info.setUser(findUserById(info.getFrom))
+            LOGGER.info(info.toString())
+        } }
+        list
+    }
+    
+    /**
+     * @description 更新好友、群组信息请求
+     * @param addMessage
+     * @return
+     */
+    def updateAddMessage(addMessage: AddMessage): Int = userMapper.updateAddMessage(addMessage)
+    
+    
+    /**
+     * @description 添加好友、群组信息请求
+     * @param addMessage
+     * @return
+     */  
+    def saveAddMessage(addMessage: AddMessage): Int = userMapper.saveAddMessage(addMessage)
+    
     def countUsers(key: String, Type: String): Int = {
         if (key == null || "".equals(key)) 
             userMapper.countUser(null)

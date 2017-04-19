@@ -15,6 +15,8 @@ import scala.collection.JavaConversions
 import com.silence.service.UserService
 import java.util.List
 import com.silence.Application
+import com.silence.entity.AddMessage
+import com.silence.entity.Add
 
 /**
  * @description WebSocket工具 单例
@@ -75,22 +77,51 @@ object WebSocketUtil {
     }
     
     /**
+     * @description 添加好友
+     * @param uid
+     * @param message
+     */
+    def addFriend(uid: Integer, message: Message): Unit = synchronized {
+      	LOGGER.info("添加好友、群组")
+        val mine = message.getMine
+        val addMessage = new AddMessage
+        addMessage.setFromUid(mine.getId)
+        addMessage.setTime(DateUtil.getDateTime)
+        addMessage.setToUid(message.getTo.getId)
+        val add = gson.fromJson(message.getMsg(), classOf[Add])
+        addMessage.setRemark(add.getRemark)
+        addMessage.setType(add.getType)
+        addMessage.setGroupId(add.getGroupId)
+        userService.saveAddMessage(addMessage)
+    }
+    
+    /**
+     * @description 统计离线消息数量
+     * @param uid
+     */
+    def countUnHandMessage(uid: Integer): HashMap[String, String] = synchronized{
+        val count = userService.countUnHandMessage(uid, 0)
+        LOGGER.info("count = " + count)
+        var result = new HashMap[String, String]
+        result.put("type", "unHandMessage")
+        result.put("count", count + "")
+        result
+    }
+    
+    /**
      * @description 监测某个用户的离线或者在线
      * @param message
-     * @param session
      */
-    def checkOnline(message: Message, session: Session): Unit = synchronized {
+    def checkOnline(message: Message, session: Session): HashMap[String, String] = synchronized {
           LOGGER.info("监测在线状态" + message.getTo.toString)
           val uids = redisService.getSets(SystemConstant.ONLINE_USER)
           var result = new HashMap[String, String]
           result.put("type", "checkOnline")
-          if (uids.contains(message.getTo.getId.toString)) {
+          if (uids.contains(message.getTo.getId.toString))
               result.put("status", "在线")
-              WebSocketUtil.sendMessage(gson.toJson(result), session)
-          } else {
+          else 
               result.put("status", "离线")
-            	WebSocketUtil.sendMessage(gson.toJson(result), session)
-          }
+          result
     }
     
     /**
