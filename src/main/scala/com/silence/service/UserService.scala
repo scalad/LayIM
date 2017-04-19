@@ -40,6 +40,17 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     @Autowired private var mailService: MailService = _
 
     /**
+     * @description 拒绝添加好友
+     * @param messageBoxId 消息盒子的消息id
+     */
+    def refuseFriend(messageBoxId: Integer): Boolean = {
+        var addMessage = new AddMessage
+        addMessage.setAgree(2)
+        addMessage.setId(messageBoxId)
+        updateAddMessage(addMessage) == 1
+    }
+    
+    /**
      * @description 添加好友操作
      * @param mid 我的id
      * @param mgid 我设定的分组
@@ -98,6 +109,7 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @param addMessage
      * @return
      */
+    @Transactional
     def updateAddMessage(addMessage: AddMessage): Int = userMapper.updateAddMessage(addMessage)
     
     

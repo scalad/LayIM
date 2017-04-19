@@ -48,6 +48,18 @@ class UserController @Autowired()(private val userService : UserService){
     
     private final val gson: Gson = new Gson
     
+    /**
+     * @description 拒绝添加好友
+     * @param request
+     * @param messageBoxId 消息盒子的消息id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/refuseFriend"), method = Array(RequestMethod.POST))
+    def refuseFriend(@RequestParam("messageBoxId") messageBoxId: Integer,request: HttpServletRequest): String = {
+        val result = userService.refuseFriend(messageBoxId)
+        gson.toJson(new ResultSet(result))
+    }
     
     /**
      * @description 添加好友

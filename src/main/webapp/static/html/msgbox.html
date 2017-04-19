@@ -45,7 +45,7 @@
 	  {{#  } else if(item.read === 1){ }}
 		已同意
 	  {{#  } else if(item.read === 2){ }}
-	  	已经拒绝
+	  	<em>已拒绝</em>
 	  {{# } }}   
       </p>
     </li>
@@ -159,12 +159,13 @@ layui.use(['layim', 'flow'], function(){
     //拒绝
     ,refuse: function(othis){
       var li = othis.parents('li')
-      ,uid = li.data('uid');
+      ,messageBoxId = li.data('messageboxid');
 
       layer.confirm('确定拒绝吗？', function(index){
         $.post('/user/refuseFriend', {
-          uid: uid //对方用户ID
+        	messageBoxId: messageBoxId
         }, function(res){
+          res = eval("(" + res + ")");
           if(res.code != 0){
             return layer.msg(res.msg);
           }
