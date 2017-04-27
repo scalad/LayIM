@@ -329,7 +329,7 @@ class UserController @Autowired()(private val userService : UserService){
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = Array("/findUser"), method = Array(RequestMethod.POST))
+    @RequestMapping(value = Array("/findUser"), method = Array(RequestMethod.POST, RequestMethod.GET))
     def findUserById(@RequestParam("id") id: Integer): String = {
         gson.toJson(new ResultSet(userService.findUserById(id)))
     }

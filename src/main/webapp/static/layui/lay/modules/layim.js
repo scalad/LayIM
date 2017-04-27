@@ -26,6 +26,7 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
     this.v = v;
     $('body').on('click', '*[layim-event]', function(e){
       var othis = $(this), methid = othis.attr('layim-event');
+	  events = $.extend(events, my_events || {});
       events[methid] ? events[methid].call(this, othis, e) : '';
     });
   };
@@ -527,7 +528,8 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
           html += '<li layim-event="menu_history"><i class="layui-icon" >&#xe60e;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '消息记录</li>';
           html += '<li layim-event="menu_nomsg"><i class="layui-icon" >&#xe617;</i>&nbsp;&nbsp;&nbsp;&nbsp;'  + '屏蔽消息</li>';
           html += '<li layim-event="menu_delete"><i class="layui-icon" >&#x1006;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '删除好友</li>';
-          html += '<li layim-event="menu_moveto"><i class="layui-icon" >&#xe623;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '移动至</li></ul>';
+          html += '<li layim-event="changeGroup"><i class="layui-icon" >&#xe623;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '移动至</li></ul>';
+      
       if(othis.hasClass('layim-null')) return;
       
       layer.tips(html, this, {
@@ -544,7 +546,32 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
       $(document).off('mousedown', hide).on('mousedown', hide);
       $(window).off('resize', hide).on('resize', hide);    
     });
-        
+    
+	// 自定义主面板 群组右键功能 --- layim-list-group
+	layimMain.find('.layim-list-group').on('contextmenu', 'li', function (e) {
+		var othis = $(this);
+		var html = '<ul data-id="' + othis.attr('class') + '">' +
+			'<li layim-event="leaveOut">退出该群</li>';
+
+		if (othis.hasClass('layim-null')) return;
+
+		layer.tips(html, this, {
+			tips: 1
+			, time: 0
+			, anim: 5
+			, fixed: true
+			, skin: 'layui-box layui-layim-contextmenu'
+			, success: function (layero) {
+				var stopmp = function (e) {
+					stope(e);
+				};
+				layero.off('mousedown', stopmp).on('mousedown', stopmp);
+			}
+		});
+		$(document).off('mousedown', hide).on('mousedown', hide);
+		$(window).off('resize', hide).on('resize', hide);
+	});
+    
   }
   
   //主面板最小化状态

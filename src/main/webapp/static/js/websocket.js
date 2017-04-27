@@ -1,7 +1,7 @@
 var socket = null;
 var show;
-layui.use(['layim', 'jquery'], function(layim){
-	var $ = layui.jquery;
+layui.use(['layim', 'jquery', 'laytpl'], function(layim){
+	var $ = layui.jquery,laytpl = layui.laytpl;
 	//把layim对象添加到window上
 	window.layim = layui.layim;
 	//屏蔽右键菜单
@@ -275,6 +275,87 @@ layui.use(['layim', 'jquery'], function(layim){
 		  });
 			    
 	  }
+	  
+    //外部自定义我的事件
+    my_events = {
+		//改变用户的群组
+        changeGroup: function(othis, e){
+            //改变群组模板
+            var elemAddTpl = ['<div class="layim-add-box">'
+                , '<div class="layim-add-img"><img class="layui-circle" src="{{ d.data.avatar }}"><p>' +
+                '{{ d.data.name||"" }}</p></div>'
+                , '<div class="layim-add-remark">'
+                , '{{# if(d.data.type === "friend" && d.type === "setGroup"){ }}'
+                , '<p>选择分组</p>'
+                , '{{# } if(d.data.type === "friend"){ }}'
+                , '<select class="layui-select" id="LAY_layimGroup">'
+                , '{{# layui.each(d.data.group, function(index, item){ }}'
+                , '<option value="{{ item.id }}">{{ item.groupname }}</option>'
+                , '{{# }); }}'
+                , '</select>'
+                , '{{# } }}'
+                , '{{# if(d.data.type === "group"){ }}'
+                , '<p>请输入验证信息</p>'
+                , '{{# } if(d.type !== "setGroup"){ }}'
+                , '<textarea id="LAY_layimRemark" placeholder="验证信息" class="layui-textarea"></textarea>'
+                , '{{# } }}'
+                , '</div>'
+                , '</div>'].join('');
+
+            var friend_id = othis.parent().attr('data-id');
+            $.getJSON('/user/findUser?id=' + friend_id.substring(12), function(res){
+                if(0 == res.code){
+                    var index = layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['430px', '260px'], //宽高
+                        btn:   ['确认', '取消'],
+                        title: '移动分组',
+                        content: laytpl(elemAddTpl).render({
+                            data: {
+                                name: res.data.username
+                                , avatar: res.data.avatar
+                                , group: parent.layui.layim.cache().friend
+                                , type: 'friend'
+                            }
+                            , type: 'setGroup'
+                        })
+                        , yes: function (index, layero) {
+                            var groupElem = layero.find('#LAY_layimGroup');
+                            var group_id = groupElem.val(); //群组id
+                            console.log(group_id);
+                            console.log(res.data.id);
+                            $.post('/index/Tools/changeGroup', {'group_id' : group_id, 'user_id' : res.data.id},
+                                function(data) {
+                                    if (1 == data.code) {
+                                        layer.msg(data.msg, {time: 1500});
+                                        //先从旧组移除，然后加入新组
+                                        layim.removeList({
+                                            type: 'friend'
+                                            ,id: res.data.id
+                                        });
+                                        //加入新组
+                                        layim.addList({
+                                            type: 'friend'
+                                            ,avatar: res.data.avatar
+                                            ,username: res.data.user_name
+                                            ,groupid: group_id
+                                            ,id: res.data.id
+                                            ,sign: res.data.sign
+                                        });
+                                        layer.close(index);
+                                    } else {
+                                        layer.msg(data.msg, {time: 2000});
+                                    }
+                            }, 'json');
+                        }
+                    });
+                }else{
+                    layer.msg(res.msg, {time: 2000});
+                }
+            });
+        }
+    }
 	  //获取离线消息
 	  /*$.ajax({
 	  		url:"/user/getOffLineMessage",
