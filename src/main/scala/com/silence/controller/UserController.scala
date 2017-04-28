@@ -49,6 +49,25 @@ class UserController @Autowired()(private val userService : UserService){
     private final val gson: Gson = new Gson
     
     /**
+     * @description 移动好友分组
+     * @param groupId 新的分组id
+     * @param userId 被移动的好友id
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/changeGroup"), method = Array(RequestMethod.POST))
+    def changeGroup(@RequestParam("groupId") groupId: Integer, @RequestParam("userId") userId: Integer
+        ,request: HttpServletRequest): String = {
+        val user = request.getSession.getAttribute("user").asInstanceOf[User]
+        val result = userService.changeGroup(groupId, userId, user.getId)
+        if (result)
+            return gson.toJson(new ResultSet(result))
+        else
+            gson.toJson(new ResultSet(SystemConstant.ERROR, SystemConstant.ERROR_MESSAGE))
+    }
+    
+    /**
      * @description 拒绝添加好友
      * @param request
      * @param messageBoxId 消息盒子的消息id

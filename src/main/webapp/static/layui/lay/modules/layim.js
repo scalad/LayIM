@@ -522,6 +522,7 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
     //自定义好友管理右键菜单
     layimMain.find('.layim-list-friend .layui-layim-list').on('contextmenu', 'li', function(e){
       othis = $(this);
+      console.log(othis);
       var html = '<ul id="contextmenu_' + othis[0].id + '" data-id="' + othis[0].id + '" data-index="' + othis.data('index') + '">';
       	  html += '<li layim-event="menu_chat"><i class="layui-icon" >&#xe611;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '发送消息</li>';
           html += '<li layim-event="menu_profile"><i class="layui-icon">&#xe60a;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '查看资料</li>';

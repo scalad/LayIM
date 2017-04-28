@@ -40,6 +40,24 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     @Autowired private var mailService: MailService = _
 
     /**
+     * @description 移动好友分组
+     * @param groupId 新的分组id
+     * @param uId 被移动的好友id
+     * @param mId 我的id
+     * @return
+     */
+    //清除缓存
+    @CacheEvict(value = Array("findUserById","findFriendGroupsById","findUserByGroupId"), allEntries = true) 
+    @Transactional
+    def changeGroup(groupId: Integer, uId: Integer, mId: Integer):Boolean = {
+        if (groupId == null || uId == null || mId == null) 
+            return false
+        else
+    		    userMapper.changeGroup(groupId, uId, mId) == 1  
+    }
+  
+    
+    /**
      * @description 拒绝添加好友
      * @param messageBoxId 消息盒子的消息id
      */

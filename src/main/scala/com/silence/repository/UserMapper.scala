@@ -25,6 +25,16 @@ import com.silence.entity.AddFriends
 trait UserMapper {
   
     /**
+     * @description 移动好友分组
+     * @param groupId 新的分组id
+     * @param uId 被移动的好友id
+     * @param mId 我的id
+     * @return
+     */
+    @Update(Array("update t_friend_group_friends set fgid = #{groupId} where id =(select t.id from ((select id from t_friend_group_friends where fgid in (select id from t_friend_group where uid = #{mId}) and uid = #{uId}) t))"))
+    def changeGroup(@Param("groupId") groupId: Integer, @Param("uId") uId: Integer, @Param("mId") mId: Integer):Int
+  
+    /**
      * @description 添加好友操作
      * @param mgid 分组id
      * @param tid 对方用户id

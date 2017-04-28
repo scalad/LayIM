@@ -59,7 +59,6 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 		},
 		//处理接收到的消息
 		handleMessage : function(data) {
-			console.log(data);
 			json = eval("(" + data + ")");
 			var type = json.type;
 			if("friend" == type || "group" == type) {				
@@ -199,7 +198,6 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 		  //个人信息
 	      $(".layui-layim-user").css("cursor","pointer");
 	      var mine = layim.cache().mine;
-	      console.log(mine);
 	      $(".layui-layim-user").bind("click", function(){
 	    	  layer.open({
 	    		  type: 1,
@@ -215,7 +213,6 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	  layim.on('sendMessage', function(data){
 		  var mine = data.mine
 	      var To = data.to;
-	      console.log(data);
 	      socket.send(JSON.stringify({
 	    	 type:"message",
 	    	 mine:mine,
@@ -303,6 +300,7 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
                 , '</div>'].join('');
 
             var friend_id = othis.parent().attr('data-id');
+            console.log(friend_id);
             $.getJSON('/user/findUser?id=' + friend_id.substring(12), function(res){
                 if(0 == res.code){
                     var index = layer.open({
@@ -323,11 +321,9 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
                         , yes: function (index, layero) {
                             var groupElem = layero.find('#LAY_layimGroup');
                             var group_id = groupElem.val(); //群组id
-                            console.log(group_id);
-                            console.log(res.data.id);
-                            $.post('/index/Tools/changeGroup', {'group_id' : group_id, 'user_id' : res.data.id},
+                            $.post('/user/changeGroup', {'groupId' : group_id, 'userId' : res.data.id},
                                 function(data) {
-                                    if (1 == data.code) {
+                                    if (0 == data.code) {
                                         layer.msg(data.msg, {time: 1500});
                                         //先从旧组移除，然后加入新组
                                         layim.removeList({
