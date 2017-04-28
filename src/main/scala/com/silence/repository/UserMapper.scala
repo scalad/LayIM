@@ -25,6 +25,15 @@ import com.silence.entity.AddFriends
 trait UserMapper {
   
     /**
+     * @description 更新用户头像
+     * @param userId
+     * @param avatar
+     * @return 
+     */
+    @Update(Array("update t_user set avatar=#{avatar} where id=#{userId}"))
+    def updateAvatar(@Param("userId") userId: Integer, @Param("avatar") avatar: String): Int
+  
+    /**
      * @description 移动好友分组
      * @param groupId 新的分组id
      * @param uId 被移动的好友id

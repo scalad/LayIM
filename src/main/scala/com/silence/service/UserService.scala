@@ -40,6 +40,21 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     @Autowired private var mailService: MailService = _
 
     /**
+     * @description 更新用户头像
+     * @param userId
+     * @param avatar
+     * @return 
+     */
+    @CacheEvict(value = Array("findUserById"))
+    @Transactional
+    def updateAvatar(userId: Integer, avatar: String): Boolean = {
+        if (userId == null | avatar == null)
+            return false
+        else
+            userMapper.updateAvatar(userId, avatar) == 1
+    }
+    
+    /**
      * @description 移动好友分组
      * @param groupId 新的分组id
      * @param uId 被移动的好友id

@@ -28,6 +28,10 @@ object SystemConstant {
     
     final val FILE_PATH: String = "/upload/file/"
     
+    final val AVATAR_PATH: String = "/static/image/avatar/"
+    
+    final val GROUP_AVATAR_PATH: String = "/static/image/group/"
+    
     //电子邮件相关
     final val SUBJECT: String = "LayIM即时通讯系统邮箱激活邮件"
     

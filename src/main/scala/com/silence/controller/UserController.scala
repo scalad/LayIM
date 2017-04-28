@@ -329,6 +329,22 @@ class UserController @Autowired()(private val userService : UserService){
     }
     
     /**
+     * @description用户更新头像
+     * @param file
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/updateAvatar"), method = Array(RequestMethod.POST))
+    def updateAvatar(@RequestParam("avatar") avatar: MultipartFile, request: HttpServletRequest): String = {
+        val user = request.getSession.getAttribute("user").asInstanceOf[User]
+        val path = request.getServletContext.getRealPath(SystemConstant.AVATAR_PATH)
+        val src = FileUtil.upload(path, avatar)
+        userService.updateAvatar(user.getId, src)
+        var result = new HashMap[String, String]
+        result.put("src", src)
+        gson.toJson(new ResultSet(result))
+    }  
+    
+    /**
      * @description 跳转主页
      * @param model
      * @param request

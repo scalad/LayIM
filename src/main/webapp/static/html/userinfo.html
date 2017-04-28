@@ -5,6 +5,7 @@
 <title>修改用户信息</title>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <script src="/static/layui/layui.js"></script>
+<script src="/static/js/user.js"></script>
 </head>
 <body>
 <div class="main layui-clear" style="padding: 15px">
@@ -72,40 +73,11 @@
             <div class="layui-form-item fly-form-app">
                 	注：密码改后下次登录用
             </div>
-            
+            <div class="layui-form-item">
+                <button class="layui-btn" id="btn">确认提交</button>
+            </div>
+         
 	</form>
 </div>
 </body>
-<script type="text/javascript">
-	layui.use(['jquery', 'layer', 'form', 'upload'], function() {
-		var $ = layui.jquery,
-		layim = parent.layim,
-		form = layui.form,
-		layer = layui.layer;
-	    //修改头像
-	    layui.upload({
-	        url: "test"
-	        ,title: '修改头像'
-	        ,ext: 'jpg|png'
-	        ,success: function(res){
-	            if(1 == res.code){
-	                $("#LAY_demo_upload").attr('src', res.url);
-	                $("#user_avatar").val(res.url);
-	            }else{
-	                layer.msg(res.msg, {time:2000});
-	            }
-	        }
-	    });
-		
-		$(document).ready(function(){
-			var mine = layim.cache().mine;
-			$("#username").val(mine.username);
-			$("#email").val(mine.email);
-			$("#sign").val(mine.sign);
-			$("#LAY_demo_upload").attr("src", mine.avatar);
-			
-		});
-		
-	});
-</script>
 </html>
