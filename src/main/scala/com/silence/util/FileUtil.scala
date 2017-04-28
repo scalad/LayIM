@@ -13,7 +13,7 @@ import com.silence.common.SystemConstant
 object FileUtil {
   
     /**
-     * @description 服务器保存服务器
+     * @description 文件保存服务器
      * @param types 文件类型/upload/image 或  /upload/file
      * @param path 文件绝对路径地址
      * @param file 二进制文件
@@ -34,6 +34,19 @@ object FileUtil {
         }
         FileUtils.copyInputStreamToFile(file.getInputStream, new File(paths, name))
         result + name
+    }
+    
+    /**
+     * @description 头像
+     * @param realpath 服务器绝对路径地址
+     * @param file 文件
+     * @return 相对路径 
+     */
+    def upload(realpath: String, file: MultipartFile): String = {
+        var name = file.getOriginalFilename
+        name = UUIDUtil.getUUID32String + name.substring(name.indexOf("."))
+        FileUtils.copyInputStreamToFile(file.getInputStream, new File(realpath, name))
+        SystemConstant.AVATAR_PATH + name
     }
   
 }
