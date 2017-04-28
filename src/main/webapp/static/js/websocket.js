@@ -200,11 +200,11 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	      var mine = layim.cache().mine;
 	      $(".layui-layim-user").bind("click", function(){
 	    	  layer.open({
-	    		  type: 1,
-	    		  title: "个人信息",
+	    		  type: 2,
+	    		  title: "修改个人信息",
 	    		  skin: 'layui-layer-rim',
-	    		  area: ['50%', '60%'], 
-	    		  content: mine.id + mine.username + mine.sign +"<div class='layim-chat-other'><img src='" + mine.avatar + "'/></div>"
+	    		  area: ['500px', '550px'], 
+	    		  content: '/static/html/userinfo.html'
 	    	  });
 	      })
 	  });
@@ -334,7 +334,7 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
                                         layim.addList({
                                             type: 'friend'
                                             ,avatar: res.data.avatar
-                                            ,username: res.data.user_name
+                                            ,username: res.data.username
                                             ,groupid: group_id
                                             ,id: res.data.id
                                             ,sign: res.data.sign
