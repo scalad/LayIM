@@ -835,6 +835,7 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
         } else {
           data.submit && data.submit(groupElem.val(), remarkElem.val(), index);
         }
+        layer.close(popAdd.index);
       }
     });
   };
@@ -1496,38 +1497,13 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
     //弹出查找页面
     ,find: function(){
       layer.close(events.find.index);
-      var html = '<div class="layui-layer-content"><ul id="layim-users" style="padding-top:5px;" class="layim-members-list"></ul></div>';
-      var findIndex = layer.open({
-        type: 1
-        ,title: '查找'
-        ,shade: false
-        ,maxmin: true
-        ,area: ['585px', '600px']
-        ,skin: 'layui-box layui-layer-border'
-        ,resize: false
-        ,content: html
-      });
-      //使用流加载
-      flow.load({
-    	  elem: '#layim-users' //指定列表容器
-          ,isAuto: false
-    	  ,done: function(page, next){
-    	  var lis = [];
-    	  $.get('/user/findUsers?page='+page + "&Type=friend", function(res){
-    		  res = eval("(" + res + ")");
-    	      layui.each(res.data, function(index, item){
-    	    	  var img = '<img style="width: 40px; height: 40px; border-radius: 100%;" src ="' + item.avatar + '"/>';
-    	    	  var cite = '<cite style="display: block;padding-top:10px; font-size: 14px;">' + item.username + '</cite>';
-    	    	  var a = '<a style="cursor:pointer" layim-data-uid=' + item.id + ' onclick="show(this);">' + img + cite + '</a>';
-    	    	  var li = '<li class="layim-user" style="margin:20px 20px;display: inline-block;">'+ a +' </li>';	    	  
-    	          lis.push(li);
-    	      }); 
-    	      next(lis.join(''), page < res.pages);
-    	  });
-      }
-      });
-      events.find.index = findIndex;
-      return events.find.index; 
+	  layer.open({
+		  type: 2,
+		  title: "查找",
+		  skin: 'layui-layer-rim',
+		  area: ['610px', '500px'], 
+		  content: '/static/html/find.html'
+	  }); 
     }
     
     //弹出更换背景

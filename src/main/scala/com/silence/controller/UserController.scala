@@ -114,20 +114,20 @@ class UserController @Autowired()(private val userService : UserService){
     }
     
     /**
-     * @description 查找好友、群
-     * @param page
-     * @param key
-     * @param Type
+     * @description 分页查找好友
+     * @param page 第几页
+     * @param name 好友名字
+     * @param sex 性别
      */
     @ResponseBody
     @RequestMapping(value = Array("/findUsers"), method = Array(RequestMethod.GET))
     def findUsers(@RequestParam(value = "page",defaultValue = "1") page: Int,
-                  @RequestParam(value = "key", required = false) key: String,
-                  @RequestParam("Type") Type: String): String = {
-    		val count = userService.countUsers(key, Type)
+                  @RequestParam(value = "name", required = false) name: String,
+                  @RequestParam(value = "sex", required = false) sex: Integer): String = {
+    		val count = userService.countUsers(name, sex)
 				val pages = if (count < SystemConstant.USER_PAGE) 1 else (count / SystemConstant.USER_PAGE + 1)
     		PageHelper.startPage(page, SystemConstant.USER_PAGE)
-    		val users = userService.findUsers(key, Type)
+    		val users = userService.findUsers(name, sex)
     		var result = new ResultPageSet(users)
     		result.setPages(pages)
         gson.toJson(result)

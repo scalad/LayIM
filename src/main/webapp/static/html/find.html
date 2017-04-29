@@ -1,0 +1,95 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>查找/添加群组</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<script src="/static/layui/layui.js"></script>
+</head>
+<body class="gray-bg">
+	<div class="layui-tab layui-tab-card">
+		<ul class="layui-tab-title">
+			<li class="layui-this">找人</li>
+			<li>找群</li>
+		</ul>
+		<div class="layui-tab-content">
+			<div class="layui-tab-item layui-show layui-form layui-friend">
+				<div class="layui-form-item">
+					<input type="text" name="friend_name" placeholder="请输入昵称"
+						autocomplete="off" class="layui-input layui-input-inline">
+					<input type="radio" name="sex" value="0" title="男" checked>
+					<input type="radio" name="sex" value="1" title="女">
+					<button id="findFriend" class="layui-btn layui-btn-normal">搜索</button>
+				</div>
+			</div>
+			<div class="layui-tab-item">
+				<div class="layui-tab-item layui-show layui-form">
+					<div class="layui-form-item">
+						<input type="text" name="group_name" placeholder="请输入群昵称"
+							autocomplete="off" class="layui-input layui-input-inline">
+						<button id="findGroup" class="layui-btn layui-btn-normal">搜索</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	var show;
+	layui.use([ 'element', 'jquery', 'layer', 'form', 'upload', 'flow'],function() {
+		var element = layui.element, $ = layui.jquery, form = layui.form(), layer = layui.layer,flow = layui.flow;
+		//父级窗口的对象
+		var socket = parent.socket, layim = parent.layim;
+		//显示添加好友面板
+		show = function(item) {
+			var mine = layim.cache().mine;
+			var $item = $(item);
+			var img = $item.find("img").attr("src");
+			var username = $item.find("cite").text();
+			var id = $item.attr("layim-data-uid");
+			var index = layim.add({
+				type: 'friend' //friend：申请加好友、group：申请加群
+				,username: username //好友昵称，若申请加群，参数为：groupname
+				,avatar: img
+				,submit: function(group, remark, index){ //一般在此执行Ajax和WS，以通知对方
+					socket.send(JSON.stringify({
+			    		type:"addFriend",
+			    		mine:mine,
+			    		to:{"id":id},
+			    		msg:JSON.stringify({"groupId":group,"remark":remark,"Type":"0"})
+			    	}));
+					layer.msg("发送成功!", {offset: 't',anim: 5});
+				}
+			});
+		}
+		//找人		
+		$("#findFriend").click(function(){
+			$("#users").remove();
+			$(".layui-friend").append("<ul id='users'></ul>");
+			var name = $("input[name='friend_name']").val();
+			var sex = $("input[type='radio']:checked").val();
+			flow.load({
+			    elem: '#users'
+			    ,done: function(page, next){
+			      var lis = [];
+			      var params = "sex="+ sex;
+			      if(name != null && "" != name) {
+			    	  params += "&name=" + name; 
+			      }
+			      $.get('/user/findUsers?' + params + '&page='+page, function(res){
+			    	  res = eval("(" + res + ")");
+		    	      layui.each(res.data, function(index, item){
+		    	    	  var img = '<img style="width: 40px; height: 40px; border-radius: 100%;" src ="' + item.avatar + '"/>';
+		    	    	  var cite = '<cite style="display: block;padding-top:10px; font-size: 14px;">' + item.username + '</cite>';
+		    	    	  var a = '<a style="cursor:pointer" layim-data-uid=' + item.id + ' onclick="show(this);">' + img + cite + '</a>';
+		    	    	  var li = '<li class="layim-user" style="margin:20px 20px;display: inline-block;">'+ a +' </li>';	    	  
+		    	          lis.push(li);
+		    	      }); 
+		    	      next(lis.join(''), page < res.pages);    
+			      });
+			    }
+			});	
+		});
+	});
+</script>
+</html>

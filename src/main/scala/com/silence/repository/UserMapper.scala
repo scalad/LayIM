@@ -90,11 +90,21 @@ trait UserMapper {
     def saveAddMessage(addMessage: AddMessage): Int
   
   
-    @Select(Array("<script> select count(*) from t_user <if test='email != null'> and email like %#{email}%</if></script>"))
-    def countUser(@Param("email")  email: String): Int
+    /**
+     * @description 根据用户名和性别统计用户
+     * @param username
+     * @param sex
+     */
+    @Select(Array("<script> select count(*) from t_user where 1 = 1 <if test='username != null'> and username like '%${username}%'</if><if test='sex != null'> and sex=#{sex}</if></script>"))
+    def countUser(@Param("username")  username: String, @Param("sex") sex: Integer): Int
   
-    @Select(Array("<script> select id,username,status,sign,avatar,email from t_user <if test='email != null'> and email like %#{email}%</if></script>"))
-    def findUsers(@Param("email") email: String): List[User]
+    /**
+     * @description 根据用户名和性别查询用户
+     * @param username
+     * @param sex
+     */
+    @Select(Array("<script> select id,username,status,sign,avatar,email from t_user where 1=1 <if test='username != null'> and username like '%${username}%'</if><if test='sex != null'> and sex=#{sex}</if></script>"))
+    def findUsers(@Param("username")  username: String, @Param("sex") sex: Integer): List[User]
   
     /**
      * @description 统计查询消息

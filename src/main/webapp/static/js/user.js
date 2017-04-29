@@ -85,10 +85,8 @@ layui.use(['jquery', 'layer', 'form', 'upload'], function() {
                     return ;
                 }
             }
-            val sex = $("input[type='radio']:checked").val();
-            
-            
-            
+            //val sex = $("input[type='radio']:checked").val();
+                    
         });
     });
 });

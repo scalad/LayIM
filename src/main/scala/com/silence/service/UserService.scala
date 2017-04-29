@@ -153,24 +153,20 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      */  
     def saveAddMessage(addMessage: AddMessage): Int = userMapper.saveAddMessage(addMessage)
     
-    def countUsers(key: String, Type: String): Int = {
-        if (key == null || "".equals(key)) 
-            userMapper.countUser(null)
-        else
-          userMapper.countUser(key)
-    }
+    /**
+     * @description 根据用户名和性别统计用户
+     * @param username
+     * @param sex
+     */
+    def countUsers(username: String, sex: Integer): Int = userMapper.countUser(username, sex)
     
     /**
-     * @description 查找好友群相关
-     * @param key
-     * @Type 查找类型
+     * @description 根据用户名和性别查询用户
+     * @param username
+     * @param sex
      */
-    def findUsers(key: String, Type: String): List[User] = {
-        if (key == null || "".equals(key))
-            userMapper.findUsers(null)
-        else
-            userMapper.findUsers(key)
-    }
+    def findUsers(username: String, sex: Integer): List[User] = userMapper.findUsers(username, sex)
+    
     
     /**
      * @description 统计查询消息

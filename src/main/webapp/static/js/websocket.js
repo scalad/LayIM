@@ -1,5 +1,4 @@
 var socket = null;
-var show;
 layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	var $ = layui.jquery,laytpl = layui.laytpl;
 	//把layim对象添加到window上
@@ -246,32 +245,8 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	        	  ,type: "group"
 	        	  ,content: '模拟群员'+(Math.random()*100|0) + '加入群聊'
 	      	  });
-	       }
-	  });
-	  
-	  //显示添加好友面板
-	  show = function(item) {
-		  var mine = layim.cache().mine;
-		  var $item = $(item);
-		  var img = $item.find("img").attr("src");
-		  var username = $item.find("cite").text();
-		  var id = $item.attr("layim-data-uid");
-		  layim.add({
-			  type: 'friend' //friend：申请加好友、group：申请加群
-			  ,username: username //好友昵称，若申请加群，参数为：groupname
-			  ,avatar: img
-			  ,submit: function(group, remark, index){ //一般在此执行Ajax和WS，以通知对方
-				  socket.send(JSON.stringify({
-		    		  type:"addFriend",
-		    		  mine:mine,
-		    		  to:{"id":id},
-		    		  msg:JSON.stringify({"groupId":group,"remark":remark,"Type":"0"})
-		    	  }));
-				  layer.msg("发送成功!");
-			  }
-		  });
-			    
-	  }
+	    }
+	});
 	  
     //外部自定义我的事件
     my_events = {
