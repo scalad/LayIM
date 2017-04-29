@@ -24,12 +24,12 @@ class DruidConfig {
      */
     @Bean
   	def statViewServlet(): ServletRegistrationBean = {
-  		var druid = new ServletRegistrationBean()
-  		druid.setServlet(new StatViewServlet())  		
-  		druid.setUrlMappings(JavaConversions.asJavaCollection(List("/druid/*")))
-  		var params = Map("loginUsername" -> "admin", "loginPassword" -> "admin")
-  		druid.setInitParameters(JavaConversions.mapAsJavaMap(params))
-  		druid
+  		  var druid = new ServletRegistrationBean()
+  		  druid.setServlet(new StatViewServlet())  		
+  		  druid.setUrlMappings(JavaConversions.asJavaCollection(List("/druid/*")))
+  		  var params = Map("loginUsername" -> "admin", "loginPassword" -> "admin", "allo" -> "", "resetEnable" -> "false")
+  		  druid.setInitParameters(JavaConversions.mapAsJavaMap(params))
+  		  druid
   	}
   
     /**
@@ -38,11 +38,11 @@ class DruidConfig {
      */
     @Bean
   	def webStatFilter():FilterRegistrationBean = {
-  		var fitler = new FilterRegistrationBean()
-  		fitler.setFilter(new WebStatFilter())
-  		fitler.setUrlPatterns(JavaConversions.asJavaCollection(List("/*")))
-  		fitler.addInitParameter("exclusions", "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*")
-  		fitler
+  		  var fitler = new FilterRegistrationBean()
+  		  fitler.setFilter(new WebStatFilter())
+  		  fitler.setUrlPatterns(JavaConversions.asJavaCollection(List("/*")))
+  		  fitler.addInitParameter("exclusions", "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*")
+  		  fitler
   	}
     
 }
