@@ -369,4 +369,15 @@ class UserController @Autowired()(private val userService : UserService){
         gson.toJson(new ResultSet(userService.findUserById(id)))
     }
     
+    /**
+     * @description 判断邮件是否存在
+     * @param email
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/existEmail"), method = Array(RequestMethod.POST))
+    def existEmail(@RequestParam("email") email: String): String = {
+        gson.toJson(new ResultSet(userService.existEmail(email)))
+    }
+    
 }

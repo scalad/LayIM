@@ -263,6 +263,18 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     }
     
     /**
+     * @description 判断邮件是否存在
+     * @param email
+     * @return
+     */
+    def existEmail(email: String): Boolean = {
+        if (email == null || "".equals(email))
+            return false
+        else
+           userMapper.matchUser(email) != null
+    }
+    
+    /**
      * @description 用户邮件和密码是否匹配
      * @param user
      * @return User

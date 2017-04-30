@@ -90,6 +90,25 @@
 				layer.msg("激活失败，请重新激活!");
 			}
 		}
+		//监测邮件
+		$("#emailsignup").blur(function() {
+			$.ajax({
+	    		url:"user/existEmail",
+	    		type:"POST",
+	    		dataType:"JSON",
+	    		data:{email:$("#emailsignup").val()},
+	    		success:function(data) {
+	    			if(data.data){
+	    				$("#emailsignup").val("").focus();
+	    				layer.msg("此邮件已经被人注册过！");
+	    			}
+	    		},
+	    		error:function(data) {
+	    			layer.msg("服务器错误,请稍后再试！");
+	    		}
+	    	});
+		});
+		
 	    //注册
 	    form.on('submit(register)', function (data){
 	    	var passwordsignup_confirm = $("#passwordsignup_confirm").val().trim();
@@ -118,7 +137,7 @@
 	    		data:JSON.stringify(d),
 	    		success:function(data) {
 	    				layer.close(index);
-	    				layer.msg(data.msg);
+	    				layer.msg(data.msg + ",请先激活再登陆！");
 	    				window.location.href = "/#tologin";
 	    		},
 	    		error:function(data) {
