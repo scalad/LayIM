@@ -15,6 +15,7 @@ import com.silence.entity.AddMessage
 import com.silence.domain.AddInfo
 import com.silence.entity.AddFriends
 import com.silence.entity.AddFriends
+import org.apache.ibatis.annotations.Options
 
 /**
  * @description User Dao
@@ -204,7 +205,8 @@ trait UserMapper {
      * @return Int
      */
     @Insert(Array("insert into t_user(username,password,email,create_date,active) values(#{username},#{password},#{email},#{createDate},#{active})"))
-    def saveUser(user: User): Int
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    def saveUser(user: User): Int = user.getId
     
     /**
      * @description 
