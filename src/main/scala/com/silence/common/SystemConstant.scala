@@ -32,6 +32,8 @@ object SystemConstant {
     
     final val GROUP_AVATAR_PATH: String = "/static/image/group/"
     
+    final val DEFAULT_GROUP_NAME: String = "我的好友"
+    
     //电子邮件相关
     final val SUBJECT: String = "LayIM即时通讯系统邮箱激活邮件"
     

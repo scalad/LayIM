@@ -26,6 +26,7 @@ import com.silence.entity.ChatHistory
 import com.silence.entity.AddMessage
 import com.silence.domain.AddInfo
 import com.silence.entity.AddFriends
+import com.silence.entity.FriendGroup
 
 /**
  * @description 用户信息相关操作
@@ -108,11 +109,11 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @param uid
      * @param groupName
      */
-    def createFriendGroup(uid: Integer, groupName: String): Boolean = {
+    def createFriendGroup( groupName: String, uid: Integer): Boolean = {
         if (uid == null || groupName == null || "".equals(uid) || "".equals(groupName))
             return false
         else
-            userMapper.createFriendGroup(uid, groupName) == 1
+            userMapper.createFriendGroup(new FriendGroup(uid, groupName)) == 1
     }
     
     /**
@@ -329,10 +330,11 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @return Int
      */
     //清除缓存
-    @CacheEvict(value = Array("findUserById","findFriendGroupsById","findUserByGroupId"), allEntries = true)  
-    def saveUser(user: User, request: HttpServletRequest): Int = {
+    @CacheEvict(value = Array("findUserById","findFriendGroupsById","findUserByGroupId"), allEntries = true)
+    @Transactional
+    def saveUser(user: User, request: HttpServletRequest): Boolean = {
         if (user == null || user.getUsername == null || user.getPassword == null || user.getEmail == null) {
-            return 0
+            return false
         } else {          
             //激活码
             val activeCode = UUIDUtil.getUUID64String
@@ -340,11 +342,15 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
         	  user.setCreateDate(DateUtil.getDate)
         	  //加密密码
         	  user.setPassword(SecurityUtil.encrypt(user.getPassword))
+        	  userMapper.saveUser(user)
+        	  LOGGER.info("userid = " + user.getId)
+        	  //创建默认的好友分组
+        	  createFriendGroup(SystemConstant.DEFAULT_GROUP_NAME, user.getId)
         	  //发送激活电子邮件
         	  mailService.sendHtmlMail(user.getEmail, SystemConstant.SUBJECT, 
-        	      user.getUsername +",请确定这是你本人注册的账号   " + ", " + WebUtil.getServerIpAdder(request) + "/user/active/" + activeCode)
-        	  userMapper.saveUser(user)
+        	   user.getUsername +",请确定这是你本人注册的账号   " + ", " + WebUtil.getServerIpAdder(request) + "/user/active/" + activeCode)
         }
+        true
     }
         
 }

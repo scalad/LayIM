@@ -222,7 +222,7 @@ class UserController @Autowired()(private val userService : UserService){
     @ResponseBody
     @RequestMapping(value = Array("/register"), method = Array(RequestMethod.POST))
     def register(@RequestBody user: User, request: HttpServletRequest): String = {
-        if(userService.saveUser(user, request) == 1) {
+        if(userService.saveUser(user, request)) {
             gson.toJson(new ResultSet[String](SystemConstant.SUCCESS, SystemConstant.REGISTER_SUCCESS))   
         } else {
           	gson.toJson(new ResultSet[String](SystemConstant.ERROR, SystemConstant.REGISTER_FAIL))   

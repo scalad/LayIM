@@ -16,6 +16,7 @@ import com.silence.domain.AddInfo
 import com.silence.entity.AddFriends
 import com.silence.entity.AddFriends
 import org.apache.ibatis.annotations.Options
+import com.silence.entity.FriendGroup
 
 /**
  * @description User Dao
@@ -221,7 +222,7 @@ trait UserMapper {
      * @param uid
      * @param groupName
      */
-    @Insert(Array("insert into t_friend_group(uid,group_name) values(#{uid},#{groupName})"))
-    def createFriendGroup(@Param("uid") uid: Integer, @Param("groupName") groupName: String): Int
+    @Insert(Array("insert into t_friend_group(group_name,uid) values(#{groupName},#{uid})"))
+    def createFriendGroup(friendGroup: FriendGroup): Int
     
 }
