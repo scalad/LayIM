@@ -93,6 +93,7 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @param messageBoxId 消息盒子的消息id
      */
     @Transactional
+    @CacheEvict(value = Array("findUserById","findFriendGroupsById","findUserByGroupId"), allEntries = true)
     def addFriend(mid: Integer, mgid: Integer, tid: Integer, tgid: Integer, messageBoxId: Integer): Boolean = {
         val add = new AddFriends(mid, mgid, tid, tgid)
         if (userMapper.addFriend(add) != 0) {
