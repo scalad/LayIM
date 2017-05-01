@@ -275,7 +275,6 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
                 , '</div>'].join('');
 
             var friend_id = othis.parent().attr('data-id');
-            console.log(friend_id);
             $.getJSON('/user/findUser?id=' + friend_id.substring(12), function(res){
                 if(0 == res.code){
                     var index = layer.open({
@@ -325,7 +324,36 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
                     layer.msg(res.msg, {time: 2000});
                 }
             });
+        },
+        //删除好友
+        removeFriend: function(othis, e){
+            var friend_id = othis.parent().attr('data-id').substring(12);
+            //询问框
+            layer.confirm('确定删除该好友？', {
+                btn: ['确定', '取消'],
+                title: '友情提示',
+                closeBtn: 0,
+                icon: 3
+            }, function(){
+                $.post('/index/Tools/removeFriend', {'user_id' : friend_id}, function(res){
+                    if(1 == res.code){
+                        layer.msg('删除成功!', {icon: 1, time: 1500});
+                        layim.removeList({
+                            type: 'friend'
+                            , id: friend_id
+                        });
+                        //通知被删除的用户，删除我
+                        var black_data = '{"type":"delFriend","to_id":"' + res.data.to_id + '", "del_id":"' + res.data.del_id + '"}';
+                        socket.send(black_data);
+                    }else{
+                        layer.msg(res.msg, {time: 1500});
+                    }
+                }, 'json');
+            }, function(){
+            	layer.msg('服务器错误!', {icon: 1});
+            });
         }
+        
     }
 	  //获取离线消息
 	  /*$.ajax({

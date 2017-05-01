@@ -528,7 +528,7 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
           html += '<li layim-event="menu_profile"><i class="layui-icon">&#xe60a;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '查看资料</li>';
           html += '<li layim-event="menu_history"><i class="layui-icon" >&#xe60e;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '消息记录</li>';
           html += '<li layim-event="menu_nomsg"><i class="layui-icon" >&#xe617;</i>&nbsp;&nbsp;&nbsp;&nbsp;'  + '屏蔽消息</li>';
-          html += '<li layim-event="menu_delete"><i class="layui-icon" >&#x1006;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '删除好友</li>';
+          html += '<li layim-event="removeFriend"><i class="layui-icon" >&#x1006;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '删除好友</li>';
           html += '<li layim-event="changeGroup"><i class="layui-icon" >&#xe623;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '移动至</li></ul>';
       
       if(othis.hasClass('layim-null')) return;

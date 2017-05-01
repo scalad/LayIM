@@ -38,6 +38,10 @@
 	var show;
 	layui.use([ 'element', 'jquery', 'layer', 'form', 'upload', 'flow'],function() {
 		var element = layui.element, $ = layui.jquery, form = layui.form(), layer = layui.layer,flow = layui.flow;
+		//屏蔽右键菜单
+		$(document).bind("contextmenu",function(e){
+	        return false;
+	    });
 		//父级窗口的对象
 		var socket = parent.socket, layim = parent.layim;
 		//显示添加好友面板
