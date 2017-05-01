@@ -134,6 +134,24 @@ class UserController @Autowired()(private val userService : UserService){
     }
     
     /**
+     * @description 分页查找群组
+     * @param page 第几页
+     * @param name 群名称
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/findGroups"), method = Array(RequestMethod.GET))
+    def findGroups(@RequestParam(value = "page",defaultValue = "1") page: Int,
+                  @RequestParam(value = "name", required = false) name: String): String = {
+    		val count = userService.countGroup(name)
+				val pages = if (count < SystemConstant.USER_PAGE) 1 else (count / SystemConstant.USER_PAGE + 1)
+    		PageHelper.startPage(page, SystemConstant.USER_PAGE)
+    		val groups = userService.findGroup(name)
+    		var result = new ResultPageSet(groups)
+    		result.setPages(pages)
+        gson.toJson(result)
+    }
+    
+    /**
      * @description 获取聊天记录
      * @param id 与谁的聊天记录id
      * @param Type 类型，可能是friend或者是group

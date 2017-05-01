@@ -11,8 +11,13 @@ import scala.beans.BeanProperty
  */
 class GroupList(id: Integer, groupname: String) extends Group(id, groupname) {
   
+    //群头像地址
     @BeanProperty
     var avatar: String = _
+    
+    //创建者Id
+    @BeanProperty
+    var createId: Integer = _
     
     def this(id: Integer, groupname: String, avatar: String) = {
         this(id, groupname)

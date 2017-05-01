@@ -156,6 +156,20 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     def saveAddMessage(addMessage: AddMessage): Int = userMapper.saveAddMessage(addMessage)
     
     /**
+     * @description 根据群名模糊统计
+     * @param groupName
+     * @return
+     */
+    def countGroup(groupName: String): Int = userMapper.countGroup(groupName)
+    
+    /**
+     * @description 根据群名模糊查询群
+     * @param groupName
+     * @return 
+     */
+    def findGroup(groupName: String): List[GroupList] = userMapper.findGroup(groupName)
+    
+    /**
      * @description 根据用户名和性别统计用户
      * @param username
      * @param sex

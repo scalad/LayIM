@@ -91,7 +91,22 @@ trait UserMapper {
     @Insert(Array("insert into t_add_message(from_uid,to_uid,group_id,remark,agree,type,time) values (#{fromUid},#{toUid},#{groupId},#{remark},#{agree},#{Type},#{time}) ON DUPLICATE KEY UPDATE remark=#{remark},time=#{time};"))
     def saveAddMessage(addMessage: AddMessage): Int
   
+    /**
+     * @description 根据群名模糊统计
+     * @param groupName
+     * @return
+     */
+    @Select(Array("<script> select count(*) from t_group where 1 = 1 <if test='groupName != null'> and group_name like '%${groupName}%'</if></script>"))
+    def countGroup(@Param("groupName")  groupName: String): Int
   
+    /**
+     * @description 根据群名模糊查询群
+     * @param groupName
+     * @return 
+     */
+    @Select(Array("<script> select id,group_name,avatar,create_id from t_group where 1=1 <if test='groupName != null'> and group_name like '%${groupName}%'</if></script>"))
+    def findGroup(@Param("groupName") groupName: String): List[GroupList]
+    
     /**
      * @description 根据用户名和性别统计用户
      * @param username
