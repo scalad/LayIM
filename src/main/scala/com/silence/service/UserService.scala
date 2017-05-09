@@ -41,6 +41,20 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     @Autowired private var mailService: MailService = _
 
     /**
+     * @description 删除好友
+     * @param friendId 好友Id
+     * @param uId 个人Id
+     * @return Boolean
+     */
+    @CacheEvict(value = Array("findUserById","findFriendGroupsById","findUserByGroupId"), allEntries = true)
+    def removeFriend(friendId: Integer, uId: Integer): Boolean = {
+        if (friendId == null || uId == null)
+            return false
+        else
+            userMapper.removeFriend(friendId, uId) == 1
+    }
+    
+    /**
      * @description 更新用户头像
      * @param userId
      * @param avatar
