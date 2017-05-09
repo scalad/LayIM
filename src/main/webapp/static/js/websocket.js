@@ -7,6 +7,18 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	$(document).bind("contextmenu",function(e){
         return false;
     });
+	//从缓存中获取用户的信息
+	function getFriend(friends, id){
+		var ele;
+	    friends.forEach(function(e) {
+	    	e.list.forEach(function(element) {
+	    		if(id == element.id) {
+	    			ele = element;
+	    		}
+	    	});
+	    });
+	    return ele;
+	}
 	//确定只有部署到服务器
 	if(!/^http(s*):\/\//.test(location.href)){
 		layer.open({
@@ -352,6 +364,22 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
             }, function(){
             	layer.msg('服务器错误!', {icon: 1});
             });
+        },
+        //查看资料
+        checkOut: function(othis, e) {
+        	var friend_id = othis.parent().attr('data-id').substring(12);
+        	var friends = layim.cache().friend;        	
+        	var friend = getFriend(friends, friend_id);
+        	var params = escape("id="+friend.id+"&username="+friend.username+"&sign="+friend.sign+"&avatar="+friend.avatar+"&email="+friend.email+"&sex="+friend.sex);
+        	layer.open({
+	    		  type: 2,
+	    		  title: "好友信息",
+	    		  skin: 'layui-layer-rim',
+	    		  area: ['500px', '300px'], 
+	    		  scrollbar: false,
+	    		  maxWidth: "400px",
+	    		  content: '/static/html/friend.html?' + params
+	    	});
         }
         
     }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>好友信息</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<script src="/static/layui/layui.js"></script>
+</head>
+<body>
+<div style="padding: 15px">
+	<div class="layui-form layui-form-pane">
+		<div id="user_info">
+			<div class="layui-form-item">
+				<label for="user_name" class="layui-form-label">用户名</label>
+				<div class="layui-input-inline">
+					<input type="text" id="username" name="username" autocomplete="off" class="layui-input" value="">
+				</div>				
+			</div>
+			
+            <div class="site-demo-upload" style="position:absolute; top:5px;margin-left: 330px;">
+                <img id="LAY_demo_upload" src="" width="130px" height="150px">
+            </div>
+            
+			<div class="layui-form-item">
+				<label for="user_email" class="layui-form-label">邮箱</label>
+				<div class="layui-input-inline">
+					<input type="email" id="email" name="email" autocomplete="off" class="layui-input" value="">
+				</div>
+			</div>
+			<div class="layui-form-item sex">
+				<label class="layui-form-label">性别</label>
+				<div class="layui-input-inline">
+					<input type="text" id="sex" name="sex" autocomplete="off" class="layui-input" value="">
+				</div>				
+			</div>
+			<div class="layui-form-item">
+				<label for="user_email" class="layui-form-label">签名</label>
+				<div class="layui-input-inline">
+					<input type="text" id="sign" name="sign" autocomplete="off" class="layui-input" style="width: 350px;">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+function getQueryString(name) { 
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = unescape(window.location.search).substr(1).match(reg); 
+	if (r != null) return unescape(r[2]); return null; 
+} 
+layui.use(['jquery', 'form'], function(layim){
+	var $ = layui.jquery,form = layui.form;
+	$(document).ready(function() {
+		var username = getQueryString("username");
+		var sign = getQueryString("sign");
+		var avatar = getQueryString("avatar");
+		var email = getQueryString("email");
+		var sex = getQueryString("sex");
+		if (sex == "1") {
+			$("#sex").val("男");
+		} else {
+			$("#sex").val("女");
+		}
+		$("#username").val(username);
+		$("#LAY_demo_upload").attr("src", avatar);
+		$("#email").val(email);
+		$("#sign").val(sign);	
+	});
+});
+</script>
+</html>
