@@ -180,7 +180,7 @@ trait UserMapper {
      * @param gid
      * @return List[User]
      */
-    @Select(Array("select id,username,status,sign,avatar from t_user where id in(select uid from t_group_members where gid = #{gid})"))
+    @Select(Array("select id,username,status,sign,avatar,email from t_user where id in(select uid from t_group_members where gid = #{gid})"))
     def findUserByGroupId(gid: Int): List[User]
   
     /**
@@ -212,7 +212,7 @@ trait UserMapper {
      * @param fgid
      * @return List[User]
      */
-    @Select(Array("select id,username,avatar,sign,status from t_user where id in(select uid from t_friend_group_friends where fgid = #{fgid})"))
+    @Select(Array("select id,username,avatar,sign,status,email from t_user where id in(select uid from t_friend_group_friends where fgid = #{fgid})"))
     def findUsersByFriendGroupIds(fgid: Int): List[User]
     
     /**
