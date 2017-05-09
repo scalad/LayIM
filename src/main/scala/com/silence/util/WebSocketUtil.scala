@@ -77,6 +77,21 @@ object WebSocketUtil {
     }
     
     /**
+     * @description 通知对方删除好友
+     * @param uId我的id
+     * @param friendId 对方Id
+     */
+    def removeFriend(uId: Integer, friendId: Integer) = synchronized {
+        //对方是否在线，在线则处理，不在线则不处理
+      	var result = new HashMap[String, String]
+        if(sessions.get(friendId) != null) {
+          	result.put("type", "delFriend");
+          	result.put("uId", uId + "");
+          	WebSocketUtil.sendMessage(gson.toJson(result), sessions.get(friendId))
+        }
+    }
+    
+    /**
      * @description 添加好友
      * @param uid
      * @param message

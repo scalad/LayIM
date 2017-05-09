@@ -44,9 +44,22 @@ import com.silence.domain.ResultPageSet
 @RequestMapping(value = Array("/user"))
 class UserController @Autowired()(private val userService : UserService){
     
-    private final val LOGGER:Logger = LoggerFactory.getLogger(classOf[UserController])
+    private final val LOGGER: Logger = LoggerFactory.getLogger(classOf[UserController])
     
     private final val gson: Gson = new Gson
+    
+    /**
+     * @description 删除好友
+     * @param friendId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/removeFriend"), method = Array(RequestMethod.POST))
+    def removeFriend(@RequestParam("friendId") friendId: Integer,request: HttpServletRequest): String = {
+        val user = request.getSession.getAttribute("user").asInstanceOf[User]
+        val result = userService.removeFriend(friendId, user.getId)
+        gson.toJson(new ResultSet(result))
+    }
     
     /**
      * @description 移动好友分组

@@ -17,6 +17,7 @@ import com.silence.entity.AddFriends
 import com.silence.entity.AddFriends
 import org.apache.ibatis.annotations.Options
 import com.silence.entity.FriendGroup
+import org.apache.ibatis.annotations.Delete
 
 /**
  * @description User Dao
@@ -25,6 +26,15 @@ import com.silence.entity.FriendGroup
  *
  */
 trait UserMapper {
+  
+    /**
+     * @description 删除好友
+     * @param friendId 好友Id
+     * @param uId 个人Id
+     * @return Int
+     */
+    @Delete(Array("delete from t_friend_group_friends where fgid in (select id from t_friend_group where uid in (#{friendId}, #{uId})) and uid in(#{friendId}, #{uId})"))
+    def removeFriend(@Param("friendId") friendId: Integer, @Param("uId") uId: Integer): Int
   
     /**
      * @description 更新用户头像
@@ -88,7 +98,7 @@ trait UserMapper {
      * @param addMessage
      * @return
      */  
-    @Insert(Array("insert into t_add_message(from_uid,to_uid,group_id,remark,agree,type,time) values (#{fromUid},#{toUid},#{groupId},#{remark},#{agree},#{Type},#{time}) ON DUPLICATE KEY UPDATE remark=#{remark},time=#{time};"))
+    @Insert(Array("insert into t_add_message(from_uid,to_uid,group_id,remark,agree,type,time) values (#{fromUid},#{toUid},#{groupId},#{remark},#{agree},#{Type},#{time}) ON DUPLICATE KEY UPDATE remark=#{remark},time=#{time},agree=#{agree};"))
     def saveAddMessage(addMessage: AddMessage): Int
   
     /**

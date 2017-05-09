@@ -57,7 +57,7 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 					console.log("连接成功");
 				};
 				socket.onmessage = function(event) {
-					console.log("接收到消息");
+					console.log("接收到消息:" + event.data);
 					im.handleMessage(event.data);
 				};
 				socket.onclose = function() {
@@ -72,19 +72,41 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 		handleMessage : function(data) {
 			json = eval("(" + data + ")");
 			var type = json.type;
-			if("friend" == type || "group" == type) {				
-				layim.getMessage(JSON.parse(data));
-			} else if("checkOnline" == type){
-				var style;
-				if(json.status == "在线"){
-					style = "color:#00EE00;";
-				} else {
-					style = "color:#FF5722;";
+			switch(type) {
+				//处理好友和群消息
+				case "friend":
+				case "group": { 
+					layim.getMessage(JSON.parse(data));
+					break;
+				};
+				//监测好友在线状态
+				case "checkOnline": {
+					var style;
+					if(json.status == "在线"){
+						style = "color:#00EE00;";
+					} else {
+						style = "color:#FF5722;";
+					}
+					layim.setChatStatus('<span style="' + style +'">' + json.status + '</span>');
+					break;
+				};
+				//消息盒子
+				case "unHandMessage": {
+					//消息盒子未处理的消息
+					layim.msgbox(json.count);
+					break;
+				};
+				//删除好友消息，
+				case "delFriend": {
+					var friends = layim.cache().friend;        	
+		        	var friend = getFriend(friends, json.uId);
+		        	layer.alert("用户'"+friend.username +"'删除了你!", {icon: 1,time:0,title:"删除信息"});
+					layim.removeList({
+						  type: 'friend' 
+						  ,id: json.uId
+					});
+					
 				}
-				layim.setChatStatus('<span style="' + style +'">' + json.status + '</span>');
-			} else if("unHandMessage" == type){
-				//消息盒子未处理的消息
-				layim.msgbox(json.count); 
 			}
 		},
 		sendData:function(data){
@@ -347,22 +369,20 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
                 closeBtn: 0,
                 icon: 3
             }, function(){
-                $.post('/index/Tools/removeFriend', {'user_id' : friend_id}, function(res){
-                    if(1 == res.code){
+                $.post('/user/removeFriend', {'friendId' : friend_id}, function(res){
+                    if(0 == res.code){
                         layer.msg('删除成功!', {icon: 1, time: 1500});
                         layim.removeList({
                             type: 'friend'
                             , id: friend_id
                         });
-                        //通知被删除的用户，删除我
-                        var black_data = '{"type":"delFriend","to_id":"' + res.data.to_id + '", "del_id":"' + res.data.del_id + '"}';
-                        socket.send(black_data);
+                        //如果对方在线,通知对方用户删除我
+                        var data = '{"type":"delFriend","to":{"id":'+friend_id+'}}';
+                        socket.send(data);
                     }else{
                         layer.msg(res.msg, {time: 1500});
                     }
                 }, 'json');
-            }, function(){
-            	layer.msg('服务器错误!', {icon: 1});
             });
         },
         //查看资料

@@ -62,6 +62,9 @@ class WebSocket {
                 val result = WebSocketUtil.countUnHandMessage(uid)
                 WebSocketUtil.sendMessage(gson.toJson(result), session)
             }
+            case "delFriend" => {
+                WebSocketUtil.removeFriend(uid, mess.getTo.getId)
+            }
             case _ => {
                 LOGGER.info("No Mapping Message!")
             }
