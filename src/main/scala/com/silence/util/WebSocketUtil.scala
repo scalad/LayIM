@@ -97,7 +97,7 @@ object WebSocketUtil {
      * @param message
      */
     def addFriend(uid: Integer, message: Message): Unit = synchronized {
-      	LOGGER.info("添加好友、群组")
+      	LOGGER.info("添加好友")
         val mine = message.getMine
         val addMessage = new AddMessage
         addMessage.setFromUid(mine.getId)
@@ -108,6 +108,12 @@ object WebSocketUtil {
         addMessage.setType(add.getType)
         addMessage.setGroupId(add.getGroupId)
         userService.saveAddMessage(addMessage)
+        var result = new HashMap[String, String]
+        //如果对方在线，则推送给对方
+      	if (sessions.get(message.getTo.getId) != null) {
+        		result.put("type", "addFriend")
+        		sendMessage(gson.toJson(result), sessions.get(message.getTo.getId))      	  
+      	}
     }
     
     /**

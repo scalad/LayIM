@@ -105,8 +105,13 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 						  type: 'friend' 
 						  ,id: json.uId
 					});
-					
-				}
+					break;
+				};
+				//添加好友请求
+				case "addFriend": {
+					layer.alert("有新的用户添加你为好友,请查看消息盒子!", {icon: 0,time:0,title:"添加信息"});
+					break;
+				};
 			}
 		},
 		sendData:function(data){
