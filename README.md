@@ -64,6 +64,10 @@
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/right_key.png)
 
+好友资料
+
+![](https://github.com/scalad/LayIM/blob/master/doc/image/checkOut.png)
+
 在线、隐身切换
 
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/hide_and_online.png)
