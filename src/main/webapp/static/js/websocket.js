@@ -110,6 +110,7 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 				//添加好友请求
 				case "addFriend": {
 					layer.alert("有新的用户添加你为好友,请查看消息盒子!", {icon: 0,time:0,title:"添加信息"});
+					layim.msgbox(1);
 					break;
 				};
 			}

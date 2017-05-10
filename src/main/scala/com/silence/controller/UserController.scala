@@ -34,9 +34,6 @@ import scala.collection.JavaConversions
 import com.github.pagehelper.PageHelper
 import java.util.ArrayList
 import com.silence.entity.ChatHistory
-import com.silence.entity.ChatHistory
-import com.silence.entity.ChatHistory
-import org.springframework.core.annotation.AnnotationUtils.DefaultValueHolder
 import com.silence.domain.ResultPageSet
 
 @Controller
