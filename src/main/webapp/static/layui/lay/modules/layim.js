@@ -1524,19 +1524,13 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
     
     //设置
     ,setting: function(){
-    	layer.tab({
-    		  area: ['80%', '80%'],
-    		  tab: [{
-    		    title: 'TAB1', 
-    		    content: '内容1'
-    		  }, {
-    		    title: 'TAB2', 
-    		    content: '内容2'
-    		  }, {
-    		    title: 'TAB3', 
-    		    content: '内容3'
-    		  }]
-    	});
+    	layer.open({
+  		  type: 2,
+  		  title: "设置",
+  		  skin: 'layui-layer-rim',
+  		  area: ['610px', '500px'], 
+  		  content: '/static/html/setting.html'
+  	  }); 
     }
     
     //生成换肤

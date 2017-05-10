@@ -26,12 +26,14 @@ import com.silence.entity.Add
 object WebSocketUtil {
   
     private final val LOGGER: Logger = LoggerFactory.getLogger(WebSocketUtil.getClass)
+    
+    private final lazy val application = Application.getApplicationContext
   
     @BeanProperty final var sessions: HashMap[Integer, Session] = new HashMap[Integer, Session]()
   
-    private lazy val redisService: RedisService = Application.getApplicationContext.getBean(classOf[RedisService])
+    private lazy val redisService: RedisService = application.getBean(classOf[RedisService])
     
-    private lazy val userService: UserService = Application.getApplicationContext.getBean(classOf[UserService])
+    private lazy val userService: UserService = application.getBean(classOf[UserService])
     
     private final val gson: Gson = new Gson     
     

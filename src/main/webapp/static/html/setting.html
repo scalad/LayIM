@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>设置</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<style>
+
+</style>
+</head>
+<body>
+<div class="layui-tab" lay-allowClose="true" lay-filter="setting">
+  <ul class="layui-tab-title">
+    <li class="layui-this" lay-id="111">分组管理</li>
+    <li lay-id="222">群组管理</li>
+  </ul>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">内容1</div>
+    <div class="layui-tab-item">内容2</div>
+  </div>
+</div>
+<div class="layui-progress" lay-showPercent="yes">
+  <div class="layui-progress-bar layui-bg-red" lay-percent="30%"></div>
+</div>
+ 
+<div class="layui-progress layui-progress-big" lay-showPercent="yes">
+  <div class="layui-progress-bar layui-bg-green" lay-percent="50%"></div>
+</div>
+</body>
+<script src="/static/layui/layui.js"></script>
+<script>
+layui.use(['layim', 'flow', 'element'], function(){
+    var layim = parent.layim,layer = layui.layer,$ = layui.jquery,flow = layui.flow,element = layui.element();
+    var socket = parent.socket;
+    
+    element.on('tab(setting)', function(){
+        console.log($(this).text() + this.getAttribute('lay-id'));
+    });
+});
+</script>
+</html>
