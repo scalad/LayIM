@@ -113,8 +113,23 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 					layim.msgbox(1);
 					break;
 				};
+				//同意添加好友时添加dao好友列表中
+				case "agreeAddFriend": {
+					var group = eval("(" + json.msg + ")");
+					layim.addList({
+						type: 'friend'
+						,avatar: json.mine.avatar
+						,username: json.mine.username
+						,groupid: group.group
+						,id: json.mine.id
+						,sign: json.mine.sign
+					});
+					layer.alert("用户'"+json.mine.username+"'已同意添加你为好友!", {icon: 0,time:0,title:"添加信息"});
+					break;
+				}
 			}
 		},
+		
 		sendData:function(data){
 			this.waitForConnection(function () {
 				socket.send(data);

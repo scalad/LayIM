@@ -58,6 +58,11 @@ class WebSocket {
             case "addFriend" => {
                 WebSocketUtil.addFriend(uid, mess)
             }
+            case "agreeAddFriend" => {
+                if (WebSocketUtil.getSessions.get(mess.getTo.getId) != null) {                  
+                  	WebSocketUtil.sendMessage(message, WebSocketUtil.getSessions.get(mess.getTo.getId))
+                }
+            }
             case "unHandMessage" => {
                 val result = WebSocketUtil.countUnHandMessage(uid)
                 WebSocketUtil.sendMessage(gson.toJson(result), session)

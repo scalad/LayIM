@@ -112,7 +112,6 @@ layui.use(['layim', 'flow'], function(){
       ,from_group = li.data('fromgroup')
       ,user = cache[uid]
       ,messageBoxId = li.data('messageboxid');
-      console.log(messageBoxId);
       //选择分组
       parent.layui.layim.setFriendGroup({
         type: 'friend'
@@ -120,7 +119,6 @@ layui.use(['layim', 'flow'], function(){
         ,avatar: user.avatar
         ,group: parent.layui.layim.cache().friend //获取好友分组数据
         ,submit: function(group, index){
-         
           //实际部署时，请开启下述注释，并改成你的接口地址
           $.post('/user/agreeFriend', {
             uid: uid //对方用户ID
@@ -141,6 +139,13 @@ layui.use(['layim', 'flow'], function(){
               ,id: uid //好友ID
               ,sign: user.sign //好友签名
             });
+            //通知对方添加我
+            socket.send(JSON.stringify({
+		    	 type:"agreeAddFriend",
+		    	 mine:layim.cache().mine,
+		    	 to:{"id":uid},
+		    	 msg:'{"group":'+from_group +'}'
+		    }));
             parent.layer.close(index);
             othis.parent().html('已同意');
           },"json");
