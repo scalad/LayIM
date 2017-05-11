@@ -19,6 +19,7 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	    return ele;
 	}
 	//声明websocket属性
+	var index; 
 	var im = {
 		init: function() {
 			if ('WebSocket' in window) {
@@ -27,17 +28,15 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 					host = host + ":" + window.location.port;
 				}
 				var url = 'ws://' + host + '/websocket/'+ getUid();
-				socket = new ReconnectingWebSocket(url, null, {debug: false, reconnectInterval: 3000});
+				socket = new ReconnectingWebSocket(url, null, {debug: true, reconnectInterval: 3000});
 				im.startListener();
+				layer.close(index);
 			} else {
-				layer.msg('当前浏览器不支持WebSocket功能，请更换浏览器访问!');
+				layer.msg('当前浏览器不支持WebSocket功能，请更换浏览器访问!',{icon: 2,shade: 0.5,time:-1});
 			}
 		},
 		startListener : function() {
 			if (socket) {
-				socket.onerror = function() {
-					layer.msg("连接失败!");
-				};
 				socket.onopen = function(event) {
 					console.log("连接成功");
 				};
@@ -45,8 +44,11 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 					console.log("接收到消息:" + event.data);
 					im.handleMessage(event.data);
 				};
+				socket.onerror = function() {
+					socket.close;
+				};
 				socket.onclose = function() {
-					console.log("关闭连接！!");
+					index = layer.msg('你与服务器断开连接，正在尝试重新连接！', {icon: 2,shade: 0.5,time:-1});
 					im.waitForConnection(function(){
 						im.init();
 					},5);
@@ -185,9 +187,9 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	    //,skin: ['aaa.jpg'] //新增皮肤
 	    ,isfriend: true //是否开启好友
 	    ,isgroup: true //是否开启群组
-	    //,min: true //是否始终最小化主面板，默认false
+	    ,min: false //是否始终最小化主面板，默认false
 	    ,notice: true //是否开启桌面消息提醒，默认false
-	    //,voice: true //声音提醒，默认开启，声音文件为：default.wav
+	    ,voice: true //声音提醒，默认开启，声音文件为：default.wav
 	    
 	    ,msgbox: '/static/html/msgbox.html?uid='+getUid() //消息盒子页面地址，若不开启，剔除该项即可
 	    ,find: '#' //发现页面地址，若不开启，剔除该项即可
