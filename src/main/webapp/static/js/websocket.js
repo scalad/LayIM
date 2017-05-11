@@ -1,12 +1,11 @@
+document.write("<script language='javascript' src='/static/js/reconnecting/reconnecting-websocket.js'></script>");
 var socket = null;
 layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	var $ = layui.jquery,laytpl = layui.laytpl;
 	//把layim对象添加到window上
 	window.layim = layui.layim;
 	//屏蔽右键菜单
-	$(document).bind("contextmenu",function(e){
-        return false;
-    });
+	$(document).bind("contextmenu",function(e){ return false;});
 	//从缓存中获取用户的信息
 	function getFriend(friends, id){
 		var ele;
@@ -19,31 +18,17 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	    });
 	    return ele;
 	}
-	//确定只有部署到服务器
-	if(!/^http(s*):\/\//.test(location.href)){
-		layer.open({
-		  	type: 1,
-		  	skin: 'layui-layer-rim', //加上边框
-		  	area: ['420px', '240px'], //宽高
-		  	content: '<center>请部署到服务器上查看该演示！</center>'
-		});
-	}
 	//声明websocket属性
 	var im = {
 		init: function() {
 			if ('WebSocket' in window) {
-				var uid = getUid();
-				if (!uid) {
-					console.log('当前用户未登陆，应该跳到login');
-				} else {
-					var host = window.location.host
-					if(window.location.post != ""){
-						host = host + ":" + window.location.port;
-					}
-					var socketUrl = 'ws://' + host + '/websocket/'+uid;
-					socket = new WebSocket(socketUrl);
-					im.startListener();
+				var host = window.location.host
+				if(window.location.post != ""){
+					host = host + ":" + window.location.port;
 				}
+				var url = 'ws://' + host + '/websocket/'+ getUid();
+				socket = new ReconnectingWebSocket(url, null, {debug: false, reconnectInterval: 3000});
+				im.startListener();
 			} else {
 				layer.msg('当前浏览器不支持WebSocket功能，请更换浏览器访问!');
 			}
