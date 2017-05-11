@@ -93,13 +93,41 @@ object WebSocketUtil {
         }
     }
     
+    class T {
+        @BeanProperty var groupId: Integer = _
+        @BeanProperty var remark: String = _
+    }
+    
+    /**
+     * @description 添加群组
+     * @param uid
+     * @param message
+     */
+    def addGroup(uid: Integer, message: Message):Unit = synchronized {
+        val addMessage = new AddMessage
+        val mine = message.getMine
+        val to = message.getTo
+        val t = gson.fromJson(message.getMsg, classOf[T])
+        addMessage.setFromUid(mine.getId)
+        addMessage.setToUid(to.getId)
+        addMessage.setTime(DateUtil.getDateTime)
+        addMessage.setGroupId(t.getGroupId)
+        addMessage.setRemark(t.getRemark)
+        addMessage.setType(1)
+        userService.saveAddMessage(addMessage)
+        var result = new HashMap[String, String]
+        if (sessions.get(to.getId) != null) {
+            result.put("type", "addGroup");
+            sendMessage(gson.toJson(result), sessions.get(to.getId))
+        }
+    }
+    
     /**
      * @description 添加好友
      * @param uid
      * @param message
      */
     def addFriend(uid: Integer, message: Message): Unit = synchronized {
-      	LOGGER.info("添加好友")
         val mine = message.getMine
         val addMessage = new AddMessage
         addMessage.setFromUid(mine.getId)

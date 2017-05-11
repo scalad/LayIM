@@ -126,6 +126,12 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 					});
 					layer.alert("用户'"+json.mine.username+"'已同意添加你为好友!", {icon: 0,time:0,title:"添加信息"});
 					break;
+				};
+				//请求加群
+				case "addGroup": {
+					layer.alert("有新的用户申请加群,请查看消息盒子!", {icon: 0,time:0,title:"添加信息"});
+					layim.msgbox(1);
+					break;
 				}
 			}
 		},

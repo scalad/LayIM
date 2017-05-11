@@ -74,6 +74,8 @@
 			var img = $item.find("img").attr("src");
 			var groupname = $item.find("cite").text();
 			var id = $item.attr("layim-data-uid");
+			var groupId = $item.attr("layim-data-group-id");
+			console.log($item);
 			var index = layim.add({
 				type: 'group' //friend：申请加好友、group：申请加群
 				,groupname: groupname //好友昵称，若申请加群，参数为：groupname
@@ -83,7 +85,7 @@
 			    		type:"addGroup",
 			    		mine:mine,
 			    		to:{"id":id},
-			    		msg:JSON.stringify({"groupId":group,"remark":remark,"Type":"0"})
+			    		msg:JSON.stringify({"groupId":groupId,"remark":remark,"Type":"0"})
 			    	}));
 					layer.msg("发送成功!", {offset: 't',anim: 5});
 				}
@@ -135,7 +137,7 @@
 		    	      layui.each(res.data, function(index, item){
 		    	    	  var img = '<img style="width: 40px; height: 40px; border-radius: 100%;" src ="' + item.avatar + '"/>';
 		    	    	  var cite = '<cite style="display: block;padding-top:10px; font-size: 14px;">' + item.groupname + '</cite>';
-		    	    	  var a = '<a style="cursor:pointer" layim-data-uid=' + item.createId + ' onclick="showAddGroup(this);">' + img + cite + '</a>';
+		    	    	  var a = '<a style="cursor:pointer" layim-data-group-id=' + item.id + ' layim-data-uid=' + item.createId + ' onclick="showAddGroup(this);">' + img + cite + '</a>';
 		    	    	  var li = '<li class="layim-user" style="margin:20px 20px;display: inline-block;">'+ a +' </li>';	    	  
 		    	          lis.push(li);
 		    	      }); 

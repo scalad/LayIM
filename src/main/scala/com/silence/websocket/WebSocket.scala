@@ -52,6 +52,9 @@ class WebSocket {
                 val result = WebSocketUtil.checkOnline(mess, session)
                 WebSocketUtil.sendMessage(gson.toJson(result), session)
             }
+            case "addGroup" => {
+                WebSocketUtil.addGroup(uid, mess)
+            }
             case "changOnline" => {
                 WebSocketUtil.changeOnline(uid, mess.getMsg)
             }
