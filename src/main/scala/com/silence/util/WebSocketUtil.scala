@@ -17,6 +17,7 @@ import java.util.List
 import com.silence.Application
 import com.silence.entity.AddMessage
 import com.silence.entity.Add
+import com.silence.websocket.domain.Domain
 
 /**
  * @description WebSocket工具 单例
@@ -93,11 +94,6 @@ object WebSocketUtil {
         }
     }
     
-    class T {
-        @BeanProperty var groupId: Integer = _
-        @BeanProperty var remark: String = _
-    }
-    
     /**
      * @description 添加群组
      * @param uid
@@ -107,7 +103,7 @@ object WebSocketUtil {
         val addMessage = new AddMessage
         val mine = message.getMine
         val to = message.getTo
-        val t = gson.fromJson(message.getMsg, classOf[T])
+        val t = gson.fromJson(message.getMsg, classOf[Domain.Group])
         addMessage.setFromUid(mine.getId)
         addMessage.setToUid(to.getId)
         addMessage.setTime(DateUtil.getDateTime)
