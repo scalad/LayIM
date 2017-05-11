@@ -40,10 +40,15 @@
       </p>
       <p class="layim-msgbox-btn">
       {{#  if(item.read === 0){ }}
-	  	<button class="layui-btn layui-btn-small" data-type="agree">同意</button>
-        <button class="layui-btn layui-btn-small layui-btn-primary" data-type="refuse">拒绝</button>
+      	{{#  if(item.type === 0){ }}	
+	  		<button class="layui-btn layui-btn-small" data-type="agreeAddFriend">同意</button>
+        	<button class="layui-btn layui-btn-small layui-btn-primary" data-type="refuseAddFriend">拒绝</button>
+      	{{#  } else if(item.type === 1){ }}
+      		<button class="layui-btn layui-btn-small" data-type="agreeAddGroup">同意</button>
+        	<button class="layui-btn layui-btn-small layui-btn-primary" data-type="refuseAddGroup">拒绝</button>
+      	{{#  } }}  
 	  {{#  } else if(item.read === 1){ }}
-		已同意
+			已同意
 	  {{#  } else if(item.read === 2){ }}
 	  	<em>已拒绝</em>
 	  {{# } }}   
@@ -78,6 +83,7 @@ layui.use(['layim', 'flow'], function(){
           if(res.code != 0){
       	      return layer.msg(res.msg);
       	  }
+          console.log(res.data);
 	      //记录来源用户信息
 	      layui.each(res.data, function(index, item){
 	          cache[item.from] = item.user;
@@ -105,8 +111,17 @@ layui.use(['layim', 'flow'], function(){
 
   //操作
   var active = {
-    //同意
-    agree: function(othis){
+	//同意添加群
+	agreeAddGroup: function(othis){
+		var li = othis.parents('li')
+	      ,uid = li.data('uid')
+	      ,from_group = li.data('fromgroup')
+	      ,user = cache[uid]
+	      ,messageBoxId = li.data('messageboxid');
+		
+	},
+    //同意添加好友
+    agreeAddFriend: function(othis){
       var li = othis.parents('li')
       ,uid = li.data('uid')
       ,from_group = li.data('fromgroup')
@@ -155,7 +170,7 @@ layui.use(['layim', 'flow'], function(){
     }
 
     //拒绝
-    ,refuse: function(othis){
+    ,refuseAddFriend: function(othis){
       var li = othis.parents('li')
       ,messageBoxId = li.data('messageboxid');
 

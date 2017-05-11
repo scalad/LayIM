@@ -63,7 +63,7 @@
 			    		to:{"id":id},
 			    		msg:JSON.stringify({"groupId":group,"remark":remark,"Type":"0"})
 			    	}));
-					layer.msg("发送成功!", {offset: 't',anim: 5});
+					layer.msg('申请已发送，请等待对方确认', {icon: 1,shade: 0.5}, function(){layer.close(index);});
 				}
 			});
 		}
@@ -87,7 +87,7 @@
 			    		to:{"id":id},
 			    		msg:JSON.stringify({"groupId":groupId,"remark":remark,"Type":"0"})
 			    	}));
-					layer.msg("发送成功!", {offset: 't',anim: 5});
+					layer.msg('申请已发送，请等待对方确认', {icon: 1,shade: 0.5}, function(){layer.close(index);});
 				}
 			});
 		}

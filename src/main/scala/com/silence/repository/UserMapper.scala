@@ -118,6 +118,14 @@ trait UserMapper {
     def findGroup(@Param("groupName") groupName: String): List[GroupList]
     
     /**
+     * @description 根据群id查询群信息
+     * @param gid
+     * @return
+     */
+    @Select(Array("select id,group_name,avatar,create_id from t_group where id = #{gid}"))
+    def findGroupById(@Param("gid") gid: Integer): GroupList
+    
+    /**
      * @description 根据用户名和性别统计用户
      * @param username
      * @param sex
