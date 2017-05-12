@@ -29,6 +29,13 @@ import com.silence.domain.GroupMember
 trait UserMapper {
 
     /**
+     * @description 退出群
+     * @param groupMember
+     */
+    @Delete(Array("delete from t_group_members where gid=#{gid} and uid=#{uid}"))
+    def leaveOutGroup(groupMember: GroupMember): Int
+  
+    /**
      * @description 添加群成员
      * @param gid 群编号
      * @param uid 用户编号

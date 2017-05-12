@@ -550,8 +550,8 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
 	// 自定义主面板 群组右键功能 --- layim-list-group
 	layimMain.find('.layim-list-group').on('contextmenu', 'li', function (e) {
 		var othis = $(this);
-		var html = '<ul data-id="' + othis.attr('class') + '">' +
-			'<li layim-event="leaveOut">退出该群</li>';
+		var html = '<ul data-id="' + othis[0].id.substring(11) + '">' +
+			'<li layim-event="leaveOutGroup">退出该群</li></ul>';
 
 		if (othis.hasClass('layim-null')) return;
 

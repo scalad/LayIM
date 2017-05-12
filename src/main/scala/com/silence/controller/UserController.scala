@@ -46,6 +46,20 @@ class UserController @Autowired()(private val userService : UserService){
     private final val gson: Gson = new Gson
     
     /**
+     * @description 退出群
+     * @param groupId 群编号
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = Array("/leaveOutGroup"), method = Array(RequestMethod.POST))
+    def leaveOutGroup(@RequestParam("groupId") groupId: Integer, request: HttpServletRequest): String = {
+        val user = request.getSession.getAttribute("user").asInstanceOf[User]
+        val result = userService.leaveOutGroup(groupId, user.getId)
+        gson.toJson(new ResultSet(result))
+    }
+    
+    /**
      * @description 删除好友
      * @param friendId
      * @return

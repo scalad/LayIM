@@ -40,7 +40,13 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     
     //电子邮件相关服务
     @Autowired private var mailService: MailService = _
-
+    
+    /**
+     * @description 退出群
+     * @param groupMember
+     */
+    @CacheEvict(value = Array("findUserById","findFriendGroupsById","findUserByGroupId"), allEntries = true)
+    def leaveOutGroup(gid: Integer, uid: Integer): Boolean = userMapper.leaveOutGroup(new GroupMember(gid, uid)) == 1    
     
     /**
      * @description 添加群成员

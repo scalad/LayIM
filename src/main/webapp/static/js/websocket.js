@@ -395,6 +395,26 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	    		  maxWidth: "400px",
 	    		  content: '/static/html/friend.html?' + params
 	    	});
+        },
+        //退出群
+        leaveOutGroup: function(othis, e) {
+        	var groupId = othis.parent().attr("data-id");
+        	var index = layer.confirm('确定退出该群？', {
+                btn: ['确定', '取消'],
+                title: '友情提示',
+                closeBtn: 0,
+                icon: 3
+            }, function(){
+            	$.post('/user/leaveOutGroup', {
+                	groupId: groupId
+                }, function(res){
+                	if (res.code == 0) {                		
+                		layim.removeList({type: 'group',id: groupId});
+                	}
+                	layer.msg(res.msg);
+                	layer.close(index);
+                },"json");
+            });
         }
         
     }
