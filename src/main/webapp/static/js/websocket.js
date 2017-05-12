@@ -30,7 +30,6 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 				var url = 'ws://' + host + '/websocket/'+ getUid();
 				socket = new ReconnectingWebSocket(url, null, {debug: true, reconnectInterval: 3000});
 				im.startListener();
-				layer.close(index);
 			} else {
 				layer.msg('当前浏览器不支持WebSocket功能，请更换浏览器访问!',{icon: 2,shade: 0.5,time:-1});
 			}
@@ -39,6 +38,7 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 			if (socket) {
 				socket.onopen = function(event) {
 					console.log("连接成功");
+					layer.close(index);
 				};
 				socket.onmessage = function(event) {
 					console.log("接收到消息:" + event.data);
@@ -49,9 +49,6 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 				};
 				socket.onclose = function() {
 					index = layer.msg('你与服务器断开连接，正在尝试重新连接！', {icon: 2,shade: 0.5,time:-1});
-					im.waitForConnection(function(){
-						im.init();
-					},5);
 				}
 			}
 		},
@@ -121,22 +118,6 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 					break;
 				}
 			}
-		},
-		
-		sendData:function(data){
-			this.waitForConnection(function () {
-				socket.send(data);
-		    }, 500);
-		},
-		waitForConnection : function (callback, interval) {//判断连接是否建立
-		    if (socket.readyState === 1) {
-		        callback();
-		    } else {
-		        var that = this;
-		        setTimeout(function () {
-		            that.waitForConnection(callback, interval);
-		        }, interval);
-		    }
 		}
 	}
 
