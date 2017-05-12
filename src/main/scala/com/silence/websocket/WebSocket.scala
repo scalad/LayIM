@@ -69,6 +69,9 @@ class WebSocket {
             case "agreeAddGroup" => {
                 WebSocketUtil.agreeAddGroup(mess)
             }
+            case "refuseAddGroup" => {
+                WebSocketUtil.refuseAddGroup(mess);
+            }
             case "unHandMessage" => {
                 val result = WebSocketUtil.countUnHandMessage(uid)
                 WebSocketUtil.sendMessage(gson.toJson(result), session)

@@ -106,6 +106,18 @@ layui.use(['layim', 'flow'], function(){
 
   //操作
   var active = {
+	//拒绝加群
+	refuseAddGroup: function(othis) {
+		var li = othis.parents('li'),uid = li.data('uid'),messageBoxId = li.data('messageboxid');
+		layer.confirm("确定拒绝?",{icon:2,title:"提示"},function(index){
+			socket.send(JSON.stringify({
+	    		type:"refuseAddGroup",
+	    	 	msg: JSON.stringify({toUid:uid,messageBoxId:messageBoxId})
+		    }));
+			layer.close(index);
+	       	othis.parent().html('<em>已拒绝</em>');
+		});
+	},
 	//同意添加群
 	agreeAddGroup: function(othis){
 		var li = othis.parents('li')
@@ -113,7 +125,6 @@ layui.use(['layim', 'flow'], function(){
 	      ,from_group = li.data('fromgroup')
 	      ,user = cache[uid]
 	      ,messageBoxId = li.data('messageboxid');
-		console.log(uid + " " + from_group + " " + messageBoxId);
 		//同意该用户添加群
 		socket.send(JSON.stringify({
 	    	 type:"agreeAddGroup",
@@ -179,13 +190,12 @@ layui.use(['layim', 'flow'], function(){
         $.post('/user/refuseFriend', {
         	messageBoxId: messageBoxId
         }, function(res){
-          res = eval("(" + res + ")");
           if(res.code != 0){
             return layer.msg(res.msg);
           }
           layer.close(index);
           othis.parent().html('<em>已拒绝</em>');
-        });
+        },"json");
       });
     }
   };

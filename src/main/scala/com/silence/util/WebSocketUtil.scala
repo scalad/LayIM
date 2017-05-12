@@ -86,8 +86,16 @@ object WebSocketUtil {
     def agreeAddGroup(mess: Message): Unit = {
         val agree = gson.fromJson(mess.getMsg, classOf[Domain.AgreeAddGroup])
         userService.addGroupMember(agree.getGroupId, agree.getToUid, agree.getMessageBoxId)
-        
     }
+    
+    /**
+     * @description 拒绝添加群
+     * @param mess
+     */
+    def refuseAddGroup(mess: Message): Unit = {
+        val refuse = gson.fromJson(mess.getMsg, classOf[Domain.AgreeAddGroup])
+        userService.updateAddMessage(refuse.getMessageBoxId, 2)
+    }  
     
     /**
      * @description 通知对方删除好友
