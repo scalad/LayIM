@@ -18,6 +18,7 @@ import com.silence.entity.AddFriends
 import org.apache.ibatis.annotations.Options
 import com.silence.entity.FriendGroup
 import org.apache.ibatis.annotations.Delete
+import com.silence.domain.GroupMember
 
 /**
  * @description User Dao
@@ -26,6 +27,14 @@ import org.apache.ibatis.annotations.Delete
  *
  */
 trait UserMapper {
+
+    /**
+     * @description 添加群成员
+     * @param gid 群编号
+     * @param uid 用户编号
+     */
+    @Insert(Array("insert into t_group_members(gid,uid) values(#{gid},#{uid})"))
+    def addGroupMember(groupMember: GroupMember): Int
   
     /**
      * @description 删除好友

@@ -17,5 +17,14 @@ object Domain {
   			@BeanProperty var remark: String = _
     }
     
+    /**
+     * @description 同意添加好友
+     */
+    class AgreeAddGroup {
+        @BeanProperty var toUid: Integer = _
+        @BeanProperty var groupId: Integer = _
+        @BeanProperty var messageBoxId: Integer = _
+        override def toString = "toUid=" + toUid + ",groupId=" + groupId + ",messageBoxId=" + messageBoxId
+    }
     
 }

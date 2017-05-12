@@ -86,7 +86,7 @@ class UserController @Autowired()(private val userService : UserService){
     @ResponseBody
     @RequestMapping(value = Array("/refuseFriend"), method = Array(RequestMethod.POST))
     def refuseFriend(@RequestParam("messageBoxId") messageBoxId: Integer,request: HttpServletRequest): String = {
-        val result = userService.refuseFriend(messageBoxId)
+        val result = userService.updateAddMessage(messageBoxId, 2)
         gson.toJson(new ResultSet(result))
     }
     

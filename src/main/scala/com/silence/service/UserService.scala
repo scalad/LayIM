@@ -27,6 +27,7 @@ import com.silence.entity.AddMessage
 import com.silence.domain.AddInfo
 import com.silence.entity.AddFriends
 import com.silence.entity.FriendGroup
+import com.silence.domain.GroupMember
 
 /**
  * @description 用户信息相关操作
@@ -40,6 +41,23 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     //电子邮件相关服务
     @Autowired private var mailService: MailService = _
 
+    
+    /**
+     * @description 添加群成员
+     * @param gid 群编号
+     * @param uid 用户编号
+     * @param messageBoxId 消息盒子Id
+     */
+    @Transactional
+    def addGroupMember(gid: Integer, uid: Integer, messageBoxId: Integer): Boolean = {
+        if (gid == null || uid == null ) {
+          	return false          
+        } else {
+          	userMapper.addGroupMember(new GroupMember(gid, uid)) == 1
+          	updateAddMessage(messageBoxId, 1)       
+        }
+    }
+    
     /**
      * @description 删除好友
      * @param friendId 好友Id
@@ -85,18 +103,6 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
         else
     		    userMapper.changeGroup(groupId, uId, mId) == 1  
     }
-  
-    
-    /**
-     * @description 拒绝添加好友
-     * @param messageBoxId 消息盒子的消息id
-     */
-    def refuseFriend(messageBoxId: Integer): Boolean = {
-        var addMessage = new AddMessage
-        addMessage.setAgree(2)
-        addMessage.setId(messageBoxId)
-        updateAddMessage(addMessage) == 1
-    }
     
     /**
      * @description 添加好友操作
@@ -111,12 +117,9 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
     def addFriend(mid: Integer, mgid: Integer, tid: Integer, tgid: Integer, messageBoxId: Integer): Boolean = {
         val add = new AddFriends(mid, mgid, tid, tgid)
         if (userMapper.addFriend(add) != 0) {
-            var addMessage = new AddMessage
-            addMessage.setAgree(1)
-            addMessage.setId(messageBoxId)
-            updateAddMessage(addMessage)
+            updateAddMessage(messageBoxId, 1)
         }
-        true
+        false
     }
     
     /**
@@ -164,7 +167,12 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @return
      */
     @Transactional
-    def updateAddMessage(addMessage: AddMessage): Int = userMapper.updateAddMessage(addMessage)
+    def updateAddMessage(messageBoxId: Integer, agree: Integer): Boolean = {
+        var addMessage = new AddMessage
+        addMessage.setAgree(agree)
+        addMessage.setId(messageBoxId)
+        userMapper.updateAddMessage(addMessage) == 1
+    }
     
     
     /**

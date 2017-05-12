@@ -76,21 +76,16 @@ layui.use(['layim', 'flow'], function(){
   //请求消息
   var renderMsg = function(page, callback){
   	  //实际部署时，请将下述 getmsg.json 改为你的接口地址
-      $.get('/user/findAddInfo?uid=' + uid, {
-      	  page: page || 1
-      }, function(res){
-    	  res = eval("(" + res + ")");
+      $.get('/user/findAddInfo?uid=' + uid, { page: page || 1 }, function(res){
           if(res.code != 0){
       	      return layer.msg(res.msg);
       	  }
-          console.log(res.data);
 	      //记录来源用户信息
 	      layui.each(res.data, function(index, item){
 	          cache[item.from] = item.user;
 	      });
-      
      	  callback && callback(res.data, res.pages);
-    });
+      },"json");
   };
 
   //消息信息流
@@ -118,7 +113,13 @@ layui.use(['layim', 'flow'], function(){
 	      ,from_group = li.data('fromgroup')
 	      ,user = cache[uid]
 	      ,messageBoxId = li.data('messageboxid');
-		
+		console.log(uid + " " + from_group + " " + messageBoxId);
+		//同意该用户添加群
+		socket.send(JSON.stringify({
+	    	 type:"agreeAddGroup",
+	    	 msg: JSON.stringify({toUid:uid,groupId:from_group,messageBoxId:messageBoxId})
+	    }));
+        othis.parent().html('已同意');
 	},
     //同意添加好友
     agreeAddFriend: function(othis){
@@ -169,7 +170,7 @@ layui.use(['layim', 'flow'], function(){
       });
     }
 
-    //拒绝
+    //拒绝添加好友
     ,refuseAddFriend: function(othis){
       var li = othis.parents('li')
       ,messageBoxId = li.data('messageboxid');

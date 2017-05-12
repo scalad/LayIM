@@ -80,6 +80,16 @@ object WebSocketUtil {
     }
     
     /**
+     * @description 同意添加好友
+     * @param mess
+     */
+    def agreeAddGroup(mess: Message): Unit = {
+        val agree = gson.fromJson(mess.getMsg, classOf[Domain.AgreeAddGroup])
+        userService.addGroupMember(agree.getGroupId, agree.getToUid, agree.getMessageBoxId)
+        
+    }
+    
+    /**
      * @description 通知对方删除好友
      * @param uId我的id
      * @param friendId 对方Id
