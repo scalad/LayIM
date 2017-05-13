@@ -49,11 +49,14 @@ layui.use(['layim', 'laypage'], function(){
 	  	   		type:"POST",
 	  	   		data:{"id":${id},"Type":'${Type}',"page":curr},
 	  	   		success:function(data) {
-	  	   			console.log(data);
-	  	  		  	var html = laytpl(LAY_tpl.value).render({
-	  	  			    data: data.data
-	  	  		  	});
-	  	  		  	$('#LAY_view').html(html);
+	  	   			if (data.data.length != 0) {	  	   				
+		  	  		  	var html = laytpl(LAY_tpl.value).render({
+		  	  			    data: data.data
+		  	  		  	});
+		  	  		  	$('#LAY_view').html(html);
+	  	   			} else {
+	  	   				$('#LAY_view').html("<center>没有数据!</center>");
+	  	   			}
 	  	   		}
 	  	   	});
   	  	}
