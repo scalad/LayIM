@@ -525,7 +525,7 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
       var html = '<ul id="contextmenu_' + othis[0].id + '" data-id="' + othis[0].id + '" data-index="' + othis.data('index') + '">';
       	  html += '<li layim-event="menu_chat"><i class="layui-icon" >&#xe611;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '发送消息</li>';
           html += '<li layim-event="checkOut"><i class="layui-icon">&#xe60a;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '查看资料</li>';
-          html += '<li layim-event="menu_history"><i class="layui-icon" >&#xe60e;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '消息记录</li>';
+          html += '<li layim-event="viewChatLog"><i class="layui-icon" >&#xe60e;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '消息记录</li>';
           html += '<li layim-event="menu_nomsg"><i class="layui-icon" >&#xe617;</i>&nbsp;&nbsp;&nbsp;&nbsp;'  + '屏蔽消息</li>';
           html += '<li layim-event="removeFriend"><i class="layui-icon" >&#x1006;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '删除好友</li>';
           html += '<li layim-event="changeGroup"><i class="layui-icon" >&#xe623;</i>&nbsp;&nbsp;&nbsp;&nbsp;' + '移动至</li></ul>';

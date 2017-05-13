@@ -415,8 +415,25 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
                 	layer.close(index);
                 },"json");
             });
+        },
+        //右键菜单消息记录
+        viewChatLog: function(othis, e) {
+        	var friend_id = othis.parent().attr('data-id').substring(12);
+        	var friends = layim.cache().friend;        	
+        	var friend = getFriend(friends, friend_id);
+        	return layer.open({
+                type: 2
+                ,maxmin: true
+                ,title: '与 '+ friend.username +' 的聊天记录'
+                ,area: ['45%', '100%']
+                ,shade: false
+                ,offset: 'rb'
+                ,skin: 'layui-box'
+                ,anim: 2
+                ,id: 'layui-layim-chatlog'
+                ,content: layim.cache().base.chatLog + '?id=' + friend.id + '&Type=friend'
+            });
         }
-        
     }
 	  //获取离线消息
 	  /*$.ajax({
