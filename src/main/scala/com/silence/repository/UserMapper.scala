@@ -230,7 +230,8 @@ trait UserMapper {
      * @param uid 用户ID
      * @return List[Group]
      */
-    @Select(Array("select id,group_name,avatar from t_group where id in(select distinct gid from t_group_members where uid = #{uid})"))
+    @Results(value = Array(new Result(property="createId",column="create_id")))
+    @Select(Array("select id,group_name,avatar,create_id from t_group where id in(select distinct gid from t_group_members where uid = #{uid})"))
     def findGroupsById(uid: Int): List[GroupList]
     
     /**

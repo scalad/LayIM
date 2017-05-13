@@ -551,7 +551,7 @@ layui.define(['layer', 'laytpl', 'upload', 'flow'], function(exports){
 	layimMain.find('.layim-list-group').on('contextmenu', 'li', function (e) {
 		var othis = $(this);
 		var html = '<ul data-id="' + othis[0].id.substring(11) + '">' +
-			'<li layim-event="leaveOutGroup">退出该群</li></ul>';
+			'<li layim-event="leaveOutGroup"><i class="layui-icon" >&#x1006;</i>&nbsp;&nbsp;&nbsp;&nbsp;退出该群</li></ul>';
 
 		if (othis.hasClass('layim-null')) return;
 

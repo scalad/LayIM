@@ -268,12 +268,12 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	    	  }));
 	      } else if(type === 'group'){
 		      //模拟系统消息
-		      layim.getMessage({
+		      /*layim.getMessage({
 		          system: true
 	        	  ,id: res.data.id
 	        	  ,type: "group"
 	        	  ,content: '模拟群员'+(Math.random()*100|0) + '加入群聊'
-	      	  });
+	      	  });*/
 	    }
 	});
 	  
