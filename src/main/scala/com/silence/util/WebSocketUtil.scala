@@ -18,6 +18,7 @@ import com.silence.Application
 import com.silence.entity.AddMessage
 import com.silence.entity.Add
 import com.silence.websocket.domain.Domain
+import java.util.Collections
 
 /**
  * @description WebSocket工具 单例
@@ -30,7 +31,7 @@ object WebSocketUtil {
     
     private final lazy val application = Application.getApplicationContext
   
-    @BeanProperty final var sessions: HashMap[Integer, Session] = new HashMap[Integer, Session]()
+    @BeanProperty final var sessions = Collections.synchronizedMap(new HashMap[Integer, Session]())
   
     private lazy val redisService: RedisService = application.getBean(classOf[RedisService])
     
