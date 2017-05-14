@@ -28,7 +28,7 @@ layui.use(['jquery', 'layer', 'form', 'upload'], function() {
 	
     //从缓存中初始化数据
 	$(document).ready(function(){
-		var mine = layim.cache().mine;
+		/*var mine = layim.cache().mine;
 		$("#username").val(mine.username);
 		$("#email").val(mine.email);
 		$("#sign").val(mine.sign);
@@ -37,55 +37,59 @@ layui.use(['jquery', 'layer', 'form', 'upload'], function() {
 			$("input[type='radio']").eq(0).attr("checked",true);
 		} else {
 			$("input[type='radio']").eq(1).attr("checked",true);
-		}
+		}*/
 	});
 	
     //提交修改项
     $("#btn").click(function(){
         layer.ready(function(){
             var username = $("#username").val();
+            var email = $("#email").val();
+            var sex = $("input[type='radio']:checked").val();
             if('' == username){
                 layer.tips('用户名不能为空', '#username');
                 return ;
             }
+            if('' == email){
+                layer.tips('邮箱不能为空!', '#email');
+                return ;
+            }
+            
             var oldpwd = $("#oldpwd").val(); //旧密码
             var pwd = $("#pwd").val();
             var repwd = $("#repwd").val();
-            if('' != oldpwd && !/^[\S]{6,12}$/.test(oldpwd)){
-                layer.tips('密码必须6到12位', '#oldpwd');
-                return ;
+            if('' != oldpwd){
+            	if('' == pwd){
+            		layer.tips('新密码不能为空', '#pwd');
+            		return ;
+            	}
+            	if('' != pwd && '' == repwd){
+            		layer.tips('重复密码不能为空', '#repwd');
+            		return ;
+            	}
+            	if(!/^[\S]{6,12}$/.test(oldpwd)){
+            		layer.tips('密码必须6到12位', '#oldpwd');
+            		return ;
+            	}
+            	if('' != pwd && '' != repwd && '' == oldpwd){
+            		layer.tips('必须输入旧密码', '#oldpwd');
+            		return ;
+            	}                
+            	if('' != pwd && '' != repwd && '' != oldpwd && pwd != repwd){
+            		layer.tips('两次密码不一致', '#pwd');
+            		return ;
+            	}
+            	if('' != pwd && '' != repwd && '' != oldpwd && pwd == repwd){
+            		if(!/^[\S]{6,12}$/.test(pwd)){
+            			layer.tips('密码必须6到12位', '#pwd');
+            			return ;
+            		}
+            		if(!/^[\S]{6,12}$/.test(repwd)){
+            			layer.tips('密码必须6到12位', '#repwd');
+            			return ;
+            		}
+            	}
             }
-            if('' == oldpwd){
-                layer.tips('旧密码不能为空', '#oldpwd');
-                return ;
-            }
-            if('' == pwd){
-                layer.tips('新密码不能为空', '#pwd');
-                return ;
-            }
-            if('' != pwd && '' == repwd){
-                layer.tips('重复密码不能为空', '#repwd');
-                return ;
-            }
-            if('' != pwd && '' != repwd && '' == oldpwd){
-                layer.tips('必须输入旧密码', '#oldpwd');
-                return ;
-            }
-            if('' != pwd && '' != repwd && '' != oldpwd && pwd != repwd){
-                layer.tips('两次密码不一致', '#pwd');
-                return ;
-            }
-            if('' != pwd && '' != repwd && '' != oldpwd && pwd == repwd){
-                if(!/^[\S]{6,12}$/.test(pwd)){
-                    layer.tips('密码必须6到12位', '#pwd');
-                    return ;
-                }
-                if(!/^[\S]{6,12}$/.test(repwd)){
-                    layer.tips('密码必须6到12位', '#repwd');
-                    return ;
-                }
-            }
-            //val sex = $("input[type='radio']:checked").val();
                     
         });
     });
