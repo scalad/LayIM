@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>创建群组</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<script src="/static/layui/layui.js"></script>
+<style type="text/css">
+.layui-form{margin-left: 20px;padding-top: 20px;}
+</style>
+</head>
+<body>
+	<div class="layui-form layui-form-pane">
+		<div class="layui-form-item">
+			<label for="groupname" class="layui-form-label">群名称</label>
+			<div class="layui-input-inline">
+				<input type="text" id="groupname" name="groupname" autocomplete="off" class="layui-input" style="width: 250px;">
+			</div>				
+		</div>
+		
+		<div class="layui-form-item">
+            <div class="site-demo-upload">
+            	<label for="avatar" class="layui-form-label">群头像</label>
+                <div class="site-demo-upbar">
+                     <input name="avatar" class="layui-upload-file" id="avatar" type="file">
+                </div>
+            </div>
+         </div>
+           
+         <div class="layui-form-item fly-form-app">
+             	注：上传的图片不能够超过500kb
+         </div>
+         <div class="layui-form-item">
+             <button class="layui-btn" id="btn">确认提交</button>
+         </div>
+	</div>
+</body>
+<script type="text/javascript">
+	layui.use(['jquery', 'layer', 'form', 'upload',],function() {
+		var $ = layui.jquery, form = layui.form(), layer = layui.layer,upload = layui.upload;
+		layui.upload({
+			url: '上传接口url',
+			methos: 'post',
+			before: function(input){
+				console.log(input);
+			},
+			success: function(res){
+				console.log(res); //上传成功返回值，必须为json格式
+			}
+		});  
+	});
+</script>
+</html>
