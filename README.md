@@ -79,6 +79,8 @@
 ![](https://github.com/scalad/LayIM/blob/master/doc/image/login.png)
 
 ### application.properties配置文件 ###
+
+你需要在这里配置你的Mysql数据库，Redis以及邮件服务器，如果不需要邮件相关服务，你可以在UserService.scala中注释掉相关的代码
     
 	# Application
 	spring.application.name=LayIM
