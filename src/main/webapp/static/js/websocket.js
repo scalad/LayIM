@@ -309,7 +309,6 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
                     var index = layer.open({
                         type: 1,
                         skin: 'layui-layer-rim', //加上边框
-                        area: ['430px', '260px'], //宽高
                         btn:   ['确认', '取消'],
                         title: '移动分组',
                         content: laytpl(elemAddTpl).render({

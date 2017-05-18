@@ -28,7 +28,7 @@ layui.use(['jquery', 'layer', 'form', 'upload'], function() {
 	
     //从缓存中初始化数据
 	$(document).ready(function(){
-		/*var mine = layim.cache().mine;
+		var mine = layim.cache().mine;
 		$("#username").val(mine.username);
 		$("#email").val(mine.email);
 		$("#sign").val(mine.sign);
@@ -37,7 +37,7 @@ layui.use(['jquery', 'layer', 'form', 'upload'], function() {
 			$("input[type='radio']").eq(0).attr("checked",true);
 		} else {
 			$("input[type='radio']").eq(1).attr("checked",true);
-		}*/
+		}
 	});
 	
     //提交修改项
