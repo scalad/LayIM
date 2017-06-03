@@ -84,7 +84,7 @@ class UserService @Autowired()(private var userMapper: UserMapper) {
      * @param avatar
      * @return 
      */
-    @CacheEvict(value = Array("findUserById"))
+    @CacheEvict(value = Array("findUserById"), allEntries = true)
     @Transactional
     def updateAvatar(userId: Integer, avatar: String): Boolean = {
         if (userId == null | avatar == null)

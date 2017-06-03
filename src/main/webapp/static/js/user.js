@@ -16,10 +16,10 @@ layui.use(['jquery', 'layer', 'form', 'upload'], function() {
         	console.log("before upload!");
         }
         ,success: function(res, input){
-        	console.log(res.data);
             if(0 == res.code){
                 $("#LAY_demo_upload").attr('src', res.data.src);
                 $("#user_avatar").val(res.data.src);
+                layer.msg("修改成功!", {time:2000});
             }else{
                 layer.msg(res.msg, {time:2000});
             }
