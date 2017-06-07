@@ -217,12 +217,6 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	  
 	  //监听layim建立就绪
 	  layim.on('ready', function(res){	      
-		  //请求未处理的消息
-		  socket.send(JSON.stringify({
-		    	 type:"unHandMessage",
-		    	 mine:null,
-		    	 to:null
-		  }));
 		  //个人信息
 	      $(".layui-layim-user").css("cursor","pointer");
 	      var mine = layim.cache().mine;
@@ -234,7 +228,13 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
 	    		  area: ['500px', '550px'], 
 	    		  content: '/static/html/userinfo.html'
 	    	  });
-	      })
+	      });
+		  //请求未处理的消息
+		  socket.send(JSON.stringify({
+		    	 type:"unHandMessage",
+		    	 mine:null,
+		    	 to:null
+		  }));
 	  });
 	  
 	  //监听发送消息
