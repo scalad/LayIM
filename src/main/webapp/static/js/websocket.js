@@ -283,7 +283,7 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
         changeGroup: function(othis, e){
             //改变群组模板
             var elemAddTpl = ['<div class="layim-add-box">'
-                , '<div class="layim-add-img"><img class="layui-circle" src="{{ d.data.avatar }}"><p>' +
+                , '<div class="layim-add-img" style="position:static;"><img class="layui-circle" src="{{ d.data.avatar }}"><p>' +
                 '{{ d.data.name||"" }}</p></div>'
                 , '<div class="layim-add-remark">'
                 , '{{# if(d.data.type === "friend" && d.type === "setGroup"){ }}'
@@ -299,7 +299,7 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
                 , '<p>请输入验证信息</p>'
                 , '{{# } if(d.type !== "setGroup"){ }}'
                 , '<textarea id="LAY_layimRemark" placeholder="验证信息" class="layui-textarea"></textarea>'
-                , '{{# } }}'
+                , '{{# } }}'	
                 , '</div>'
                 , '</div>'].join('');
 
@@ -311,6 +311,7 @@ layui.use(['layim', 'jquery', 'laytpl'], function(layim){
                         skin: 'layui-layer-rim', //加上边框
                         btn:   ['确认', '取消'],
                         title: '移动分组',
+                        area: ['440px', '260px'],
                         content: laytpl(elemAddTpl).render({
                             data: {
                                 name: res.data.username
