@@ -9,8 +9,6 @@
 * Mysql 5.0+
 * Redis 
 
-![功能设计](https://github.com/scalad/WebSocket/blob/master/doc/image/function.png)
-
 ### 技术 ###
 
 * [Gradle](https://gradle.org/install)
@@ -22,7 +20,11 @@
 * Alibaba Druid
 * Java Mail
 
-### 界面
+### 界面 ###
+
+系统功能
+
+![功能设计](https://github.com/scalad/WebSocket/blob/master/doc/image/function.png)
 
 系统主页
 
