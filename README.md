@@ -22,7 +22,7 @@
 
 ### 界面 ###
 
-![功能](https://github.com/scalad/WebSocket/blob/master/doc/image/My Video Gif.gif)
+![](https://github.com/scalad/WebSocket/blob/master/doc/image/Gif.gif)
 
 ### application.properties配置文件 ###
 
