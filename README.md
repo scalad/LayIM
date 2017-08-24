@@ -22,63 +22,7 @@
 
 ### 界面 ###
 
-系统功能
-
-![功能设计](https://github.com/scalad/WebSocket/blob/master/doc/image/function.png)
-
-系统主页
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/page_index.png)
-
-发送文字、表情和图片
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/word_emoji_image_send.png)
-
-发送文件
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/file_send.png)
-
-获取群成员
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/group_members.png)
-
-聊天记录、分页处理
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/chatLog.png)
-
-个人信息
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/personal.png)
-
-群聊天记录、分页处理
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/group_log.png)
-
-查找好友并添加好友、现在默认查找全部
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/find_and_add.png)
-
-消息盒子并同意添加好友
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/messageBox.png)
-
-右键菜单
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/right_key.png)
-
-好友资料
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/checkOut.png)
-
-在线、隐身切换
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/hide_and_online.png)
-
-注册、登陆
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/register.png)
-
-![](https://github.com/scalad/LayIM/blob/master/doc/image/login.png)
+![功能](https://github.com/scalad/WebSocket/blob/master/doc/image/My Video Gif.gif)
 
 ### application.properties配置文件 ###
 
