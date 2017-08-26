@@ -11,23 +11,16 @@ import org.springframework.context.ApplicationContext
 import scala.beans.BeanProperty
 
 @SpringBootApplication
-//启动swagger注解
 @EnableSwagger2
 @EntityScan(Array("com.silence.entity"))
 @MapperScan(Array("com.silence.repository"))
-class Config extends App
+class Config
 
 object Application extends SpringBootServletInitializer {
 
     @BeanProperty var applicationContext: ApplicationContext = null
     
-    def main(args: Array[String]): Unit = {
-      
-    		applicationContext = SpringApplication.run(classOf[Config])
-    		
-    }
-        
-    override protected def configure(builder: SpringApplicationBuilder): SpringApplicationBuilder = {
-  		  builder.sources(Application)
-  	}
+    def main(args: Array[String]) = applicationContext = SpringApplication.run(classOf[Config])
+
+    override protected def configure(builder: SpringApplicationBuilder) = builder.sources(Application)
 }

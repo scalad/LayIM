@@ -59,7 +59,7 @@ class CacheConfig extends CachingConfigurerSupport {
                   }
                   sb.toString
               }
-        };
+        }
     }
     
     @Bean

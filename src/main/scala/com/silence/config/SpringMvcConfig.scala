@@ -19,9 +19,9 @@ class SpringMvcConfig extends WebMvcConfigurerAdapter {
      * @param registry
      */
     override def addViewControllers(registry: ViewControllerRegistry): Unit = {
-        registry.addViewController( "/" ).setViewName( "forward:/index.html" )
-        registry.setOrder(Ordered.HIGHEST_PRECEDENCE )
-        super.addViewControllers(registry )
+        registry.addViewController("/").setViewName("forward:/index.html")
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE)
+        super.addViewControllers(registry)
     } 
     
     /**
@@ -29,8 +29,7 @@ class SpringMvcConfig extends WebMvcConfigurerAdapter {
      * @param registry
      */
     override def addInterceptors(registry: InterceptorRegistry) = {
-        // addPathPatterns 用于添加拦截规则
-        // excludePathPatterns 用户排除拦截
+        // addPathPatterns 用于添加拦截规则,excludePathPatterns 用户排除拦截
         registry.addInterceptor(new SystemHandlerInterceptorConfig())
             .addPathPatterns("/**").excludePathPatterns("/").excludePathPatterns("/*.html")
             .excludePathPatterns("/user/login").excludePathPatterns("/user/register")

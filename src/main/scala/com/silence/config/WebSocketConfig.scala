@@ -18,8 +18,5 @@ class WebSocketConfig {
  		 * ServerEndpointExporter，因为它将由容器自己提供和管理
      */
     @Bean
-    def serverEndpointExporter(): ServerEndpointExporter = {
-        return new ServerEndpointExporter()
-    }  
-  
+    def serverEndpointExporter() = new ServerEndpointExporter()
 }
